@@ -112,19 +112,19 @@ public class GenerateInfinite : MonoBehaviour {
             {
                 int startVertex = vertex;
                 // Calculate some stuff
-                Vector3 cellBottomLeft = tileBottomLeft + new Vector3(x * planeSize, 0, z * planeSize);
-                Vector3 cellTopLeft = tileBottomLeft + new Vector3(x * planeSize, 0, (z + 1) * planeSize);
-                Vector3 cellTopRight = tileBottomLeft + new Vector3((x + 1) * planeSize, 0, (z + 1) * planeSize);
-                Vector3 celBottomRight = tileBottomLeft + new Vector3((x + 1) * planeSize, 0, z * planeSize);
+                Vector3 cellBottomLeft = tileBottomLeft + new Vector3(x, 0, z);
+                Vector3 cellTopLeft = tileBottomLeft + new Vector3(x, 0, (z + 1));
+                Vector3 cellTopRight = tileBottomLeft + new Vector3((x + 1), 0, (z + 1));
+                Vector3 celBottomRight = tileBottomLeft + new Vector3((x + 1), 0, z );
 
                 // Add all the samplers together to make the height
-                Vector3 cellWorldCoords = position + tileBottomLeft + new Vector3(x * planeSize, 0, z * planeSize);
+                Vector3 cellWorldCoords = position + tileBottomLeft + new Vector3(x, 0, z);
                 foreach (Sampler sampler in samplers)
                 {
                     cellBottomLeft.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
-                    cellTopLeft.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z + planeSize);
-                    cellTopRight.y += sampler.Sample(cellWorldCoords.x + planeSize, cellWorldCoords.z + planeSize);
-                    celBottomRight.y += sampler.Sample(cellWorldCoords.x + planeSize, cellWorldCoords.z);
+                    cellTopLeft.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
+                    cellTopRight.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
+                    celBottomRight.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
                 }
 
                 // Make the vertices
@@ -147,6 +147,7 @@ public class GenerateInfinite : MonoBehaviour {
         mesh.vertices = gm.vertices;
         mesh.uv = gm.uvs;
         mesh.triangles = gm.triangles;
+        mesh.RecalculateNormals();
         return tile;
     }
 
