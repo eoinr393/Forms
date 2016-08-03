@@ -82,8 +82,12 @@ public class GenerateInfinite : MonoBehaviour {
         renderer.receiveShadows = true;
         Mesh mesh = tile.AddComponent<MeshFilter>().mesh;
         mesh.Clear();
-        tile.AddComponent<MeshCollider>();        
+        MeshCollider meshCollider = tile.AddComponent<MeshCollider>();        
         tile.transform.position = position;
+
+        Rigidbody rigidBody = tile.AddComponent<Rigidbody>();
+        rigidBody.isKinematic = true;
+
 
         int verticesPerSegment = 6;
 
@@ -158,6 +162,9 @@ public class GenerateInfinite : MonoBehaviour {
             material = new Material(shader);
             renderer.material = material;
         }
+
+        meshCollider.sharedMesh = null;
+        meshCollider.sharedMesh = mesh;
 
         return tile;
     }
