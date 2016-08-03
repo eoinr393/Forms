@@ -75,7 +75,6 @@ public class GenerateInfinite : MonoBehaviour {
 
     GameObject GenerateTile(Vector3 position)
     {
-
         GameObject tile = new GameObject();
         tile.transform.parent = this.transform;
         MeshRenderer renderer = tile.AddComponent<MeshRenderer>();
@@ -111,20 +110,21 @@ public class GenerateInfinite : MonoBehaviour {
             for (int x = 0; x < planeSize; x++)
             {
                 int startVertex = vertex;
-                // Calculate some stuff
+
                 Vector3 cellBottomLeft = tileBottomLeft + new Vector3(x, 0, z);
                 Vector3 cellTopLeft = tileBottomLeft + new Vector3(x, 0, (z + 1));
                 Vector3 cellTopRight = tileBottomLeft + new Vector3((x + 1), 0, (z + 1));
-                Vector3 celBottomRight = tileBottomLeft + new Vector3((x + 1), 0, z );
+                Vector3 cellBottomRight = tileBottomLeft + new Vector3((x + 1), 0, z );
 
                 // Add all the samplers together to make the height
-                Vector3 cellWorldCoords = position + tileBottomLeft + new Vector3(x, 0, z);
+                Vector3 cell = position + tileBottomLeft + new Vector3(x, 0, z);
                 foreach (Sampler sampler in samplers)
                 {
-                    cellBottomLeft.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
-                    cellTopLeft.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
-                    cellTopRight.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
-                    celBottomRight.y += sampler.Sample(cellWorldCoords.x, cellWorldCoords.z);
+                    cellBottomLeft.y += sampler.Sample(cell.x, cell.z);
+                    cellTopLeft.y += sampler.Sample(cell.x, cell.z + 1);
+                    cellTopRight.y += sampler.Sample(cell.x + 1, cell.z + 1);
+                    cellBottomRight.y += sampler.Sample(cell.x + 1, cell.z);
+
                 }
 
                 // Make the vertices
@@ -132,7 +132,7 @@ public class GenerateInfinite : MonoBehaviour {
                 gm.vertices[vertex++] = cellTopLeft;
                 gm.vertices[vertex++] = cellTopRight;
                 gm.vertices[vertex++] = cellTopRight;
-                gm.vertices[vertex++] = celBottomRight;
+                gm.vertices[vertex++] = cellBottomRight;
                 gm.vertices[vertex++] = cellBottomLeft;
 
                 // Make the normals, UV's and triangles                
@@ -148,6 +148,17 @@ public class GenerateInfinite : MonoBehaviour {
         mesh.uv = gm.uvs;
         mesh.triangles = gm.triangles;
         mesh.RecalculateNormals();
+
+        renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+        Shader shader = Shader.Find("Diffuse");
+
+        Material material = null;
+        if (renderer.material == null)
+        {
+            material = new Material(shader);
+            renderer.material = material;
+        }
+
         return tile;
     }
 

@@ -110,8 +110,8 @@ namespace BGE
             float contPitch = 0; //Input.GetAxis("Pitch Axis");
             Yaw(contYaw);
 
-            //Pitch(-mouseY);
-            //Pitch(contPitch);
+            Pitch(-mouseY);
+            Pitch(contPitch);
             
             float contWalk = 0; // Input.GetAxis("Walk Axis");
             float contStrafe = 0; // Input.GetAxis("Strafe Axis");
