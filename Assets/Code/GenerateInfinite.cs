@@ -27,8 +27,8 @@ public class GenerateInfinite : MonoBehaviour {
 	public GameObject player;
 
 	int planeSize = 10;
-	int halfTilesX = 5;
-	int halfTilesZ = 5;
+	int halfTilesX = 10;
+	int halfTilesZ = 10;
 	
 	Vector3 startPos;
 
