@@ -2,11 +2,12 @@
 using System.Collections;
 
 public class ForceController : MonoBehaviour {
-    Camera ovrCamera;
+    public Camera headCamera;
     public float speed = 10.0f;
 
     public bool vrMode;
 
+     
     Rigidbody rigidBody;
 
     public ForceController()
@@ -52,9 +53,9 @@ public class ForceController : MonoBehaviour {
 
     void Walk(float units)
     {
-        if (ovrCamera != null)
+        if (headCamera != null)
         {
-            rigidBody.AddForce(ovrCamera.transform.forward* units);
+            rigidBody.AddForce(headCamera.transform.forward* units);
         }
         else
         {
@@ -69,9 +70,9 @@ public class ForceController : MonoBehaviour {
 
     void Strafe(float units)
     {
-        if (ovrCamera != null)
+        if (headCamera != null)
         {
-            rigidBody.AddForce(ovrCamera.transform.right* units);
+            rigidBody.AddForce(headCamera.transform.right* units);
         }
         else
         {
@@ -92,7 +93,7 @@ public class ForceController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
         {
-            speed *= 10.0f;
+            speed *= 5.0f;
         }
 
         if (Input.GetKey(KeyCode.W))
@@ -114,6 +115,8 @@ public class ForceController : MonoBehaviour {
         {
             Strafe(speed);
         }
+
+        /*
         if (Input.GetKey(KeyCode.Q))
         {
             Roll(-Time.deltaTime * angularSpeed);
@@ -122,6 +125,7 @@ public class ForceController : MonoBehaviour {
         {
             Roll(Time.deltaTime * angularSpeed);
         }
+        */
         if (Input.GetKey(KeyCode.R))
         {
             Fly(speed);
@@ -145,8 +149,8 @@ public class ForceController : MonoBehaviour {
         // If in Rift mode, dont pitch
         //if (ovrCamera == null)
         //{
-        //    Pitch(-mouseY * Time.deltaTime * angularSpeed);
-        //    Pitch(contPitch * Time.deltaTime * angularSpeed);
+        Pitch(-mouseY * Time.deltaTime * angularSpeed);
+        Pitch(contPitch * Time.deltaTime * angularSpeed);
         //}
         //else
         {
