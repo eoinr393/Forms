@@ -88,7 +88,7 @@ public class ForceController : MonoBehaviour {
         float mouseX, mouseY;
         float speed = this.speed;
 
-        float runAxis = 0; ;// Input.GetAxis("Run Axis");
+        float runAxis = Input.GetAxis("Fire1");
         float angularSpeed = 60.0f;
 
         if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
@@ -157,8 +157,8 @@ public class ForceController : MonoBehaviour {
             Fly(-contPitch * speed);
         }
 
-        float contWalk = 0; //  Input.GetAxis("Walk Axis");
-        float contStrafe = 0; // Input.GetAxis("Strafe Axis");
+        float contWalk = Input.GetAxis("Vertical");
+        float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {
             Walk(-contWalk * speed);

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 class Tile
 {
@@ -32,7 +32,7 @@ public class GenerateInfinite : MonoBehaviour {
     public float cellSize = 1.0f;
 	Vector3 startPos;
 
-	Hashtable tiles = new Hashtable();
+	Dictionary<string,Tile> tiles = new Dictionary<string, Tile>();
 
     Sampler[] samplers;
 
@@ -67,7 +67,7 @@ public class GenerateInfinite : MonoBehaviour {
 				string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();
 				t.name = tilename;
 				Tile tile = new Tile(t, updateTime);
-				tiles.Add(tilename, tile);
+				tiles[tilename] = tile;
 			}
 		}
 
@@ -76,7 +76,7 @@ public class GenerateInfinite : MonoBehaviour {
         StartCoroutine(CheckPlayerMovement());
 	}
 
-    private IEnumerator CheckPlayerMovement()
+    private System.Collections.IEnumerator CheckPlayerMovement()
     {
         yield return null;
 
@@ -95,7 +95,7 @@ public class GenerateInfinite : MonoBehaviour {
                 //force integer position and round to nearest tilesize
                 int playerX = (int)(Mathf.Floor((player.transform.position.x) / (planeSize * cellSize)) * planeSize);
                 int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (planeSize * cellSize)) * planeSize);
-
+                List<Vector3> newTiles = new List<Vector3>();
                 for (int x = -halfTile; x < halfTile; x++)
                 {
                     for (int z = -halfTile; z < halfTile; z++)
@@ -107,13 +107,7 @@ public class GenerateInfinite : MonoBehaviour {
                         pos *= cellSize;
                         if (!tiles.ContainsKey(tilename))
                         {
-                            GameObject t = GenerateTile(pos);//(GameObject) Instantiate(plane, pos, 
-                                                                //Quaternion.identity);
-                            t.name = tilename;
-                            Tile tile = new Tile(t, updateTime);
-                            tiles.Add(tilename, tile);
-                            yield return null;
-
+                            newTiles.Add(pos);                            
                         }
                         else
                         {
@@ -121,10 +115,20 @@ public class GenerateInfinite : MonoBehaviour {
                         }
                     }
                 }
+                newTiles.Sort((a, b) => (int) Vector3.SqrMagnitude(player.transform.position - a) - (int) Vector3.SqrMagnitude(player.transform.position - b));
+                foreach (Vector3 pos in newTiles)
+                {
+                    GameObject t = GenerateTile(pos);
+                    string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();
+                    t.name = tilename;
+                    Tile tile = new Tile(t, updateTime);
+                    tiles.Add(tilename, tile);
+                    yield return null;
+                }
 
                 //destroy all tiles not just created or with time updated
                 //and put new tiles and tiles to be kepts in a new hashtable
-                Hashtable newTerrain = new Hashtable();
+                Dictionary<string, Tile> newTerrain = new Dictionary<string, Tile>();
                 foreach (Tile tls in tiles.Values)
                 {
                     if (tls.creationTime != updateTime)
@@ -134,7 +138,7 @@ public class GenerateInfinite : MonoBehaviour {
                     }
                     else
                     {
-                        newTerrain.Add(tls.theTile.name, tls);
+                        newTerrain[tls.theTile.name] = tls;
                     }
                 }
                 //copy new hashtable contents to the working hashtable
