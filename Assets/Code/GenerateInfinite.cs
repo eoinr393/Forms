@@ -122,7 +122,7 @@ public class GenerateInfinite : MonoBehaviour {
                     string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();
                     t.name = tilename;
                     Tile tile = new Tile(t, updateTime);
-                    tiles.Add(tilename, tile);
+                    tiles[tilename] = tile;
                     yield return null;
                 }
 
