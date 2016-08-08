@@ -53,7 +53,9 @@ public class GenerateInfinite : MonoBehaviour {
 		this.gameObject.transform.position = Vector3.zero;
 		startPos = Vector3.zero;
 
+        /*
 		float updateTime = Time.realtimeSinceStartup;
+
 
 		for(int x = -halfTile; x < halfTile; x++)
 		{
@@ -70,7 +72,7 @@ public class GenerateInfinite : MonoBehaviour {
 				tiles[tilename] = tile;
 			}
 		}
-
+        */
 
 
         StartCoroutine(CheckPlayerMovement());
@@ -80,14 +82,11 @@ public class GenerateInfinite : MonoBehaviour {
     {
         yield return null;
 
-        float dist = 500;
+        // Make sure this happens at once at the start
+        int xMove = int.MaxValue;
+        int zMove = int.MaxValue;
         while (true)
-        {
-
-            //determine how far the player has moved since last terrain update
-            int xMove = (int)(player.transform.position.x - startPos.x);
-            int zMove = (int)(player.transform.position.z - startPos.z);
-
+        {            
             if (Mathf.Abs(xMove) >= planeSize * cellSize || Mathf.Abs(zMove) >= planeSize * cellSize)
             {
                 float updateTime = Time.realtimeSinceStartup;
@@ -103,8 +102,8 @@ public class GenerateInfinite : MonoBehaviour {
                         Vector3 pos = new Vector3((x * planeSize + playerX),
                                                     0,
                                                   (z * planeSize + playerZ));
-                        string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();
                         pos *= cellSize;
+                        string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();                        
                         if (!tiles.ContainsKey(tilename))
                         {
                             newTiles.Add(pos);                            
@@ -115,6 +114,7 @@ public class GenerateInfinite : MonoBehaviour {
                         }
                     }
                 }
+                // Sort in order of distance from the player
                 newTiles.Sort((a, b) => (int) Vector3.SqrMagnitude(player.transform.position - a) - (int) Vector3.SqrMagnitude(player.transform.position - b));
                 foreach (Vector3 pos in newTiles)
                 {
@@ -123,30 +123,33 @@ public class GenerateInfinite : MonoBehaviour {
                     t.name = tilename;
                     Tile tile = new Tile(t, updateTime);
                     tiles[tilename] = tile;
-                    yield return null;
+                    yield return new WaitForSeconds(Random.Range(0.01f, 0.2f));
                 }
 
                 //destroy all tiles not just created or with time updated
                 //and put new tiles and tiles to be kepts in a new hashtable
                 Dictionary<string, Tile> newTerrain = new Dictionary<string, Tile>();
-                foreach (Tile tls in tiles.Values)
+                foreach (Tile tile in tiles.Values)
                 {
-                    if (tls.creationTime != updateTime)
+                    if (tile.creationTime != updateTime)
                     {
-                        //delete gameobject
-                        Destroy(tls.theTile);
+                        Debug.Log("Deleting tile: " + tile.theTile.name);
+                        Destroy(tile.theTile);
+                        yield return new WaitForSeconds(Random.Range(0.01f, 0.2f));
                     }
                     else
                     {
-                        newTerrain[tls.theTile.name] = tls;
+                        newTerrain[tile.theTile.name] = tile;
                     }
                 }
                 //copy new hashtable contents to the working hashtable
                 tiles = newTerrain;
-
                 startPos = player.transform.position;
             }
             yield return null;
+            //determine how far the player has moved since last terrain update
+            xMove = (int)(player.transform.position.x - startPos.x);
+            zMove = (int)(player.transform.position.z - startPos.z);
         }
     }
 
