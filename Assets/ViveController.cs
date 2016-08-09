@@ -11,7 +11,7 @@ public class ViveController : MonoBehaviour {
     public GameObject rightEngine;
 
     public GameObject head;
-
+    public float maxSpeed = 250.0f;
     public float power = 1000.0f;
 
     private SteamVR_Controller.Device leftController
@@ -77,6 +77,10 @@ public class ViveController : MonoBehaviour {
         {
             rightEngine.SetActive(false);
         }
+
+        rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, maxSpeed);
+
+        //rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, 10f);
 
         /*
         if (leftTrig > 0.2f && rightTrig > 0.2f)

@@ -1,6 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public static class WaitFor
+{
+    public static System.Collections.IEnumerator Frames(int frameCount)
+    {
+        if (frameCount <= 0)
+        {
+            throw new System.ArgumentOutOfRangeException("frameCount", "Cannot wait for less that 1 frame");
+        }
+
+        while (frameCount > 0)
+        {
+            frameCount--;
+            yield return null;
+        }
+    }
+}
 class Tile
 {
 	public GameObject theTile;
@@ -23,22 +39,51 @@ class GeneratedMesh
     public int[] triangles;
 }
 
-
 public class GenerateInfinite : MonoBehaviour {
 	public GameObject player;
 
-	int planeSize = 10;
+	public int cellsPerTile = 10;
 	public int halfTile = 5;
     public float cellSize = 1.0f;
 	Vector3 startPos;
 
 	Dictionary<string,Tile> tiles = new Dictionary<string, Tile>();
-
     Sampler[] samplers;
+    TextureGenerator textureGenerator;
+    
+    void OnDrawGizmos()
+    {
+        samplers = GetComponents<Sampler>();
+        textureGenerator = GetComponent<TextureGenerator>();
+        if (samplers == null)
+        {
+            Debug.Log("Sampler is null! Add a sampler to the NoiseForm");
+        }
+        Random.seed = 42;
+        int playerX = (int)(Mathf.Floor((player.transform.position.x) / (cellsPerTile * cellSize)) * cellsPerTile);
+        int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
+
+        Gizmos.color = Color.cyan;
+        for (int x = -halfTile; x < halfTile; x++)
+        {
+            for (int z = -halfTile; z < halfTile; z++)
+            {
+                Vector3 pos = new Vector3((x * cellsPerTile + playerX),
+                                            0,
+                                          (z * cellsPerTile + playerZ));
+                pos *= cellSize;
+                GeneratedMesh gm = GenerateMesh(pos);
+                for (int i = 0; i < gm.vertices.Length; i += 2)
+                {
+                    Gizmos.DrawLine(pos + gm.vertices[i], pos + gm.vertices[i + 1]);
+                }
+            }
+        }
+    }
 
     void Awake()
     {
-        samplers = GetComponents<Sampler>();
+        samplers = GetComponents<Sampler>();        
         if (samplers == null)
         {
             Debug.Log("Sampler is null! Add a sampler to the NoiseForm");
@@ -53,55 +98,36 @@ public class GenerateInfinite : MonoBehaviour {
 		this.gameObject.transform.position = Vector3.zero;
 		startPos = Vector3.zero;
 
-        /*
-		float updateTime = Time.realtimeSinceStartup;
-
-
-		for(int x = -halfTile; x < halfTile; x++)
-		{
-			for(int z = -halfTile ; z < halfTile ; z++)
-			{
-				Vector3 pos = new Vector3((x * planeSize+startPos.x),
-											0,
-										  (z * planeSize+startPos.z));
-                pos *= cellSize;
-				GameObject t = (GameObject) GenerateTile(pos); 
-				string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();
-				t.name = tilename;
-				Tile tile = new Tile(t, updateTime);
-				tiles[tilename] = tile;
-			}
-		}
-        */
-
-
-        StartCoroutine(CheckPlayerMovement());
+        textureGenerator = GetComponent<TextureGenerator>();
+        
+        StartCoroutine(GenerateWorldAroundPlayer());
 	}
 
-    private System.Collections.IEnumerator CheckPlayerMovement()
+    private System.Collections.IEnumerator GenerateWorldAroundPlayer()
     {
         yield return null;
 
         // Make sure this happens at once at the start
         int xMove = int.MaxValue;
         int zMove = int.MaxValue;
+
         while (true)
         {            
-            if (Mathf.Abs(xMove) >= planeSize * cellSize || Mathf.Abs(zMove) >= planeSize * cellSize)
+            if (Mathf.Abs(xMove) >= cellsPerTile * cellSize || Mathf.Abs(zMove) >= cellsPerTile * cellSize)
             {
                 float updateTime = Time.realtimeSinceStartup;
 
                 //force integer position and round to nearest tilesize
-                int playerX = (int)(Mathf.Floor((player.transform.position.x) / (planeSize * cellSize)) * planeSize);
-                int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (planeSize * cellSize)) * planeSize);
+                int playerX = (int)(Mathf.Floor((player.transform.position.x) / (cellsPerTile * cellSize)) * cellsPerTile);
+                int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
                 List<Vector3> newTiles = new List<Vector3>();
                 for (int x = -halfTile; x < halfTile; x++)
                 {
                     for (int z = -halfTile; z < halfTile; z++)
                     {
-                        Vector3 pos = new Vector3((x * planeSize + playerX),
+                        Vector3 pos = new Vector3((x * cellsPerTile + playerX),
                                                     0,
-                                                  (z * planeSize + playerZ));
+                                                  (z * cellsPerTile + playerZ));
                         pos *= cellSize;
                         string tilename = "Tile_" + ((int)(pos.x)).ToString() + "_" + ((int)(pos.z)).ToString();                        
                         if (!tiles.ContainsKey(tilename))
@@ -123,7 +149,7 @@ public class GenerateInfinite : MonoBehaviour {
                     t.name = tilename;
                     Tile tile = new Tile(t, updateTime);
                     tiles[tilename] = tile;
-                    yield return new WaitForSeconds(Random.Range(0.01f, 0.2f));
+                    yield return WaitFor.Frames(Random.Range(1, 3));
                 }
 
                 //destroy all tiles not just created or with time updated
@@ -135,7 +161,7 @@ public class GenerateInfinite : MonoBehaviour {
                     {
                         Debug.Log("Deleting tile: " + tile.theTile.name);
                         Destroy(tile.theTile);
-                        yield return new WaitForSeconds(Random.Range(0.01f, 0.2f));
+                        yield return WaitFor.Frames(Random.Range(1, 3));
                     }
                     else
                     {
@@ -153,52 +179,43 @@ public class GenerateInfinite : MonoBehaviour {
         }
     }
 
-    GameObject GenerateTile(Vector3 position)
+    GeneratedMesh GenerateMesh(Vector3 position)
     {
-        GameObject tile = new GameObject();
-        tile.transform.parent = this.transform;
-        MeshRenderer renderer = tile.AddComponent<MeshRenderer>();
-        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        renderer.receiveShadows = true;
-        Mesh mesh = tile.AddComponent<MeshFilter>().mesh;
-        mesh.Clear();
-        MeshCollider meshCollider = tile.AddComponent<MeshCollider>();        
-        tile.transform.position = position;
-
-        Rigidbody rigidBody = tile.AddComponent<Rigidbody>();
-        rigidBody.isKinematic = true;
-
 
         int verticesPerSegment = 6;
 
-        int vertexCount = verticesPerSegment * ((int)planeSize) * ((int)planeSize);
-
+        int vertexCount = verticesPerSegment * ((int)cellsPerTile) * ((int)cellsPerTile);
+        
+        int vertex = 0;
+        // What cell is x and z for the bottom left of this tile in world space
+        Vector3 tileBottomLeft = new Vector3();
+        tileBottomLeft.x = -(cellsPerTile) / 2;
+        tileBottomLeft.z = -(cellsPerTile) / 2;
+        
         GeneratedMesh gm = new GeneratedMesh();
 
         gm.vertices = new Vector3[vertexCount];
         gm.normals = new Vector3[vertexCount];
         gm.uvs = new Vector2[vertexCount];
         gm.triangles = new int[vertexCount];
-
         gm.colours = new Color[vertexCount];
 
-        int vertex = 0;
+        Vector2 texOrigin = position / cellSize;
+        texOrigin.x = texOrigin.x % textureGenerator.size;
+        texOrigin.y = texOrigin.y % textureGenerator.size;
 
-        // What cell is x and z for the bottom left of this tile in world space
-        Vector3 tileBottomLeft = new Vector3();
-        tileBottomLeft.x = -(planeSize) / 2;
-        tileBottomLeft.z = -(planeSize) / 2;
+        float tilesPerTexture = textureGenerator.size / cellsPerTile;
 
-        for (int z = 0; z < planeSize; z++)
+        for (int z = 0; z < cellsPerTile; z++)
         {
-            for (int x = 0; x < planeSize; x++)
+            for (int x = 0; x < cellsPerTile; x++)
             {
                 int startVertex = vertex;
 
                 Vector3 cellBottomLeft = tileBottomLeft + new Vector3(x * cellSize, 0, z * cellSize);
                 Vector3 cellTopLeft = tileBottomLeft + new Vector3(x * cellSize, 0, ((z + 1) * cellSize));
                 Vector3 cellTopRight = tileBottomLeft + new Vector3((x + 1) * cellSize, 0, (z + 1) * cellSize);
-                Vector3 cellBottomRight = tileBottomLeft + new Vector3((x + 1) * cellSize , 0, z * cellSize);
+                Vector3 cellBottomRight = tileBottomLeft + new Vector3((x + 1) * cellSize, 0, z * cellSize);
 
                 // Add all the samplers together to make the height
                 Vector3 cell = (position / cellSize) + tileBottomLeft + new Vector3(x, 0, z);
@@ -223,17 +240,45 @@ public class GenerateInfinite : MonoBehaviour {
                 {
                     int vertexIndex = startVertex + i;
                     gm.triangles[vertexIndex] = vertexIndex;
-                    gm.uvs[vertexIndex] = new Vector2(x / planeSize, z / planeSize);
+                    Vector3 vPos = gm.vertices[vertexIndex];
+                    Vector2 uv = new Vector2();
+                    uv.x = (Mathf.Abs(position.x + vPos.x) % textureGenerator.size) / (cellSize * cellsPerTile * tilesPerTexture);
+                    uv.y = (Mathf.Abs(position.z + vPos.z) % textureGenerator.size) / (cellSize * cellsPerTile * tilesPerTexture);
+
+                    //uv.x = (((Mathf.Abs(position.x) / cellSize) % textureGenerator.size) + x) / textureGenerator.size;
+                    //uv.y = (((Mathf.Abs(position.z) / cellSize) % textureGenerator.size) + z) / textureGenerator.size;
+                    gm.uvs[vertexIndex] = uv;
                 }
             }
         }
+        return gm;
+
+    }
+
+    GameObject GenerateTile(Vector3 position)
+    {
+        GameObject tile = new GameObject();
+        tile.transform.parent = this.transform;
+        MeshRenderer renderer = tile.AddComponent<MeshRenderer>();
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        renderer.receiveShadows = true;
+        Mesh mesh = tile.AddComponent<MeshFilter>().mesh;
+        mesh.Clear();
+        MeshCollider meshCollider = tile.AddComponent<MeshCollider>();        
+        tile.transform.position = position;
+
+        Rigidbody rigidBody = tile.AddComponent<Rigidbody>();
+        rigidBody.isKinematic = true;
+
+        GeneratedMesh gm = GenerateMesh(position);
         mesh.vertices = gm.vertices;
         mesh.uv = gm.uvs;
         mesh.triangles = gm.triangles;
         mesh.RecalculateNormals();
 
-        renderer.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
-        Shader shader = Shader.Find("Diffuse");
+        renderer.material.SetTexture(0, textureGenerator.texture);
+        //renderer.material.color = Color.blue; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+        /*Shader shader = Shader.Find("Diffuse");
 
         Material material = null;
         if (renderer.material == null)
@@ -241,6 +286,7 @@ public class GenerateInfinite : MonoBehaviour {
             material = new Material(shader);
             renderer.material = material;
         }
+        */
 
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;

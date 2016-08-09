@@ -5,11 +5,15 @@ using System.Collections;
 public class PerlinNoiseSampler:Sampler
 {
     
+    [Range(0, 10)]
     public float origin = 0;
-    public float scale = 0.2f;
-    public float height;
-    
 
+    [Range(0.0f, 1.0f)]
+    public float scale = 0.2f;
+
+    [Range(0, 10000)]
+    public float height = 100;
+    
     public PerlinNoiseSampler()
     {
     }
