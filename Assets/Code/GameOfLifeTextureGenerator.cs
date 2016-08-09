@@ -62,14 +62,13 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         texture.Apply();
     }
 
-    public override Texture2D GenerateTexture()
+    public override void GenerateTexture()
     {
         if (texture == null)
         {
-            texture = new Texture2D(size, size, TextureFormat.RGBAFloat, false);
+            texture = new Texture2D(size, size);
             texture.filterMode = FilterMode.Point;
         }
-        return texture;
     }
 
     void Awake()
@@ -84,7 +83,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         // MakeGosperGun(boardWidth / 2, boardSize / 2);
         //MakeTumbler(boardSize / 2, boardSize / 2);        
         Randomise();
-        //StartCoroutine("UpdateBoard");
+        StartCoroutine("UpdateBoard");
         //StartCoroutine("ResetBoard");
     }
 

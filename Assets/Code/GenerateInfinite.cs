@@ -278,7 +278,7 @@ public class GenerateInfinite : MonoBehaviour {
 
         renderer.material.SetTexture(0, textureGenerator.texture);
         //renderer.material.color = Color.blue; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
-        /*Shader shader = Shader.Find("Diffuse");
+        Shader shader = Shader.Find("Diffuse");
 
         Material material = null;
         if (renderer.material == null)
@@ -286,8 +286,7 @@ public class GenerateInfinite : MonoBehaviour {
             material = new Material(shader);
             renderer.material = material;
         }
-        */
-
+        
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;
 
