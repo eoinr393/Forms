@@ -5,8 +5,10 @@ public class GameOfLifeTextureGenerator : TextureGenerator
 {
     public Color backGround = Color.black;
     public Color foreGround = Color.gray;
-    
-    [Range(0, 100)]
+
+    public float updatesPerSecond = 30.0f;
+
+    [Range(0.01f, 100)]
     public float speed = 2;
 
     bool[,] current;
@@ -26,40 +28,6 @@ public class GameOfLifeTextureGenerator : TextureGenerator
                 board[y, x] = false;
             }
         }
-    }
-
-    void UpdateTexture()
-    {
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                texture.SetPixel(x, y, current[y, x] ? foreGround : backGround);
-            }
-        }
-
-        texture.Apply();
-    }
-
-    float t = 0.0f;
-
-    void LerpTexture()
-    {
-        if (texture == null)
-        {
-            return;
-        }
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                Color from = next[y, x] ? foreGround : backGround;
-                Color to = current[y, x] ? foreGround : backGround;
-                texture.SetPixel(x, y, Color.Lerp(from, to, t));
-            }
-        }
-        t += ((Time.deltaTime * 2.0f) / speed);
-        texture.Apply();
     }
 
     public override void GenerateTexture()
@@ -163,51 +131,81 @@ public class GameOfLifeTextureGenerator : TextureGenerator
     }
 
     System.Collections.IEnumerator UpdateBoard()
-    {
-        int totalCells = size * size;        
+    {        
         while (true)
         {
-            float delay = 1.0f / speed;
-            if (!paused)
+            if (texture == null)
             {
-                ClearBoard(next);
-                for (int row = 0; row < size; row++)
-                {
-                    for (int col = 0; col < size; col++)
+                break;
+            }
+            ClearBoard(next);
+            for (int row = 0; row < size; row++)
+            {
+                for (int col = 0; col < size; col++)
+                {                    
+                    int count = CountNeighbours(row, col);
+                    if (current[row, col])
                     {
-                        int count = CountNeighbours(row, col);
-                        if (current[row, col])
+                        if (count < 2)
                         {
-                            if (count < 2)
-                            {
-                                next[row, col] = false;
-                            }
-                            else if ((count == 2) || (count == 3))
-                            {
-                                next[row, col] = true;
-                            }
-                            else if (count > 3)
-                            {
-                                next[row, col] = false;
-                            }
+                            next[row, col] = false;
                         }
-                        else
+                        else if ((count == 2) || (count == 3))
                         {
-                            if (count == 3)
-                            {
-                                next[row, col] = true;
-                            }
-                        }                        
+                            next[row, col] = true;
+                        }
+                        else if (count > 3)
+                        {
+                            next[row, col] = false;
+                        }
                     }
+                    else
+                    {
+                        if (count == 3)
+                        {
+                            next[row, col] = true;
+                        }
+                    }
+                    // next[row, col] = current[row, col];
                 }
+                
             }
             bool[,] temp;
             temp = current;
             current = next;
             next = temp;
-            t = 0.0f;
-            //UpdateTexture();
-            yield return new WaitForSeconds(delay);
+            float t = 0.0f;
+
+            /*for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    Color to = current[y, x] ? foreGround : backGround;
+                    texture.SetPixel(x, y, to);
+                }
+            }
+            texture.Apply();
+            yield return new WaitForSeconds(1.0f / speed);
+            */
+
+            // Now lerp to the new board            
+            float delay = 1.0f / updatesPerSecond;
+            float tDelta = 1.0f / (updatesPerSecond / speed);
+            while (t <= 1.0f)
+            {                
+                for (int y = 0; y < size; y++)
+                {
+                    for (int x = 0; x < size; x++)
+                    {
+                        Color from = next[y, x] ? foreGround : backGround;
+                        Color to = current[y, x] ? foreGround : backGround;
+                        texture.SetPixel(x, y, Color.Lerp(from, to, t));                        
+                    }
+                }
+                t += tDelta;
+                texture.Apply();
+                yield return new WaitForSeconds(delay);
+            } 
         }
     }
 
@@ -336,11 +334,6 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         current[y + 2, x] = true;
         current[y + 2, x + 1] = true;
         current[y + 2, x + 2] = true;
-    }
-
-    void Update()
-    {
-        LerpTexture();
     }
 }
 
