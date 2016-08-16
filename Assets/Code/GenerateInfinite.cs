@@ -50,32 +50,40 @@ public class GenerateInfinite : MonoBehaviour {
 	Dictionary<string,Tile> tiles = new Dictionary<string, Tile>();
     Sampler[] samplers;
     TextureGenerator textureGenerator;
+
+    public bool drawGizmos = true;
+
+    [Range(0.1f, 10.0f)]
+    public float textureScaling = 1.0f;
     
     void OnDrawGizmos()
     {
-        samplers = GetComponents<Sampler>();
-        textureGenerator = GetComponent<TextureGenerator>();
-        if (samplers == null)
+        if (drawGizmos)
         {
-            Debug.Log("Sampler is null! Add a sampler to the NoiseForm");
-        }
-        Random.seed = 42;
-        int playerX = (int)(Mathf.Floor((player.transform.position.x) / (cellsPerTile * cellSize)) * cellsPerTile);
-        int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
-
-        Gizmos.color = Color.cyan;
-        for (int x = -halfTile; x < halfTile; x++)
-        {
-            for (int z = -halfTile; z < halfTile; z++)
+            samplers = GetComponents<Sampler>();
+            textureGenerator = GetComponent<TextureGenerator>();
+            if (samplers == null)
             {
-                Vector3 pos = new Vector3((x * cellsPerTile + playerX),
-                                            0,
-                                          (z * cellsPerTile + playerZ));
-                pos *= cellSize;
-                GeneratedMesh gm = GenerateMesh(pos);
-                for (int i = 0; i < gm.vertices.Length; i += 2)
+                Debug.Log("Sampler is null! Add a sampler to the NoiseForm");
+            }
+            Random.seed = 42;
+            int playerX = (int)(Mathf.Floor((player.transform.position.x) / (cellsPerTile * cellSize)) * cellsPerTile);
+            int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
+
+            Gizmos.color = Color.cyan;
+            for (int x = -halfTile; x < halfTile; x++)
+            {
+                for (int z = -halfTile; z < halfTile; z++)
                 {
-                    Gizmos.DrawLine(pos + gm.vertices[i], pos + gm.vertices[i + 1]);
+                    Vector3 pos = new Vector3((x * cellsPerTile + playerX),
+                                                0,
+                                              (z * cellsPerTile + playerZ));
+                    pos *= cellSize;
+                    GeneratedMesh gm = GenerateMesh(pos);
+                    for (int i = 0; i < gm.vertices.Length; i += 2)
+                    {
+                        Gizmos.DrawLine(pos + gm.vertices[i], pos + gm.vertices[i + 1]);
+                    }
                 }
             }
         }
@@ -235,24 +243,49 @@ public class GenerateInfinite : MonoBehaviour {
                 gm.vertices[vertex++] = cellBottomRight;
                 gm.vertices[vertex++] = cellBottomLeft;
 
-                // Make the normals, UV's and triangles                
+                vertex = startVertex;
+                gm.uvs[vertex++] = MakeUV(position, x, z);
+                gm.uvs[vertex++] = MakeUV(position, x, z + 1);
+                gm.uvs[vertex++] = MakeUV(position, x + 1, z + 1);
+                gm.uvs[vertex++] = MakeUV(position, x + 1, z + 1);
+                gm.uvs[vertex++] = MakeUV(position, x + 1, z);
+                gm.uvs[vertex++] = MakeUV(position, x, z);
+                
+                
+                //gm.uvs[vertex++] = new Vector2((float) x / cellsPerTile, (float)z / cellsPerTile);
+                //gm.uvs[vertex++] = new Vector2((float)x / cellsPerTile, ((float)z + 1.0f)/ cellsPerTile);
+                //gm.uvs[vertex++] = new Vector2(((float)x + 1.0f) / cellsPerTile, ((float)z + 1.0f) / cellsPerTile);
+                //gm.uvs[vertex++] = new Vector2(((float)x + 1.0f) / cellsPerTile, ((float)z + 1.0f) / cellsPerTile);
+                //gm.uvs[vertex++] = new Vector2(((float)x + 1.0f) / cellsPerTile, (float)z / cellsPerTile);
+                //gm.uvs[vertex++] = new Vector2((float)x / cellsPerTile, (float)z / cellsPerTile);
+
+
+
+                //uv.x = (((Mathf.Abs(position.x) / cellSize) % textureGenerator.size) + x) / textureGenerator.size;
+                //uv.y = (((Mathf.Abs(position.z) / cellSize) % textureGenerator.size) + z) / textureGenerator.size;
+
+
+
+                // Make the triangles                
                 for (int i = 0; i < 6; i++)
                 {
                     int vertexIndex = startVertex + i;
                     gm.triangles[vertexIndex] = vertexIndex;
-                    Vector3 vPos = gm.vertices[vertexIndex];
-                    Vector2 uv = new Vector2();
-                    uv.x = (Mathf.Abs(position.x + vPos.x) % textureGenerator.size) / (cellSize * cellsPerTile * tilesPerTexture);
-                    uv.y = (Mathf.Abs(position.z + vPos.z) % textureGenerator.size) / (cellSize * cellsPerTile * tilesPerTexture);
-
-                    //uv.x = (((Mathf.Abs(position.x) / cellSize) % textureGenerator.size) + x) / textureGenerator.size;
-                    //uv.y = (((Mathf.Abs(position.z) / cellSize) % textureGenerator.size) + z) / textureGenerator.size;
-                    gm.uvs[vertexIndex] = uv;
                 }
             }
         }
         return gm;
+    }
 
+    private Vector2 MakeUV(Vector3 tilePos, float x, float z)
+    {
+        
+        // Convert the actual position to a cell position
+        Vector2 cellPos = new Vector2(((tilePos.x / cellSize) % (textureGenerator.size + 1)) + x
+            , ((tilePos.z / cellSize) % (textureGenerator.size + 1)) + z);
+        cellPos /= textureScaling;
+        Vector2 uv = new Vector2((cellPos.x) / (float) textureGenerator.size, (cellPos.y) / (float) textureGenerator.size);
+        return uv;
     }
 
     GameObject GenerateTile(Vector3 position)
@@ -276,9 +309,9 @@ public class GenerateInfinite : MonoBehaviour {
         mesh.triangles = gm.triangles;
         mesh.RecalculateNormals();
 
-        renderer.material.SetTexture(0, textureGenerator.texture);
+        renderer.material.SetTexture("_MainTex", textureGenerator.texture);
         //renderer.material.color = Color.blue; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
-        Shader shader = Shader.Find("Diffuse");
+        /*Shader shader = Shader.Find("Diffuse");
 
         Material material = null;
         if (renderer.material == null)
@@ -286,7 +319,7 @@ public class GenerateInfinite : MonoBehaviour {
             material = new Material(shader);
             renderer.material = material;
         }
-        
+        */
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;
 

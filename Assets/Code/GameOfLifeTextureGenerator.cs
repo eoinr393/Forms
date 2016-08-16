@@ -80,8 +80,8 @@ public class GameOfLifeTextureGenerator : TextureGenerator
     {
         current = new bool[size, size];
         next = new bool[size, size];
-        // MakeGosperGun(boardWidth / 2, boardSize / 2);
-        //MakeTumbler(boardSize / 2, boardSize / 2);        
+        //MakeGosperGun(size / 2, size / 2);
+        //MakeTumbler(size / 2, size / 2);        
         Randomise();
         StartCoroutine("UpdateBoard");
         //StartCoroutine("ResetBoard");
@@ -164,10 +164,10 @@ public class GameOfLifeTextureGenerator : TextureGenerator
 
     System.Collections.IEnumerator UpdateBoard()
     {
-        int totalCells = size * size;
-        float delay = 1.0f / (totalCells * speed);
+        int totalCells = size * size;        
         while (true)
         {
+            float delay = 1.0f / speed;
             if (!paused)
             {
                 ClearBoard(next);
@@ -197,8 +197,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
                             {
                                 next[row, col] = true;
                             }
-                        }
-                        yield return new WaitForSeconds(delay);
+                        }                        
                     }
                 }
             }
@@ -208,6 +207,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
             next = temp;
             t = 0.0f;
             //UpdateTexture();
+            yield return new WaitForSeconds(delay);
         }
     }
 
@@ -343,3 +343,5 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         LerpTexture();
     }
 }
+
+
