@@ -50,7 +50,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         next = new bool[size, size];
         //MakeGosperGun(size / 2, size / 2);
         //MakeTumbler(size / 2, size / 2);        
-        Randomise();
+        MakeGliderRow();
         StartCoroutine("UpdateBoard");
         //StartCoroutine("ResetBoard");
     }
@@ -225,6 +225,23 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         }
     }
 
+    public void MakeGliderRow()
+    {
+        for (int x = 5; x < size; x += 10)
+        {
+            MakeGlider(x, 5);
+        }
+    }
+
+    public void MakeGlider(int x, int y)
+    {
+        On(x + 1, y);
+        On(x, y - 1);
+        On(x - 1, y + 1);
+        On(x, y + 1);
+        On(x + 1, y + 1);
+    }
+
     public void MakeGosperGun(int x, int y)
     {
         On(x + 23, y);
@@ -323,17 +340,6 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         On(x + 5, y + 5);
         On(x + 6, y + 5);
 
-    }
-
-
-
-    public void MakeGlider(int x, int y)
-    {
-        current[y, x + 1] = true;
-        current[y + 1, x + 2] = true;
-        current[y + 2, x] = true;
-        current[y + 2, x + 1] = true;
-        current[y + 2, x + 2] = true;
     }
 }
 
