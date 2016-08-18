@@ -8,8 +8,16 @@ public class SnakeGenerator : MonoBehaviour {
     public float gap;
     public GameObject prefab;
 
-	// Use this for initialization
-	void Start () {
+    public void OnDrawGizmos()
+    {
+        for (int i = 0; i < numParts; i++)
+        {
+            Gizmos.DrawWireSphere(
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
         for (int i = 0; i < numParts; i++)
         {
             GameObject part = (GameObject) GameObject.Instantiate<GameObject>(prefab);
