@@ -14,6 +14,8 @@ public class GameOfLifeTextureGenerator : TextureGenerator
     bool[,] current;
     bool[,] next;
 
+    public bool wrap = false;
+
     public void Clear()
     {
         ClearBoard(current);
@@ -50,12 +52,98 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         next = new bool[size, size];
         //MakeGosperGun(size / 2, size / 2);
         //MakeTumbler(size / 2, size / 2);        
-        MakeGliderRow();
         StartCoroutine("UpdateBoard");
-        //StartCoroutine("ResetBoard");
+        StartCoroutine("Spawner");
+    }
+
+    IEnumerator Spawner()
+    {
+        while (true)
+        {
+            int i = Random.Range(0, 6);
+            int x = Random.Range(5, size - 5);
+            switch (i)
+            {
+                case 0:
+                    MakeGlider(x, 5);
+                    break;
+                //case 1:
+                //    MakeLightWeightSpaceShip(x, 5);
+                //    break;
+                //case 2:
+                //    break;
+                case 5:
+                    //ClearBoard(current);
+                    break;
+            }
+            yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
+        }
     }
 
     bool paused = false;
+
+    int ModNeg(int num, int mod)
+    {
+        int r = num % mod;
+        if (r < 0)
+        {
+            r += mod;
+        }
+        return r;
+    }
+
+    int CountNeighboursWrapped(int row, int col)
+    {
+        int count = 0;
+        int left, right, up, down;
+
+        left = ModNeg(col - 1, size);
+        right = ModNeg(col + 1, size);
+        up = ModNeg(row - 1, size);
+        down = ModNeg(row + 1, size);
+
+        // Top left
+        if ((current[up, left]))
+        {
+            count++;
+        }
+        // Top
+        if (current[up, col])
+        {
+            count++;
+        }
+        // Top right
+        if (current[up, right])
+        {
+            count++;
+        }
+        // Left
+        if (current[row, left])
+        {
+            count++;
+        }
+        // Right
+        if (current[row, right])
+        {
+            count++;
+        }
+        // Bottom left
+        if (current[down, left])
+        {
+            count++;
+        }
+        // Bottom
+        if (current[down, col])
+        {
+            count++;
+        }
+        // Bottom right
+        if (current[down, right])
+        {
+            count++;
+        }
+        return count;
+    }
 
     int CountNeighbours(int row, int col)
     {
@@ -143,7 +231,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
             {
                 for (int col = 0; col < size; col++)
                 {                    
-                    int count = CountNeighbours(row, col);
+                    int count = (wrap) ? CountNeighboursWrapped(row, col) : CountNeighbours(row, col);
                     if (current[row, col])
                     {
                         if (count < 2)
