@@ -75,11 +75,14 @@ public class Boid : MonoBehaviour
     [HideInInspector]
     public SteeringBehaviour[] behaviours;
 
-    private float ThreadTimeDelta()
+    public float TimeDelta
     {
-        float flockMultiplier = (flock == null) ? 1 : flock.timeMultiplier;
-        float timeDelta = multiThreadingEnabled ? flock.threadTimeDelta : Time.deltaTime;
-        return timeDelta * flockMultiplier * timeMultiplier;
+        get
+        {
+            float flockMultiplier = (flock == null) ? 1 : flock.timeMultiplier;
+            float timeDelta = multiThreadingEnabled ? flock.threadTimeDelta : Time.deltaTime;
+            return timeDelta * flockMultiplier * timeMultiplier;
+        }
     }       
 
     void Start()
@@ -103,6 +106,18 @@ public class Boid : MonoBehaviour
         rotation = transform.rotation;
     }
 
+    public Vector3 TransformDirection(Vector3 direction)
+    {
+        return rotation * direction;
+    }
+
+    public Vector3 TransformPoint(Vector3 localPoint)
+    {
+        Vector3 p = rotation * localPoint;
+        p += position;
+        return p;
+    }
+
     float timeAcc = 0;
     Vector3 desiredPosition = Vector3.zero;
 
@@ -113,7 +128,7 @@ public class Boid : MonoBehaviour
         if (!multiThreadingEnabled)
         {
             UpdateLocalFromTransform();
-            CalculateForce();
+            force = CalculateForce();
         }
 
         timeAcc += Time.deltaTime;
@@ -235,7 +250,7 @@ public class Boid : MonoBehaviour
     #endregion
 
     // Shared behaviours
-    public Vector3 Seek(Vector3 targetPos)
+    public Vector3 SeekForce(Vector3 targetPos)
     {
         Vector3 desiredVelocity;
 
@@ -243,5 +258,39 @@ public class Boid : MonoBehaviour
         desiredVelocity.Normalize();
         desiredVelocity *= maxSpeed;
         return (desiredVelocity - velocity);
+    }
+
+    public Vector3 FleeForce(Vector3 target)
+    {
+        Vector3 desiredVelocity;
+        desiredVelocity = position - target;
+        desiredVelocity.Normalize();
+        desiredVelocity *= maxSpeed;
+        Utilities.checkNaN(desiredVelocity);
+        return (desiredVelocity - velocity);
+    }
+
+    public Vector3 ArriveForce(Vector3 target, float slowingDistance = 15.0f, float deceleration = 0.9f)
+    {
+        Vector3 desired = target - position;
+
+        float distance = desired.magnitude;
+
+        if (distance < 1.0f)
+        {
+            return Vector3.zero;
+        }
+        float desiredSpeed = 0;
+        if (distance < slowingDistance)
+        {
+            desiredSpeed = (distance / slowingDistance) * maxSpeed * (1.0f - slowingDistance);
+        }
+        else
+        {
+            desiredSpeed = maxSpeed;
+        }
+        desired *= desiredSpeed;
+
+        return desired - velocity;
     }
 }
