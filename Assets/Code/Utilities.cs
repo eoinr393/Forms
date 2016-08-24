@@ -182,6 +182,13 @@ public class Utilities
         smoothedAccumulator = Interpolate(Clip(smoothRate, 0, 1), smoothedAccumulator, newValue);
     }
 
+    public static Vector3 TransformPointNoScale(Vector3 localPoint, Transform transform)
+    {
+        Vector3 p = transform.rotation * localPoint;
+        p += transform.position;
+        return p;
+    }
+
 
     static public bool checkNaN(ref Vector3 v, Vector3 def)
     {

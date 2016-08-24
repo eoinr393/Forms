@@ -15,7 +15,7 @@ public abstract class SteeringBehaviour: MonoBehaviour
     [HideInInspector]
     public Boid boid;
 
-    public void Start()
+    public void Awake()
     {
         boid = GetComponent<Boid>();
     }

@@ -6,13 +6,16 @@ struct CreaturePart
 {
     public Vector3 position;
     public float size;
+    public enum Part { head, body, fin };
+    public Part part;
+    public GameObject prefab;
 
-    
-
-    public CreaturePart(Vector3 position, float scale)
+    public CreaturePart(Vector3 position, float scale, Part part, GameObject prefab)
     {
         this.position = position;
         this.size = scale;
+        this.part = part;
+        this.prefab = prefab;
     }
 }
 
@@ -38,8 +41,8 @@ public class CreatureGenerator : MonoBehaviour {
 
     public bool flatten = false;
 
-    public GameObject prefab;
-
+    public GameObject headPrefab;
+    public GameObject bodyPrefab;
 
     public void OnDrawGizmos()
     {
@@ -57,7 +60,7 @@ public class CreatureGenerator : MonoBehaviour {
         Gizmos.color = Color.yellow;
         foreach(CreaturePart cp in creatureParts)
         {
-            GameObject part = GameObject.Instantiate<GameObject>(prefab);
+            GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
             part.transform.position = cp.position;
             part.GetComponent<Renderer>().material.color = Color.blue;
             part.transform.localScale = new Vector3(cp.size, cp.size, cp.size);
@@ -76,13 +79,17 @@ public class CreatureGenerator : MonoBehaviour {
         {            
             float partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));
             theta += thetaInc;
-            pos.z += ((lastGap + partSize) / 2) + gap;
+            pos.z -= ((lastGap + partSize) / 2) + gap;
             if (flatten)
             {
                 pos.y -= (partSize / 2);
             }
             lastGap = partSize;
-            cps.Add(new CreaturePart(pos, partSize));
+            cps.Add(new CreaturePart(pos
+                , partSize
+                , (i == 0) ? CreaturePart.Part.head : CreaturePart.Part.body
+                , (i == 0) ? headPrefab : bodyPrefab
+                ));
         }
         return cps;
     }

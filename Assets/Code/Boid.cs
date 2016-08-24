@@ -182,7 +182,6 @@ public class Boid : MonoBehaviour
             if (speed > 0.01f && integrateForces)
             {
                 transform.forward = Vector3.RotateTowards(transform.forward, velocity, Mathf.Deg2Rad * maxTurnDegrees * Time.deltaTime, float.MaxValue);
-                //transform.forward = velocity;
             }
 
             if (applyBanking && integrateForces)
