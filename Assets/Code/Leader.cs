@@ -51,7 +51,7 @@ public class Leader : MonoBehaviour {
 	void FixedUpdate ()
     {
         Transform prevFollower;
-
+        compensator = 1.0f;
         for (int i = 0 ; i < followers.Count; i++)
         {
             if (i == 0)
@@ -65,22 +65,19 @@ public class Leader : MonoBehaviour {
 
             Transform follower = followers[i].transform;
 
-            DelayedMovement(prevFollower, follower, bondDistances[i]);            
+            DelayedMovement(prevFollower, follower, bondDistances[i], i);            
         }
     }
 
-    void DelayedMovement(Transform prevFollower, Transform follower, float bondDistance)
-    {
-        Follower f = follower.gameObject.GetComponent<Follower>();
-        float bondDamping = this.bondDamping;
-        float angularBondDamping = this.angularBondDamping;
+    private float compensator = 1.0f;
 
-        if (f != null)
-        {
-            bondDamping = f.bondDamping;
-            angularBondDamping = f.angularBondDamping;
-        }
-
+    [Range(0.0f, 1.0f)]
+    public float compensation = 0.1f;
+    void DelayedMovement(Transform prevFollower, Transform follower, float bondDistance, int i)
+    {        
+        float bondDamping = this.bondDamping * compensator;
+        float angularBondDamping = this.angularBondDamping * compensator;
+        compensator *= (1.0f - compensation);
         Vector3 wantedPosition = Utilities.TransformPointNoScale(new Vector3(0, 0, -bondDistance), prevFollower.transform);
         follower.transform.position = Vector3.Lerp(follower.transform.position, wantedPosition, Time.deltaTime * bondDamping);
 

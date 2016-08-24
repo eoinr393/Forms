@@ -11,20 +11,20 @@ public class JitterWander: SteeringBehaviour
     public float radius = 10.0f;
 
     [Range(0.0f, 100.0f)]
-    public float jitter = 20.0f;
+    public float jitter = 5.0f;
 
     [Range(0.0f, 100.0f)]
-    public float diatance = 15.0f;
+    public float distance = 15.0f;
 
     private Vector3 target;
 
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * diatance, transform);
+        Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
         Gizmos.DrawWireSphere(wanderCircleCenter, radius);
         Gizmos.color = Color.green;
-        Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * diatance, transform);
+        Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
         Gizmos.DrawLine(transform.position, worldTarget);
     }
 
@@ -42,7 +42,7 @@ public class JitterWander: SteeringBehaviour
         target.Normalize();
         target *= radius;
 
-        Vector3 localTarget = target + Vector3.forward * diatance;
+        Vector3 localTarget = target + Vector3.forward * distance;
         Vector3 worldTarget = boid.TransformPoint(localTarget);
         return (worldTarget - boid.position);
     }
