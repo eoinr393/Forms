@@ -1,6 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+struct JointParam
+{
+    public float bondDamping;
+    public float angularBondDamping;
+    public int joint;
+
+    public JointParam(int joint, float bondDamping, float angularBondDamping)
+    {
+        this.joint = joint;
+        this.bondDamping = bondDamping;
+        this.angularBondDamping = angularBondDamping;
+    }
+}
+
 public class Leader : MonoBehaviour {
 
     public bool autoAssignFollowers = true;
@@ -8,12 +22,11 @@ public class Leader : MonoBehaviour {
 
     List<float> bondDistances = new List<float>();
 
-    [Range(0, 1000)]
-    public float bondDamping = 30.0f;
+    Dictionary<int, JointParam> jointParams = new Dictionary<int, JointParam>();
 
-    [Range(0, 50)]
-    public float angularBondDamping = 7.0f;
-    
+    public float bondDamping;
+    public float angularBondDamping;
+
     void Start()
     {
         Transform prevFollower;
@@ -51,7 +64,6 @@ public class Leader : MonoBehaviour {
 	void FixedUpdate ()
     {
         Transform prevFollower;
-        compensator = 1.0f;
         for (int i = 0 ; i < followers.Count; i++)
         {
             if (i == 0)
@@ -69,15 +81,25 @@ public class Leader : MonoBehaviour {
         }
     }
 
-    private float compensator = 1.0f;
+    
 
-    [Range(0.0f, 1.0f)]
-    public float compensation = 0.1f;
     void DelayedMovement(Transform prevFollower, Transform follower, float bondDistance, int i)
-    {        
-        float bondDamping = this.bondDamping * compensator;
-        float angularBondDamping = this.angularBondDamping * compensator;
-        compensator *= (1.0f - compensation);
+    {
+
+        float bondDamping;
+        float angularBondDamping;
+
+        if (jointParams[i] == null)
+        {
+            bondDamping = this.bondDamping;
+            angularBondDamping = this.angularBondDamping;
+        }
+        else
+        {
+
+        }
+
+
         Vector3 wantedPosition = Utilities.TransformPointNoScale(new Vector3(0, 0, -bondDistance), prevFollower.transform);
         follower.transform.position = Vector3.Lerp(follower.transform.position, wantedPosition, Time.deltaTime * bondDamping);
 
