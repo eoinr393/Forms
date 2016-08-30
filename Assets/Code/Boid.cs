@@ -2,24 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
-struct SceneAvoidanceFeelerInfo
-{
-    public Vector3 point;
-    public Vector3 normal;
-    public bool collided;
-    public FeeelerType feelerType;
-    public enum FeeelerType { front, side };
-    
-    public SceneAvoidanceFeelerInfo(Vector3 point, Vector3 normal, bool collided, FeeelerType feelerType)
-    {
-        this.point = point;
-        this.normal = normal;
-        this.collided = collided;
-        this.feelerType = feelerType;
-    }
-}
-
 public class Boid : MonoBehaviour
 {    
     // Need these because we might be running on a thread and can't touch the transform
