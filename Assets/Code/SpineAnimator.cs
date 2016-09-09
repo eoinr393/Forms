@@ -1,28 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-struct JointParam
+[System.Serializable]
+public class JointParam
 {
     public float bondDamping;
-    public float angularBondDamping;
-    public int joint;
+    public float angularBondDamping;    
 
-    public JointParam(int joint, float bondDamping, float angularBondDamping)
+    public JointParam(float bondDamping, float angularBondDamping)
     {
-        this.joint = joint;
         this.bondDamping = bondDamping;
         this.angularBondDamping = angularBondDamping;
     }
 }
 
-public class Leader : MonoBehaviour {
+public class SpineAnimator : MonoBehaviour {
 
-    public bool autoAssignFollowers = true;
-    public List<GameObject> followers = new List<GameObject>();
+    public bool autoAssignBones = true;
+    
+    public List<GameObject> bones = new List<GameObject>();
 
     List<float> bondDistances = new List<float>();
 
-    Dictionary<int, JointParam> jointParams = new Dictionary<int, JointParam>();
+    public List<JointParam> jointParams = new List<JointParam>();
 
     public float bondDamping;
     public float angularBondDamping;
@@ -32,20 +32,20 @@ public class Leader : MonoBehaviour {
         Transform prevFollower;
         bondDistances.Clear();
 
-        if (autoAssignFollowers)
+        if (autoAssignBones)
         {
-            followers.Clear();
+            bones.Clear();
             for (int i = 0; i < transform.parent.childCount; i++)
             {
                 GameObject child = transform.parent.GetChild(i).gameObject;
                 if (child != this.gameObject)
                 {
-                    followers.Add(child);
+                    bones.Add(child);
                 }
             }
         }
 
-        for (int i = 0; i < followers.Count; i++)
+        for (int i = 0; i < bones.Count; i++)
         {
             if (i == 0)
             {
@@ -53,10 +53,10 @@ public class Leader : MonoBehaviour {
             }
             else
             {
-                prevFollower = followers[i - 1].transform;
+                prevFollower = bones[i - 1].transform;
             }
 
-            Transform follower = followers[i].transform;
+            Transform follower = bones[i].transform;
             bondDistances.Add(Vector3.Distance(prevFollower.position, follower.position));
         }
     }
@@ -64,7 +64,7 @@ public class Leader : MonoBehaviour {
 	void FixedUpdate ()
     {
         Transform prevFollower;
-        for (int i = 0 ; i < followers.Count; i++)
+        for (int i = 0 ; i < bones.Count; i++)
         {
             if (i == 0)
             {
@@ -72,10 +72,10 @@ public class Leader : MonoBehaviour {
             }
             else
             {
-                prevFollower = followers[i - 1].transform;
+                prevFollower = bones[i - 1].transform;
             }
 
-            Transform follower = followers[i].transform;
+            Transform follower = bones[i].transform;
 
             DelayedMovement(prevFollower, follower, bondDistances[i], i);            
         }
@@ -89,14 +89,16 @@ public class Leader : MonoBehaviour {
         float bondDamping;
         float angularBondDamping;
 
-        if (jointParams[i] == null)
+        if (jointParams.Count > i)
         {
-            bondDamping = this.bondDamping;
-            angularBondDamping = this.angularBondDamping;
+            JointParam jp = jointParams[i];
+            bondDamping = jp.bondDamping;
+            angularBondDamping = jp.angularBondDamping;
         }
         else
         {
-
+            bondDamping = this.bondDamping;
+            angularBondDamping = this.angularBondDamping;
         }
 
 
