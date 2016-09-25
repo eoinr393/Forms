@@ -33,6 +33,8 @@ public class Boid : MonoBehaviour
     public bool integrateForces = true;
     public float preferredTimeDelta = 0.0f;
 
+    public float bank;
+
     [HideInInspector]
     public Flock flock;
 
@@ -226,6 +228,14 @@ public class Boid : MonoBehaviour
                 break;
             }            
         }
+
+
+        // Calculate how much banking there is so that the fins can animate 
+        Vector3 projectRight = right;
+        projectRight.y = 0;
+        projectRight.Normalize();
+        bank = Vector3.Angle(right, projectRight);
+        bank = (right.y > 0) ? bank : -bank;
         return totalForce;
     }
     #endregion

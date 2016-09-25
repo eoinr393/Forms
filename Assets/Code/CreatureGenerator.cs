@@ -43,9 +43,12 @@ public class CreatureGenerator : MonoBehaviour {
 
     public GameObject headPrefab;
     public GameObject bodyPrefab;
+    public GameObject finPrefab;
 
-    public string fins;
+    public float finRotationOffset = 20.0f;
 
+    public string finList;
+    
     public void OnDrawGizmos()
     {
         List<CreaturePart> creatureParts = CreateCreatureParams();
@@ -58,15 +61,57 @@ public class CreatureGenerator : MonoBehaviour {
 
     void CreateCreature()
     {
+        string[] fla = finList.Split(',');
         List<CreaturePart> creatureParts = CreateCreatureParams();
         Gizmos.color = Color.yellow;
-        foreach(CreaturePart cp in creatureParts)
+        Boid boid = null;
+
+        int finNumber = 0;
+        for (int i = 0; i < creatureParts.Count; i ++)
         {
+            CreaturePart cp = creatureParts[i];
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
             part.transform.position = cp.position;
             part.GetComponent<Renderer>().material.color = color;
             part.transform.localScale = new Vector3(cp.size, cp.size, cp.size);
             part.transform.parent = transform;
+            if (i == 0)
+            {
+                boid = part.GetComponent<Boid>();
+            }
+
+            // Make fins ars required
+            
+            if (System.Array.Find(fla, p => p == "" + i) != null)
+            {
+                float scale = cp.size / (finNumber + 1);
+                GameObject fin = GameObject.Instantiate<GameObject>(finPrefab);
+                Vector3 lf = cp.position;
+                lf.x -= cp.size;
+                fin.transform.position = lf;
+                
+                fin.transform.localScale = new Vector3(scale, scale * 0.1f, scale);
+                fin.GetComponentInChildren<Renderer>().material.color = color;
+                fin.GetComponentInChildren<FinAnimator>().boid = boid;
+                fin.GetComponentInChildren<FinAnimator>().side = FinAnimator.Side.left;
+                fin.GetComponentInChildren<FinAnimator>().rotationOffset += (finNumber * finRotationOffset);
+                fin.transform.parent = part.transform;
+                
+                fin = GameObject.Instantiate<GameObject>(finPrefab);
+                fin.GetComponentInChildren<FinAnimator>().boid = boid;
+                fin.GetComponentInChildren<FinAnimator>().rotationOffset += (finNumber * finRotationOffset);
+                fin.GetComponentInChildren<FinAnimator>().side = FinAnimator.Side.right;
+                Vector3 rf = cp.position;
+                rf.x += cp.size;
+                fin.transform.position = rf;
+                fin.transform.localScale = new Vector3(scale, scale * 0.1f, scale);
+                fin.GetComponentInChildren<Renderer>().material.color = color;
+                fin.transform.parent = part.transform;
+
+                finNumber++;
+            }
+
+
         }
     }
 

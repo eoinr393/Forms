@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class FinAnimator : MonoBehaviour {
+
+    public enum Side { left, right };
+    public Side side = Side.left;
+
     public Boid boid;
     private Harmonic harmonic;
     float theta = 0;
@@ -15,16 +19,43 @@ public class FinAnimator : MonoBehaviour {
     public float wigglyness = 1;
 	// Use this for initialization
 	void Start () {
-        harmonic = boid.GetComponent<Harmonic>();
-        initialAmplitude = harmonic.amplitude;
+        if (boid != null)
+        {
+            harmonic = boid.GetComponent<Harmonic>();
+            if (harmonic != null)
+            {
+                initialAmplitude = harmonic.amplitude;
+            }
+        }
     }
-	
-	// Update is called once per frame
-	void Update () {
-        float offset = rotationOffset * Mathf.Deg2Rad;
-        float angle = Mathf.Sin((harmonic.theta + offset))
-            * (harmonic.rampedAmplitude / initialAmplitude) * amplitude * wigglyness;
-        transform.localRotation = Quaternion.Euler(angle, 0, 0);
-        theta += Time.deltaTime;
+
+    public float leftRightAmp;
+    public float maxBank = float.MinValue;
+    // Update is called once per frame
+    void Update () {
+        if (harmonic != null)
+        {
+            float offset = rotationOffset * Mathf.Deg2Rad;
+            // Left right stuff
+            if (side == Side.right && boid.bank < 0)
+            {
+                leftRightAmp = 40 - Mathf.Abs(boid.bank); 
+            }
+
+            if (side == Side.left && boid.bank > 0)
+            {
+                leftRightAmp = 40 - Mathf.Abs(boid.bank);
+            }
+
+            if (Mathf.Abs(boid.bank) > maxBank)
+            {
+                maxBank = Mathf.Abs(boid.bank);
+            }
+
+            float angle = Mathf.Sin((harmonic.theta + offset))
+                * (harmonic.rampedAmplitude / initialAmplitude) * leftRightAmp * wigglyness;
+            transform.localRotation = Quaternion.Euler(angle, 0, 0);
+            theta += Time.deltaTime;
+        }
 	}
 }
