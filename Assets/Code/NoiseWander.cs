@@ -34,11 +34,7 @@ public class NoiseWander: SteeringBehaviour
         float n = Mathf.PerlinNoise(noise, 0);
         float theta = Utilities.Map(n, 0.0f, 1.0f, 0, Mathf.PI * 2.0f);
         target.x = Mathf.Sin(theta);
-        target.z = -Mathf.Cos(theta);
-
-        n = Mathf.PerlinNoise(noise, 0);
-        theta = Utilities.Map(n, 0.0f, 1.0f, 0, Mathf.PI * 2.0f);
-
+        target.z = -Mathf.Cos(theta);        
         target.y = 0;
         target *= radius;
         Vector3 localTarget = target + (Vector3.forward * distance);

@@ -28,15 +28,15 @@ public class CreatureGenerator : MonoBehaviour {
     public float frequency = 1.0f;
 
 
-    [Range(1, 100)]
+    [Range(1, 1000)]
     public int numParts = 5;
 
-    [Range(-10.0f, 10.0f)]
+    [Range(-1000.0f, 1000.0f)]
     public float gap = 1;
 
     public Color color = Color.blue;
 
-    [Range(1.0f, 100.0f)]
+    [Range(1.0f, 5000.0f)]
     public float verticalSize = 1.0f;
 
     public bool flatten = false;
@@ -62,7 +62,7 @@ public class CreatureGenerator : MonoBehaviour {
         {
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
             part.transform.position = cp.position;
-            part.GetComponent<Renderer>().material.color = Color.blue;
+            part.GetComponent<Renderer>().material.color = color;
             part.transform.localScale = new Vector3(cp.size, cp.size, cp.size);
             part.transform.parent = transform;
         }

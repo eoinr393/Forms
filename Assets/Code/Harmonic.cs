@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 
-public class Wiggle: SteeringBehaviour
+public class Harmonic: SteeringBehaviour
 {
     [Range(0.0f, 360.0f)]
     public float speed = 30;
@@ -14,13 +14,13 @@ public class Wiggle: SteeringBehaviour
     public enum Axis { Horizontal, Vertical };
 
     [HideInInspector]
-    public float wiggleTheta = 0.0f;
+    public float theta = 0.0f;
     private Vector3 target = Vector3.zero;
 
     [HideInInspector]
-    public float rampedWiggleSpeed = 0;
+    public float rampedSpeed = 0;
     [HideInInspector]
-    public float rampedWiggleAmplitude = 0;
+    public float rampedAmplitude = 0;
     [Range(0.0f, 100.0f)]
     public float radius = 50.0f;
 
@@ -39,11 +39,11 @@ public class Wiggle: SteeringBehaviour
 
     public override Vector3 Calculate()
     {
-        float n = Mathf.Sin(wiggleTheta);
+        float n = Mathf.Sin(this.theta);
 
-        rampedWiggleAmplitude = Mathf.Lerp(rampedWiggleAmplitude, amplitude, 1);
+        rampedAmplitude = amplitude; // Mathf.Lerp(rampedAmplitude, amplitude, 1);
 
-        float t = Utilities.Map(n, -1.0f, 1.0f, -rampedWiggleAmplitude, rampedWiggleAmplitude);
+        float t = Utilities.Map(n, -1.0f, 1.0f, -rampedAmplitude, rampedAmplitude);
         float theta = Mathf.Sin(Utilities.DegreesToRads(t));
 
         if (direction == Axis.Horizontal)
@@ -66,12 +66,12 @@ public class Wiggle: SteeringBehaviour
         Vector3 worldTarget = boid.TransformPoint(localTarget);
 
         Vector3 worldTargetOnY = transform.position + Quaternion.Euler(yawRoll) * localTarget;
-        rampedWiggleSpeed = Mathf.Lerp(rampedWiggleSpeed, speed, Time.deltaTime * 2.0f);
-        wiggleTheta += boid.TimeDelta * rampedWiggleSpeed * Mathf.Deg2Rad;
+        rampedSpeed = Mathf.Lerp(rampedSpeed, speed, Time.deltaTime * 2.0f);
+        this.theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
         //wiggleTheta += ThreadTimeDelta() * wiggleAngularSpeedDegrees * Mathf.Deg2Rad;
-        if (wiggleTheta > Utilities.TWO_PI)
+        if (this.theta > Utilities.TWO_PI)
         {
-            wiggleTheta = Utilities.TWO_PI - wiggleTheta;
+            this.theta = Utilities.TWO_PI - this.theta;
         }
 
         return boid.SeekForce(worldTargetOnY);
