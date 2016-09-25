@@ -87,7 +87,7 @@ public class CreatureGenerator : MonoBehaviour {
                 float scale = cp.size / (finNumber + 1);
                 GameObject fin = GameObject.Instantiate<GameObject>(finPrefab);
                 Vector3 lf = cp.position;
-                lf.x -= cp.size;
+                lf.x = (lf.x - cp.size / 2) - (scale * 0.7f);
                 fin.transform.position = lf;
                 
                 fin.transform.localScale = new Vector3(scale, scale * 0.1f, scale);
@@ -102,7 +102,7 @@ public class CreatureGenerator : MonoBehaviour {
                 fin.GetComponentInChildren<FinAnimator>().rotationOffset += (finNumber * finRotationOffset);
                 fin.GetComponentInChildren<FinAnimator>().side = FinAnimator.Side.right;
                 Vector3 rf = cp.position;
-                rf.x += cp.size;
+                rf.x = (rf.x + cp.size / 2) + (scale * 0.7f);
                 fin.transform.position = rf;
                 fin.transform.localScale = new Vector3(scale, scale * 0.1f, scale);
                 fin.GetComponentInChildren<Renderer>().material.color = color;

@@ -29,22 +29,24 @@ public class FinAnimator : MonoBehaviour {
         }
     }
 
-    public float leftRightAmp;
+    
+    public float leftRightCooefficient = 50.0f;
     public float maxBank = float.MinValue;
     // Update is called once per frame
     void Update () {
         if (harmonic != null)
         {
             float offset = rotationOffset * Mathf.Deg2Rad;
+            float leftRightAmp = amplitude;
             // Left right stuff
             if (side == Side.right && boid.bank < 0)
             {
-                leftRightAmp = 40 - Mathf.Abs(boid.bank); 
+                leftRightAmp = leftRightCooefficient - Mathf.Abs(boid.bank); 
             }
 
             if (side == Side.left && boid.bank > 0)
             {
-                leftRightAmp = 40 - Mathf.Abs(boid.bank);
+                leftRightAmp = leftRightCooefficient - Mathf.Abs(boid.bank);
             }
 
             if (Mathf.Abs(boid.bank) > maxBank)

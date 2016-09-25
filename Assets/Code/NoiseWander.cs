@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 
 
+
 public class NoiseWander: SteeringBehaviour
 {
     private Vector3 target = Vector3.zero;
@@ -18,6 +19,11 @@ public class NoiseWander: SteeringBehaviour
     public float noisiness = 0.2f;
 
     private float noise = 0.0f;
+
+    public void Start()
+    {
+        noise = UnityEngine.Random.Range(0, 1000);
+    }
 
     public void OnDrawGizmos()
     {
