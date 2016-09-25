@@ -85,11 +85,11 @@ public class Leader : MonoBehaviour {
 
     void DelayedMovement(Transform prevFollower, Transform follower, float bondDistance, int i)
     {
-
+        /*
         float bondDamping;
         float angularBondDamping;
 
-        if (jointParams[i] == null)
+        //if (jointParams[i] == null)
         {
             bondDamping = this.bondDamping;
             angularBondDamping = this.angularBondDamping;
@@ -105,5 +105,6 @@ public class Leader : MonoBehaviour {
 
         Quaternion wantedRotation = Quaternion.LookRotation(prevFollower.position - follower.transform.position, prevFollower.up);
         follower.transform.rotation = Quaternion.Slerp(follower.transform.rotation, wantedRotation, Time.deltaTime * angularBondDamping);
+        */
     }
 }
