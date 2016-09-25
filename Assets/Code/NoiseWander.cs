@@ -14,9 +14,12 @@ public class NoiseWander: SteeringBehaviour
 
     [Range(0.0f, 100.0f)]
     public float distance = 5.0f;
-
+    
     [Range(0.001f, 1.0f)]
     public float noisiness = 0.2f;
+
+    [Range(0.0f, 1.0f)]
+    public float straightness = 0.0f;
 
     private float noise = 0.0f;
 
@@ -38,7 +41,7 @@ public class NoiseWander: SteeringBehaviour
     public override Vector3 Calculate()
     {
         float n = Mathf.PerlinNoise(noise, 0);
-        float theta = Utilities.Map(n, 0.0f, 1.0f, 0, Mathf.PI * 2.0f);
+        float theta = Utilities.Map(n > straightness ? n - straightness : 0, 0.0f, 1.0f, 0, Mathf.PI * 2.0f);
         target.x = Mathf.Sin(theta);
         target.z = -Mathf.Cos(theta);        
         target.y = 0;

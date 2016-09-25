@@ -73,7 +73,7 @@ public class CreatureGenerator : MonoBehaviour {
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
             part.transform.position = cp.position;
             part.GetComponent<Renderer>().material.color = color;
-            part.transform.localScale = new Vector3(cp.size, cp.size, cp.size);
+            part.transform.localScale = new Vector3(cp.size * part.transform.localScale.x, cp.size * part.transform.localScale.y, cp.size * part.transform.localScale.z);
             part.transform.parent = transform;
             if (i == 0)
             {
@@ -84,7 +84,7 @@ public class CreatureGenerator : MonoBehaviour {
             
             if (System.Array.Find(fla, p => p == "" + i) != null)
             {
-                float scale = cp.size / (finNumber + 1);
+                float scale = cp.size / ((finNumber / 2) + 1);
                 GameObject fin = GameObject.Instantiate<GameObject>(finPrefab);
                 Vector3 lf = cp.position;
                 lf.x = (lf.x - cp.size / 2) - (scale * 0.7f);
