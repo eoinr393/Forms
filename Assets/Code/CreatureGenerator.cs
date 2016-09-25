@@ -44,6 +44,8 @@ public class CreatureGenerator : MonoBehaviour {
     public GameObject headPrefab;
     public GameObject bodyPrefab;
 
+    public string fins;
+
     public void OnDrawGizmos()
     {
         List<CreaturePart> creatureParts = CreateCreatureParams();
