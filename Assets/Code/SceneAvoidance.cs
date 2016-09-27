@@ -37,6 +37,22 @@ public class SceneAvoidance: SteeringBehaviour
     public enum ForceType { normal, incident, braking };
     public ForceType forceType = ForceType.normal;
 
+    public void OnDrawGizmos()
+    {
+        foreach (FeelerInfo feeler in feelers)
+        {
+            if (feeler.collided)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(transform.position, feeler.point);
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(feeler.point, feeler.point + (feeler.normal * 5));
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(feeler.point, feeler.point + (boid.force / 100.0f));
+            }
+        }
+    }
+
     public override Vector3 Calculate()
     {
         Vector3 force = Vector3.zero;

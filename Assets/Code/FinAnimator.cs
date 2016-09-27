@@ -8,7 +8,7 @@ public class FinAnimator : MonoBehaviour {
 
     public Boid boid;
     private Harmonic harmonic;
-    float theta = 0;
+    public float theta = 0;
     float initialAmplitude;
     public float amplitude = 40.0f;
 
@@ -25,48 +25,31 @@ public class FinAnimator : MonoBehaviour {
             if (harmonic != null)
             {
                 initialAmplitude = harmonic.amplitude;
+                theta = harmonic.theta;
             }
         }
-        leftRightAmp = amplitude;
     }
 
-    
-    public float leftRightCooefficient = 50.0f;
-    public float maxBank = float.MinValue;
-
-    float leftRightAmp;
+    public float lerpedAmplitude;
     // Update is called once per frame
-    void Update () {
+    void Update () {        
         if (harmonic != null)
         {
-            float targetAmplitude = 0 ;
             float offset = rotationOffset * Mathf.Deg2Rad;
-            
-            // Left right stuff
-            if (side == Side.right && boid.bank < 0)
+
+            // Are we Banking?
+            if (((side == Side.left && boid.bank < -5) || (side == Side.right && boid.bank > 5)))
             {
-                targetAmplitude = leftRightCooefficient - Mathf.Abs(boid.bank);
-            }
-            else if (side == Side.left && boid.bank > 0)
-            {
-                targetAmplitude = leftRightCooefficient - Mathf.Abs(boid.bank);
+                lerpedAmplitude = Mathf.Lerp(lerpedAmplitude, 0, Time.deltaTime);
             }
             else
             {
-                targetAmplitude = amplitude;
+                lerpedAmplitude  = Mathf.Lerp(lerpedAmplitude, amplitude, Time.deltaTime);
             }
-
-            leftRightAmp = Mathf.Lerp(leftRightAmp, targetAmplitude, Time.deltaTime);
-
-            if (Mathf.Abs(boid.bank) > maxBank)
-            {
-                maxBank = Mathf.Abs(boid.bank);
-            }
-
+            
             float angle = Mathf.Sin((harmonic.theta + offset))
-                * (harmonic.rampedAmplitude / initialAmplitude) * leftRightAmp * wigglyness;
+            * (harmonic.rampedAmplitude / initialAmplitude) * lerpedAmplitude * wigglyness;
             transform.localRotation = Quaternion.Euler(angle, 0, 0);
-            theta += Time.deltaTime;
         }
 	}
 }

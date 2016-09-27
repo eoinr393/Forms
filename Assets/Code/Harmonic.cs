@@ -29,7 +29,7 @@ public class Harmonic: SteeringBehaviour
 
     public void Start()
     {
-        theta = UnityEngine.Random.Range(-Mathf.PI, Mathf.PI);
+        theta = UnityEngine.Random.Range(0, Mathf.PI);
     }
 
     public void OnDrawGizmos()
