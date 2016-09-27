@@ -47,7 +47,8 @@ public class CreatureGenerator : MonoBehaviour {
 
     public GameObject headPrefab;
     public GameObject bodyPrefab;
-    public GameObject finPrefab;
+    public GameObject leftFinPrefab;
+    public GameObject rightFinPrefab;
 
     public float finRotationOffset = 20.0f;
 
@@ -99,19 +100,21 @@ public class CreatureGenerator : MonoBehaviour {
 
     private GameObject GenerateFin(float scale, CreaturePart cp, Boid boid, float rotationOffset, GameObject part, FinAnimator.Side side)
     {
-        GameObject fin = GameObject.Instantiate<GameObject>(finPrefab);
+        GameObject fin = null; 
         Vector3 pos = cp.position;
         switch (side)
         {
             case FinAnimator.Side.left:
-                pos.x = (pos.x - cp.size / 2) - (scale * 0.7f);
+                fin = GameObject.Instantiate<GameObject>(leftFinPrefab);
+                pos.x = (pos.x - cp.size / 2);
                 break;
             case FinAnimator.Side.right:
-                pos.x = (pos.x + cp.size / 2) + (scale * 0.7f);
+                fin = GameObject.Instantiate<GameObject>(rightFinPrefab);
+                pos.x = (pos.x + cp.size / 2);
                 break;
         }
         fin.transform.position = pos;
-        fin.transform.GetChild(0).transform.localScale = new Vector3(scale, scale * 0.1f, scale);
+        fin.transform.localScale = new Vector3(scale, scale, scale);
         fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;
