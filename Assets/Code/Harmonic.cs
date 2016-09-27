@@ -21,10 +21,10 @@ public class Harmonic: SteeringBehaviour
     public float rampedSpeed = 0;
     [HideInInspector]
     public float rampedAmplitude = 0;
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 500.0f)]
     public float radius = 50.0f;
 
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 500.0f)]
     public float distance = 5.0f;
 
     public void Start()
@@ -34,12 +34,15 @@ public class Harmonic: SteeringBehaviour
 
     public void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0, 0, 170);
-        Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
-        Gizmos.DrawWireSphere(wanderCircleCenter, radius);
-        Gizmos.color = new Color(0, 170, 0);
-        Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
-        Gizmos.DrawLine(transform.position, worldTarget);
+        if (isActiveAndEnabled)
+        {
+            Gizmos.color = new Color(0, 0, 170);
+            Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
+            Gizmos.DrawWireSphere(wanderCircleCenter, radius);
+            Gizmos.color = new Color(0, 170, 0);
+            Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
+            Gizmos.DrawLine(transform.position, worldTarget);
+        }
     }
 
     public override Vector3 Calculate()

@@ -221,11 +221,14 @@ public class Boid : MonoBehaviour
 
         foreach (SteeringBehaviour behaviour in behaviours)
         {
-            Vector3 force = behaviour.Calculate() * behaviour.weight;
-            force *= weight;
-            if (!AccumulateForce(ref totalForce, force))
+            if (behaviour.isActiveAndEnabled)
             {
-                break;
+                Vector3 force = behaviour.Calculate() * behaviour.weight;
+                force *= weight;
+                if (!AccumulateForce(ref totalForce, force))
+                {
+                    break;
+                }
             }            
         }
 

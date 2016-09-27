@@ -9,10 +9,10 @@ using UnityEngine;
 public class NoiseWander: SteeringBehaviour
 {
     private Vector3 target = Vector3.zero;
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 500.0f)]
     public float radius = 50.0f;
 
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 500.0f)]
     public float distance = 5.0f;
     
     [Range(0.001f, 1.0f)]
@@ -30,12 +30,15 @@ public class NoiseWander: SteeringBehaviour
 
     public void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
-        Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
-        Gizmos.DrawWireSphere(wanderCircleCenter, radius);
-        Gizmos.color = Color.green;
-        Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
-        Gizmos.DrawLine(transform.position, worldTarget);
+        if (isActiveAndEnabled)
+        {
+            Gizmos.color = Color.blue;
+            Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
+            Gizmos.DrawWireSphere(wanderCircleCenter, radius);
+            Gizmos.color = Color.green;
+            Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
+            Gizmos.DrawLine(transform.position, worldTarget);
+        }
     }
 
     public override Vector3 Calculate()
