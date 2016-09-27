@@ -56,7 +56,7 @@ public class FinAnimator : MonoBehaviour {
                 targetAmplitude = amplitude;
             }
 
-            leftRightAmp = Mathf.Lerp(leftRightAmp, targetAmplitude, Time.deltaTime * 3.0f);
+            leftRightAmp = Mathf.Lerp(leftRightAmp, targetAmplitude, Time.deltaTime);
 
             if (Mathf.Abs(boid.bank) > maxBank)
             {

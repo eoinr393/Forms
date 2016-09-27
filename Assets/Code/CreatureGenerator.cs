@@ -93,8 +93,6 @@ public class CreatureGenerator : MonoBehaviour {
                 GameObject rightFin = GenerateFin(scale, cp, boid, (finNumber * finRotationOffset), part, FinAnimator.Side.right);
                 finNumber++;
             }
-
-
         }
     }
 
@@ -118,7 +116,7 @@ public class CreatureGenerator : MonoBehaviour {
         fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;
-        fin.GetComponentInChildren<FinAnimator>().rotationOffset += rotationOffset;
+        fin.GetComponentInChildren<FinAnimator>().rotationOffset -= rotationOffset;
         fin.transform.parent = part.transform;
         return fin;
     }
