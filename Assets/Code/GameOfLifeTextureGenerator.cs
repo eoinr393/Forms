@@ -203,7 +203,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
             for (int col = 0; col < size; col++)
             {
                 float f = UnityEngine.Random.Range(0.0f, 1.0f);
-                if (f > 0.5f)
+                if (f > 0.2f)
                 {
                     current[row, col] = true;
                 }

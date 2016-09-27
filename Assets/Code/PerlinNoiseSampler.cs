@@ -3,8 +3,7 @@ using System.Collections;
 
 
 public class PerlinNoiseSampler:Sampler
-{
-    
+{   
     [Range(0, 10)]
     public float origin = 0;
 
@@ -20,7 +19,7 @@ public class PerlinNoiseSampler:Sampler
 
     public override float Sample(float x, float y)
     {
-        float sample = Mathf.PerlinNoise(origin + (x * scale), origin + (y * scale)) * height;
+        float sample = (Mathf.PerlinNoise(origin + (x * scale), origin + (y * scale))) * height;
         return sample;
     }
 }

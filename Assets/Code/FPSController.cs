@@ -67,6 +67,11 @@ namespace BGE
 
             float runAxis = 0; // Input.GetAxis("Run Axis");
 
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+
             if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
             {
                 speed *= 10.0f;
