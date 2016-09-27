@@ -52,6 +52,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         next = new bool[size, size];
         //MakeGosperGun(size / 2, size / 2);
         //MakeTumbler(size / 2, size / 2);        
+        Randomise();
         StartCoroutine("UpdateBoard");
         StartCoroutine("Spawner");
     }
@@ -65,7 +66,8 @@ public class GameOfLifeTextureGenerator : TextureGenerator
             switch (i)
             {
                 case 0:
-                    MakeGlider(x, 5);
+                    Randomise();
+                    //MakeGlider(x, 5);
                     break;
                 //case 1:
                 //    MakeLightWeightSpaceShip(x, 5);
