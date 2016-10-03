@@ -71,9 +71,10 @@ public class GenerateInfinite : MonoBehaviour {
             int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
 
             Gizmos.color = Color.cyan;
-            for (int x = -halfTile; x < halfTile; x++)
+            int gizmoTiles = 2; 
+            for (int x = -gizmoTiles; x < gizmoTiles; x++)
             {
-                for (int z = -halfTile; z < halfTile; z++)
+                for (int z = -gizmoTiles; z < gizmoTiles; z++)
                 {
                     Vector3 pos = new Vector3((x * cellsPerTile + playerX),
                                                 0,
