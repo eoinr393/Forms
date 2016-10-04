@@ -71,7 +71,7 @@ public class GenerateInfinite : MonoBehaviour {
             int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
 
             Gizmos.color = Color.cyan;
-            int gizmoTiles = 2; 
+            int gizmoTiles = 4; 
             for (int x = -gizmoTiles; x < gizmoTiles; x++)
             {
                 for (int z = -gizmoTiles; z < gizmoTiles; z++)
@@ -80,6 +80,7 @@ public class GenerateInfinite : MonoBehaviour {
                                                 0,
                                               (z * cellsPerTile + playerZ));
                     pos *= cellSize;
+                    pos += transform.position;
                     GeneratedMesh gm = GenerateMesh(pos);
                     for (int i = 0; i < gm.vertices.Length; i += 2)
                     {
@@ -104,7 +105,7 @@ public class GenerateInfinite : MonoBehaviour {
     // Use this for initialization
     void Start () 
 	{
-		this.gameObject.transform.position = Vector3.zero;
+		//this.gameObject.transform.position = Vector3.zero;
 		startPos = Vector3.zero;
 
         textureGenerator = GetComponent<TextureGenerator>();
@@ -299,7 +300,7 @@ public class GenerateInfinite : MonoBehaviour {
         Mesh mesh = tile.AddComponent<MeshFilter>().mesh;
         mesh.Clear();
         MeshCollider meshCollider = tile.AddComponent<MeshCollider>();        
-        tile.transform.position = position;
+        tile.transform.position = position + transform.position;
 
         Rigidbody rigidBody = tile.AddComponent<Rigidbody>();
         rigidBody.isKinematic = true;

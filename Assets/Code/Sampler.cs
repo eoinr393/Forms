@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class Sampler : MonoBehaviour
 {
-    public enum operations { add, subtract, multiply, divide };
+    public enum operations { add, subtract, multiply, divide , ignore};
     public operations operation = operations.add;
 
     public Sampler()
@@ -24,6 +24,8 @@ public abstract class Sampler : MonoBehaviour
                 return input * Sample(x, y);
             case operations.divide:
                 return input / Sample(x, y);
+            case operations.ignore:
+                return input;
             default:
                 return 0;
         }

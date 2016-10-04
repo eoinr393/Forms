@@ -4,9 +4,10 @@ using System.Collections;
 
 public class PerlinNoiseSampler:Sampler
 {
-
     [Range(0, 1)]
     public float low = 1.0f;
+
+    [Range(0, 1)]
     public float high = 0.0f;
 
     [Range(0, 10)]
@@ -25,7 +26,19 @@ public class PerlinNoiseSampler:Sampler
     public override float Sample(float x, float y)
     {
         float noise = Mathf.PerlinNoise(origin + (x * scale), origin + (y * scale));
-        noise = (noise > high) ? (noise - high) : high;
+        float mid = 0.5f;
+        if (noise > high)
+        {
+            noise = mid + (noise - high);
+        }
+        else if (noise < low)
+        {
+            noise = mid + (noise - low);
+        }
+        else
+        {
+            noise = mid;
+        }
         float sample =  noise * height;
         return sample;
     }
