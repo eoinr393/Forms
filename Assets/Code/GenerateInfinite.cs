@@ -65,8 +65,7 @@ public class GenerateInfinite : MonoBehaviour {
             if (samplers == null)
             {
                 Debug.Log("Sampler is null! Add a sampler to the NoiseForm");
-            }
-            Random.seed = 42;
+            }            
             int playerX = (int)(Mathf.Floor((player.transform.position.x) / (cellsPerTile * cellSize)) * cellsPerTile);
             int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (cellsPerTile * cellSize)) * cellsPerTile);
 

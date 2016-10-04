@@ -187,7 +187,7 @@ public class Boid : MonoBehaviour
         }
         else
         {
-            transform.position = desiredPosition;
+            if (integrateForces) transform.position = desiredPosition;
         }            
     }
 
