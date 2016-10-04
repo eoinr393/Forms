@@ -32,11 +32,14 @@ public class NoiseWander: SteeringBehaviour
     {
         if (isActiveAndEnabled)
         {
+            
             Gizmos.color = Color.blue;
             Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
+            Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(wanderCircleCenter, radius);
-            Gizmos.color = Color.green;
             Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
+
+            Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, worldTarget);
         }
     }

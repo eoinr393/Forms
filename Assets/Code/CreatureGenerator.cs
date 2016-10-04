@@ -56,11 +56,14 @@ public class CreatureGenerator : MonoBehaviour {
     
     public void OnDrawGizmos()
     {
-        List<CreaturePart> creatureParts = CreateCreatureParams();
-        Gizmos.color = Color.yellow;
-        foreach(CreaturePart cp in creatureParts)
+        if (!Application.isPlaying)
         {
-            Gizmos.DrawWireSphere(cp.position, cp.size * 0.5f);
+            List<CreaturePart> creatureParts = CreateCreatureParams();
+            Gizmos.color = Color.yellow;
+            foreach (CreaturePart cp in creatureParts)
+            {
+                Gizmos.DrawWireSphere(cp.position, cp.size * 0.5f);
+            }
         }
     }
 
