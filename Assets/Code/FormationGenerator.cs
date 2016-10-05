@@ -41,18 +41,21 @@ public class FormationGenerator : MonoBehaviour {
     void GeneratePositions()
     {
         positions.Clear();
-        GenerateCreaturePosition(transform.position, 0, 10);
+        GenerateCreaturePosition(transform.position, 0, sideWidth);
     }
 
     void OnDrawGizmos()
     {
-        GeneratePositions();
-        if (isActiveAndEnabled)
+        if (!Application.isPlaying)
         {
-            foreach (Vector3 pos in positions)
+            GeneratePositions();
+            if (isActiveAndEnabled)
             {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawCube(pos, Vector3.one * gap * 0.5f);
+                foreach (Vector3 pos in positions)
+                {
+                    Gizmos.color = Color.magenta;
+                    Gizmos.DrawCube(pos, Vector3.one * gap * 0.5f);
+                }
             }
         }
     }
@@ -78,13 +81,14 @@ public class FormationGenerator : MonoBehaviour {
                 go.transform.position = positions[i];
                 go.transform.parent = transform;
                 go.SetActive(true);
-                //Formation formation = go.GetComponent<Formation>();
-                //if (formation == null)
-                //{
-                //    formation = go.AddComponent<Formation>();
-                //}
-                //formation.leader = leader.GetComponent<Boid>();
-            }       
+                Formation formation = go.GetComponentInChildren<Formation>();
+                if (formation == null)
+                {
+                   formation = go.GetComponentInChildren<Boid>().gameObject.AddComponent<Formation>();
+                }
+                Boid boid = leader.GetComponentInChildren<Boid>();
+                formation.leader = leader;
+            }
         }
     }
 	

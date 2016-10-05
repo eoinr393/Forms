@@ -4,14 +4,16 @@ using System;
 
 public class Formation : SteeringBehaviour
 {
-    public Boid leader;
+    private Boid leaderBoid;
+    public GameObject leader;
     private Vector3 offset;
     private Vector3 targetPos;
 
     public void Start()
     {
-        if (leader != null)
+        if (leader  != null)
         {
+            leaderBoid = leader.GetComponentInChildren<Boid>();
             offset = transform.position - leader.transform.position;
             offset = Quaternion.Inverse(transform.rotation) * offset;
         }
@@ -19,7 +21,7 @@ public class Formation : SteeringBehaviour
 
     public void OnDrawGizmos()
     {
-        if (isActiveAndEnabled)
+        if (isActiveAndEnabled && leaderBoid != null)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, targetPos);
@@ -28,24 +30,31 @@ public class Formation : SteeringBehaviour
 
     public override Vector3 Calculate()
     {
-        Vector3 target = Vector3.zero;
+        if (leaderBoid != null)
+        {
+            Vector3 targetPos = Vector3.zero;
 
-        target = leader.TransformPoint(offset);
-        
-        float dist = (target - boid.position).magnitude;
+            targetPos = leaderBoid.TransformPoint(offset);
 
-        float lookAhead = (dist / boid.maxSpeed);
+            float dist = (targetPos - boid.position).magnitude;
 
-        target = target + (lookAhead * leader.velocity);
+            float lookAhead = (dist / boid.maxSpeed);
 
-        /*float pitchForce = target.y - position.y;
-        pitchForce *= (1.0f - pitchForceScale);
-        target.y -= pitchForce;
+            targetPos = targetPos + (lookAhead * leaderBoid.velocity);
 
-        offsetPursuitTargetPos = target;
+            /*float pitchForce = target.y - position.y;
+            pitchForce *= (1.0f - pitchForceScale);
+            target.y -= pitchForce;
 
-        Utilities.checkNaN(target);
-        */
-        return boid.ArriveForce(target);
+            offsetPursuitTargetPos = target;
+
+            Utilities.checkNaN(target);
+            */
+            return boid.SeekForce(targetPos);
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
 }
