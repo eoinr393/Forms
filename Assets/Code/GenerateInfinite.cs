@@ -30,6 +30,7 @@ class Tile
 	}
 }
 
+/*
 class GeneratedMesh
 {
     public Vector3[] vertices;
@@ -38,6 +39,7 @@ class GeneratedMesh
     public Color[] colours;
     public int[] triangles;
 }
+*/
 
 public class GenerateInfinite : MonoBehaviour {
 	public GameObject player;
@@ -80,10 +82,10 @@ public class GenerateInfinite : MonoBehaviour {
                                               (z * cellsPerTile + playerZ));
                     pos *= cellSize;
                     pos += transform.position;
-                    GeneratedMesh gm = GenerateMesh(pos);
-                    for (int i = 0; i < gm.vertices.Length; i += 2)
+                    Mesh mesh = GenerateMesh(pos);
+                    for (int i = 0; i < mesh.vertices.Length; i += 2)
                     {
-                        Gizmos.DrawLine(pos + gm.vertices[i], pos + gm.vertices[i + 1]);
+                        Gizmos.DrawLine(pos + mesh.vertices[i], pos + mesh.vertices[i + 1]);
                     }
                 }
             }
@@ -188,7 +190,7 @@ public class GenerateInfinite : MonoBehaviour {
         }
     }
 
-    GeneratedMesh GenerateMesh(Vector3 position)
+    Mesh GenerateMesh(Vector3 position)
     {
 
         int verticesPerSegment = 6;
@@ -200,14 +202,13 @@ public class GenerateInfinite : MonoBehaviour {
         Vector3 tileBottomLeft = new Vector3();
         tileBottomLeft.x = -(cellsPerTile) / 2;
         tileBottomLeft.z = -(cellsPerTile) / 2;
-        
-        GeneratedMesh gm = new GeneratedMesh();
 
-        gm.vertices = new Vector3[vertexCount];
-        gm.normals = new Vector3[vertexCount];
-        gm.uvs = new Vector2[vertexCount];
-        gm.triangles = new int[vertexCount];
-        gm.colours = new Color[vertexCount];
+        Mesh mesh = new Mesh();
+        mesh.vertices = new Vector3[vertexCount];
+        mesh.normals = new Vector3[vertexCount];
+        mesh.uv = new Vector2[vertexCount];
+        mesh.triangles = new int[vertexCount];
+        mesh.colors = new Color[vertexCount];
 
         Vector2 texOrigin = position / cellSize;
         texOrigin.x = texOrigin.x % textureGenerator.size;
@@ -237,20 +238,20 @@ public class GenerateInfinite : MonoBehaviour {
                 }
 
                 // Make the vertices
-                gm.vertices[vertex++] = cellBottomLeft;
-                gm.vertices[vertex++] = cellTopLeft;
-                gm.vertices[vertex++] = cellTopRight;
-                gm.vertices[vertex++] = cellTopRight;
-                gm.vertices[vertex++] = cellBottomRight;
-                gm.vertices[vertex++] = cellBottomLeft;
+                mesh.vertices[vertex++] = cellBottomLeft;
+                mesh.vertices[vertex++] = cellTopLeft;
+                mesh.vertices[vertex++] = cellTopRight;
+                mesh.vertices[vertex++] = cellTopRight;
+                mesh.vertices[vertex++] = cellBottomRight;
+                mesh.vertices[vertex++] = cellBottomLeft;
 
                 vertex = startVertex;
-                gm.uvs[vertex++] = MakeUV(position, x, z);
-                gm.uvs[vertex++] = MakeUV(position, x, z + 1);
-                gm.uvs[vertex++] = MakeUV(position, x + 1, z + 1);
-                gm.uvs[vertex++] = MakeUV(position, x + 1, z + 1);
-                gm.uvs[vertex++] = MakeUV(position, x + 1, z);
-                gm.uvs[vertex++] = MakeUV(position, x, z);
+                mesh.uv[vertex++] = MakeUV(position, x, z);
+                mesh.uv[vertex++] = MakeUV(position, x, z + 1);
+                mesh.uv[vertex++] = MakeUV(position, x + 1, z + 1);
+                mesh.uv[vertex++] = MakeUV(position, x + 1, z + 1);
+                mesh.uv[vertex++] = MakeUV(position, x + 1, z);
+                mesh.uv[vertex++] = MakeUV(position, x, z);
                 
                 
                 //gm.uvs[vertex++] = new Vector2((float) x / cellsPerTile, (float)z / cellsPerTile);
@@ -271,11 +272,11 @@ public class GenerateInfinite : MonoBehaviour {
                 for (int i = 0; i < 6; i++)
                 {
                     int vertexIndex = startVertex + i;
-                    gm.triangles[vertexIndex] = vertexIndex;
+                    mesh.triangles[vertexIndex] = vertexIndex;
                 }
             }
         }
-        return gm;
+        return mesh;
     }
 
     private Vector2 MakeUV(Vector3 tilePos, float x, float z)
@@ -296,20 +297,17 @@ public class GenerateInfinite : MonoBehaviour {
         MeshRenderer renderer = tile.AddComponent<MeshRenderer>();
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         renderer.receiveShadows = true;
-        Mesh mesh = tile.AddComponent<MeshFilter>().mesh;
-        mesh.Clear();
         MeshCollider meshCollider = tile.AddComponent<MeshCollider>();        
         tile.transform.position = position + transform.position;
 
         Rigidbody rigidBody = tile.AddComponent<Rigidbody>();
         rigidBody.isKinematic = true;
 
-        GeneratedMesh gm = GenerateMesh(position);
-        mesh.vertices = gm.vertices;
-        mesh.uv = gm.uvs;
-        mesh.triangles = gm.triangles;
-        mesh.RecalculateNormals();
-
+        MeshFilter meshFilter = tile.AddComponent<MeshFilter>();
+        Mesh gm = GenerateMesh(position);
+        gm.RecalculateNormals();
+        meshFilter.mesh = gm;
+        
         renderer.material.SetTexture("_MainTex", textureGenerator.texture);
         //renderer.material.color = Color.blue; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
         /*Shader shader = Shader.Find("Diffuse");
@@ -322,7 +320,7 @@ public class GenerateInfinite : MonoBehaviour {
         }
         */
         meshCollider.sharedMesh = null;
-        meshCollider.sharedMesh = mesh;
+        meshCollider.sharedMesh = gm;
 
         return tile;
     }
