@@ -34,7 +34,7 @@ class GeneratedMesh
 {
     public Vector3[] vertices;
     public Vector3[] normals;
-    public Vector2[] uvs;
+    public Vector2[] uv;
     public Color[] colours;
     public int[] triangles;
 }
@@ -80,11 +80,12 @@ public class GenerateInfinite : MonoBehaviour {
                                               (z * cellsPerTile + playerZ));
                     pos *= cellSize;
                     pos += transform.position;
-                    GeneratedMesh gm = GenerateMesh(pos);
-                    for (int i = 0; i < gm.vertices.Length; i += 2)
+                    Mesh gm = GenerateMesh(pos);
+                    Gizmos.DrawMesh(gm, pos);
+                    /*for (int i = 0; i < gm.vertices.Length; i += 2)
                     {
                         Gizmos.DrawLine(pos + gm.vertices[i], pos + gm.vertices[i + 1]);
-                    }
+                    }*/
                 }
             }
         }
@@ -188,7 +189,7 @@ public class GenerateInfinite : MonoBehaviour {
         }
     }
 
-    GeneratedMesh GenerateMesh(Vector3 position)
+    Mesh GenerateMesh(Vector3 position)
     {
 
         int verticesPerSegment = 6;
@@ -205,7 +206,7 @@ public class GenerateInfinite : MonoBehaviour {
 
         gm.vertices = new Vector3[vertexCount];
         gm.normals = new Vector3[vertexCount];
-        gm.uvs = new Vector2[vertexCount];
+        gm.uv = new Vector2[vertexCount];
         gm.triangles = new int[vertexCount];
         gm.colours = new Color[vertexCount];
 
@@ -245,12 +246,12 @@ public class GenerateInfinite : MonoBehaviour {
                 gm.vertices[vertex++] = cellBottomLeft;
 
                 vertex = startVertex;
-                gm.uvs[vertex++] = MakeUV(position, x, z);
-                gm.uvs[vertex++] = MakeUV(position, x, z + 1);
-                gm.uvs[vertex++] = MakeUV(position, x + 1, z + 1);
-                gm.uvs[vertex++] = MakeUV(position, x + 1, z + 1);
-                gm.uvs[vertex++] = MakeUV(position, x + 1, z);
-                gm.uvs[vertex++] = MakeUV(position, x, z);
+                gm.uv[vertex++] = MakeUV(position, x, z);
+                gm.uv[vertex++] = MakeUV(position, x, z + 1);
+                gm.uv[vertex++] = MakeUV(position, x + 1, z + 1);
+                gm.uv[vertex++] = MakeUV(position, x + 1, z + 1);
+                gm.uv[vertex++] = MakeUV(position, x + 1, z);
+                gm.uv[vertex++] = MakeUV(position, x, z);
                 
                 
                 //gm.uvs[vertex++] = new Vector2((float) x / cellsPerTile, (float)z / cellsPerTile);
@@ -275,7 +276,13 @@ public class GenerateInfinite : MonoBehaviour {
                 }
             }
         }
-        return gm;
+        Mesh mesh = new Mesh();
+        mesh.vertices = gm.vertices;
+        mesh.uv = gm.uv;
+        mesh.triangles = gm.triangles;
+        mesh.RecalculateNormals();
+
+        return mesh;
     }
 
     private Vector2 MakeUV(Vector3 tilePos, float x, float z)
@@ -296,20 +303,15 @@ public class GenerateInfinite : MonoBehaviour {
         MeshRenderer renderer = tile.AddComponent<MeshRenderer>();
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         renderer.receiveShadows = true;
-        Mesh mesh = tile.AddComponent<MeshFilter>().mesh;
-        mesh.Clear();
         MeshCollider meshCollider = tile.AddComponent<MeshCollider>();        
         tile.transform.position = position + transform.position;
 
         Rigidbody rigidBody = tile.AddComponent<Rigidbody>();
         rigidBody.isKinematic = true;
 
-        GeneratedMesh gm = GenerateMesh(position);
-        mesh.vertices = gm.vertices;
-        mesh.uv = gm.uvs;
-        mesh.triangles = gm.triangles;
-        mesh.RecalculateNormals();
-
+        MeshFilter meshFilter = tile.AddComponent<MeshFilter>();
+        Mesh mesh = GenerateMesh(position);
+        meshFilter.mesh = mesh;
         renderer.material.SetTexture("_MainTex", textureGenerator.texture);
         //renderer.material.color = Color.blue; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
         /*Shader shader = Shader.Find("Diffuse");
