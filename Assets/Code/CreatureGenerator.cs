@@ -153,10 +153,8 @@ public class CreatureGenerator : MonoBehaviour {
     }
 
     // Use this for initialization
-    bool started = false;
-    void Start () {
+    void Awake() {
         CreateCreature();
-        started = true;
 	}
 	
 	// Update is called once per frame

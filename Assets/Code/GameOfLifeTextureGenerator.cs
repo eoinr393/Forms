@@ -54,7 +54,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         //MakeTumbler(size / 2, size / 2);        
         Randomise();
         StartCoroutine("UpdateBoard");
-        StartCoroutine("Spawner");
+        //StartCoroutine("Spawner");
     }
 
     IEnumerator Spawner()

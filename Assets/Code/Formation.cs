@@ -4,7 +4,7 @@ using System;
 
 public class Formation : SteeringBehaviour
 {
-    private Boid leaderBoid;
+    public Boid leaderBoid;
     public GameObject leader;
     private Vector3 offset;
     private Vector3 targetPos;
@@ -14,7 +14,7 @@ public class Formation : SteeringBehaviour
         if (leader  != null)
         {
             leaderBoid = leader.GetComponentInChildren<Boid>();
-            offset = transform.position - leader.transform.position;
+            offset = transform.position - leaderBoid.transform.position;
             offset = Quaternion.Inverse(transform.rotation) * offset;
         }
     }
@@ -32,8 +32,6 @@ public class Formation : SteeringBehaviour
     {
         if (leaderBoid != null)
         {
-            Vector3 targetPos = Vector3.zero;
-
             targetPos = leaderBoid.TransformPoint(offset);
 
             float dist = (targetPos - boid.position).magnitude;

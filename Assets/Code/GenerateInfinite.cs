@@ -35,7 +35,7 @@ class GeneratedMesh
     public Vector3[] vertices;
     public Vector3[] normals;
     public Vector2[] uv;
-    public Color[] colours;
+    public Color[] colors;
     public int[] triangles;
 }
 
@@ -55,6 +55,8 @@ public class GenerateInfinite : MonoBehaviour {
 
     [Range(0.1f, 10.0f)]
     public float textureScaling = 1.0f;
+
+    public Color color = Color.blue;
     
     void OnDrawGizmos()
     {
@@ -208,7 +210,7 @@ public class GenerateInfinite : MonoBehaviour {
         gm.normals = new Vector3[vertexCount];
         gm.uv = new Vector2[vertexCount];
         gm.triangles = new int[vertexCount];
-        gm.colours = new Color[vertexCount];
+        gm.colors = new Color[vertexCount];
 
         Vector2 texOrigin = position / cellSize;
         texOrigin.x = texOrigin.x % textureGenerator.size;
@@ -252,27 +254,15 @@ public class GenerateInfinite : MonoBehaviour {
                 gm.uv[vertex++] = MakeUV(position, x + 1, z + 1);
                 gm.uv[vertex++] = MakeUV(position, x + 1, z);
                 gm.uv[vertex++] = MakeUV(position, x, z);
-                
-                
-                //gm.uvs[vertex++] = new Vector2((float) x / cellsPerTile, (float)z / cellsPerTile);
-                //gm.uvs[vertex++] = new Vector2((float)x / cellsPerTile, ((float)z + 1.0f)/ cellsPerTile);
-                //gm.uvs[vertex++] = new Vector2(((float)x + 1.0f) / cellsPerTile, ((float)z + 1.0f) / cellsPerTile);
-                //gm.uvs[vertex++] = new Vector2(((float)x + 1.0f) / cellsPerTile, ((float)z + 1.0f) / cellsPerTile);
-                //gm.uvs[vertex++] = new Vector2(((float)x + 1.0f) / cellsPerTile, (float)z / cellsPerTile);
-                //gm.uvs[vertex++] = new Vector2((float)x / cellsPerTile, (float)z / cellsPerTile);
-
-
-
-                //uv.x = (((Mathf.Abs(position.x) / cellSize) % textureGenerator.size) + x) / textureGenerator.size;
-                //uv.y = (((Mathf.Abs(position.z) / cellSize) % textureGenerator.size) + z) / textureGenerator.size;
-
-
+             
 
                 // Make the triangles                
                 for (int i = 0; i < 6; i++)
                 {
                     int vertexIndex = startVertex + i;
                     gm.triangles[vertexIndex] = vertexIndex;
+                    gm.colors[vertexIndex] = color;
+
                 }
             }
         }
@@ -280,6 +270,7 @@ public class GenerateInfinite : MonoBehaviour {
         mesh.vertices = gm.vertices;
         mesh.uv = gm.uv;
         mesh.triangles = gm.triangles;
+        mesh.colors = gm.colors;
         mesh.RecalculateNormals();
 
         return mesh;
@@ -313,7 +304,7 @@ public class GenerateInfinite : MonoBehaviour {
         Mesh mesh = GenerateMesh(position);
         meshFilter.mesh = mesh;
         renderer.material.SetTexture("_MainTex", textureGenerator.texture);
-        //renderer.material.color = Color.blue; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+        renderer.material.color = color; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
         /*Shader shader = Shader.Find("Diffuse");
 
         Material material = null;

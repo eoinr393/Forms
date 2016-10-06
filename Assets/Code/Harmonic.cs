@@ -49,7 +49,7 @@ public class Harmonic: SteeringBehaviour
     {
         float n = Mathf.Sin(this.theta);
 
-        rampedAmplitude = amplitude; // Mathf.Lerp(rampedAmplitude, amplitude, 1);
+        rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, Time.deltaTime * 2.0f);
 
         float t = Utilities.Map(n, -1.0f, 1.0f, -rampedAmplitude, rampedAmplitude);
         float theta = Utilities.DegreesToRads(t);
