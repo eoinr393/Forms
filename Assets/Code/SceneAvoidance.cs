@@ -54,7 +54,7 @@ public class SceneAvoidance: SteeringBehaviour
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(feeler.point, feeler.point + (feeler.normal * 5));
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(feeler.point, feeler.point + (boid.force / 10.0f));
+                Gizmos.DrawLine(feeler.point, feeler.point + force);
             }
         }
     }

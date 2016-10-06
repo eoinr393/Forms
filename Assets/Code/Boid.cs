@@ -191,7 +191,7 @@ public class Boid : MonoBehaviour
         }            
     }
 
-    private bool AccumulateForce(ref Vector3 runningTotal, Vector3 force)
+    private bool AccumulateForce(ref Vector3 runningTotal, ref Vector3 clampedForce, Vector3 force)
     {
         float soFar = runningTotal.magnitude;
 
@@ -206,12 +206,14 @@ public class Boid : MonoBehaviour
 
         if (toAdd < remaining)
         {
-            runningTotal += force;
+            clampedForce = force;
         }
         else
         {
-            runningTotal += Vector3.Normalize(force) * remaining;
+            clampedForce = Vector3.Normalize(force) * remaining;
+            
         }
+        runningTotal += clampedForce;
         return true;
     }
 
@@ -225,7 +227,9 @@ public class Boid : MonoBehaviour
             {
                 Vector3 force = behaviour.Calculate() * behaviour.weight;
                 force *= weight;
-                if (!AccumulateForce(ref totalForce, force))
+                bool full = AccumulateForce(ref totalForce, ref behaviour.force, force);
+                behaviour.forceMagnitude = behaviour.force.magnitude / maxForce;
+                if (!full)
                 {
                     break;
                 }

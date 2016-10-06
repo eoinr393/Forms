@@ -14,7 +14,7 @@ public class Formation : SteeringBehaviour
         if (leader  != null)
         {
             leaderBoid = leader.GetComponentInChildren<Boid>();
-            offset = transform.position - leaderBoid.transform.position;
+            offset = transform.position - leader.transform.position;
             offset = Quaternion.Inverse(transform.rotation) * offset;
         }
     }
@@ -25,6 +25,8 @@ public class Formation : SteeringBehaviour
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, targetPos);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(transform.position, leaderBoid.transform.position);
         }
     }
 
@@ -34,11 +36,14 @@ public class Formation : SteeringBehaviour
         {
             targetPos = leaderBoid.TransformPoint(offset);
 
-            float dist = (targetPos - boid.position).magnitude;
+            // Project target pos back onto the original y
+            //targetPos.y = leaderBoid.position.y + offset.y;
+            /*float dist = (targetPos - boid.position).magnitude;
 
             float lookAhead = (dist / boid.maxSpeed);
 
             targetPos = targetPos + (lookAhead * leaderBoid.velocity);
+            */
 
             /*float pitchForce = target.y - position.y;
             pitchForce *= (1.0f - pitchForceScale);

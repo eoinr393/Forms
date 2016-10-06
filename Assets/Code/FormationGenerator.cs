@@ -61,6 +61,26 @@ public class FormationGenerator : MonoBehaviour {
         }
     }
 
+    GameObject ClosestChild(GameObject go)
+    {
+        float closest = float.MaxValue;
+        int closestIndex = -1;
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject child = transform.GetChild(i).gameObject;
+            if (child != go)
+            {
+                float distance = Vector3.Distance(go.transform.position, child.transform.position);
+                if (distance < closest)
+                {
+                    closestIndex = i;
+                    closest = distance;
+                }
+            }
+        }
+        return transform.GetChild(closestIndex).gameObject;
+    }
+
 
 	// Use this for initialization
 	void Start () {
@@ -88,8 +108,9 @@ public class FormationGenerator : MonoBehaviour {
                     formation = go.GetComponentInChildren<Boid>().gameObject.AddComponent<Formation>();
                     formation.weight = 100.0f;
                 }
-                Boid boid = leader.GetComponentInChildren<Boid>();
-                formation.leader = leader;
+                GameObject myLeader = ClosestChild(go);
+                Boid boid = myLeader.GetComponentInChildren<Boid>();
+                formation.leader = myLeader.gameObject;
             }
         }
     }
