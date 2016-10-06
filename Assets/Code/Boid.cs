@@ -268,26 +268,20 @@ public class Boid : MonoBehaviour
         return (desiredVelocity - velocity);
     }
 
-    public Vector3 ArriveForce(Vector3 target, float slowingDistance = 15.0f, float deceleration = 0.9f)
+    public Vector3 ArriveForce(Vector3 target, float slowingDistance = 15.0f, float deceleration = 1.0f)
     {
-        Vector3 desired = target - position;
+        Vector3 toTarget = target - transform.position;
 
-        float distance = desired.magnitude;
-
-        if (distance < 1.0f)
+        float distance = toTarget.magnitude;
+        if (distance == 0.0f)
         {
             return Vector3.zero;
         }
-        float desiredSpeed = 0;
-        if (distance < slowingDistance)
-        {
-            desiredSpeed = (distance / slowingDistance) * maxSpeed * (1.0f - slowingDistance);
-        }
-        else
-        {
-            desiredSpeed = maxSpeed;
-        }
-        desired *= desiredSpeed;
+        float ramped = maxSpeed * (distance / (slowingDistance * deceleration));
+
+        float clamped = Math.Min(ramped, maxSpeed);
+        Vector3 desired = clamped * (toTarget / distance);
+        Utilities.checkNaN(desired);
 
         return desired - velocity;
     }

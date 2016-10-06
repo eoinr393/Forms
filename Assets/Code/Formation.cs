@@ -36,15 +36,12 @@ public class Formation : SteeringBehaviour
         {
             targetPos = leaderBoid.TransformPoint(offset);
 
-            // Project target pos back onto the original y
-            //targetPos.y = leaderBoid.position.y + offset.y;
-            /*float dist = (targetPos - boid.position).magnitude;
-
+            float dist = Vector3.Distance(boid.position, leaderBoid.position);
             float lookAhead = (dist / boid.maxSpeed);
 
             targetPos = targetPos + (lookAhead * leaderBoid.velocity);
-            */
-
+            
+            /*
             /*float pitchForce = target.y - position.y;
             pitchForce *= (1.0f - pitchForceScale);
             target.y -= pitchForce;
@@ -53,7 +50,7 @@ public class Formation : SteeringBehaviour
 
             Utilities.checkNaN(target);
             */
-            return boid.SeekForce(targetPos);
+            return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
         }
         else
         {
