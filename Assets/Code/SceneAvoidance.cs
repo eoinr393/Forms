@@ -32,7 +32,7 @@ public class SceneAvoidance: SteeringBehaviour
     public float sideFeelerUpdatesPerSecond = 5.0f;
 
     public float feelerRadius = 2.0f;
-    public enum ForceType { normal, incident, braking };
+    public enum ForceType { normal, incident, up, braking };
     public ForceType forceType = ForceType.normal;
 
     public void Start()
@@ -105,6 +105,9 @@ public class SceneAvoidance: SteeringBehaviour
             case ForceType.incident:
                 fromTarget.Normalize();
                 force -= Vector3.Reflect(fromTarget, info.normal) * (forwardFeelerDepth / dist);
+                break;
+            case ForceType.up:
+                force += Vector3.up * (forwardFeelerDepth * scale / dist);
                 break;
             case ForceType.braking:
                 force += fromTarget * (forwardFeelerDepth / dist);
