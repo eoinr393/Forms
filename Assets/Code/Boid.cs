@@ -177,7 +177,7 @@ public class Boid : MonoBehaviour
             UpdateLocalFromTransform();
         }
 
-        if (preferredTimeDelta != 0.0f)
+        if (preferredTimeDelta != 0.0f && integrateForces)
         {
             float timeDelta = Time.deltaTime * timeMultiplier;
             timeDelta *= (flock == null) ? 1 : flock.timeMultiplier;

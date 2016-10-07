@@ -4,8 +4,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class JointParam
 {
-    public float bondDamping;
-    public float angularBondDamping;    
+    public float bondDamping = 25;
+    public float angularBondDamping = 2;    
 
     public JointParam(float bondDamping, float angularBondDamping)
     {

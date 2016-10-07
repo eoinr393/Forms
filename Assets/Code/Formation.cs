@@ -8,6 +8,8 @@ public class Formation : SteeringBehaviour
     public GameObject leader;
     private Vector3 offset;
     private Vector3 targetPos;
+    public bool useDeadReconing = false;
+
 
     public void Start()
     {
@@ -35,12 +37,14 @@ public class Formation : SteeringBehaviour
         if (leaderBoid != null)
         {
             targetPos = leaderBoid.TransformPoint(offset);
+            targetPos.y = Mathf.Lerp(boid.position.y, targetPos.y, Time.deltaTime);
 
-            float dist = Vector3.Distance(boid.position, leaderBoid.position);
-            float lookAhead = (dist / boid.maxSpeed);
-
-            targetPos = targetPos + (lookAhead * leaderBoid.velocity);
-            
+            if (useDeadReconing)
+            {
+                float dist = Vector3.Distance(boid.position, leaderBoid.position);
+                float lookAhead = (dist / boid.maxSpeed);
+                targetPos = targetPos + (lookAhead * leaderBoid.velocity);
+            }
             /*
             /*float pitchForce = target.y - position.y;
             pitchForce *= (1.0f - pitchForceScale);

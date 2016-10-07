@@ -62,7 +62,6 @@ namespace BGE
         // Update is called once per frame
         void Update()
         {
-            transform.Translate(1, 0, 0);
             float mouseX, mouseY;
             float speed = this.speed;
 
