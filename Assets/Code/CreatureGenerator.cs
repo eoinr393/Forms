@@ -7,7 +7,7 @@ struct CreaturePart
 {
     public Vector3 position;
     public float size;
-    public enum Part { head, body, fin };
+    public enum Part { head, body, fin , tail};
     public Part part;
     public GameObject prefab;
 
@@ -47,6 +47,7 @@ public class CreatureGenerator : MonoBehaviour {
 
     public GameObject headPrefab;
     public GameObject bodyPrefab;
+    public GameObject tailPrefab;
     public GameObject leftFinPrefab;
     public GameObject rightFinPrefab;
 
@@ -80,7 +81,19 @@ public class CreatureGenerator : MonoBehaviour {
             CreaturePart cp = creatureParts[i];
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
             part.transform.position = cp.position;
-            part.GetComponent<Renderer>().material.color = color;
+            Renderer[] rs = part.GetComponentsInChildren<Renderer>();
+            foreach (Renderer r in rs)
+            {
+                r.material.color = color;
+            }
+
+            // Tail animator setup
+            TailAnimator tailAnimator = part.GetComponentInChildren<TailAnimator>();
+            if (tailAnimator != null)
+            {
+                tailAnimator.boid = boid;
+            }
+            
             part.transform.localScale = new Vector3(cp.size * part.transform.localScale.x, cp.size * part.transform.localScale.y, cp.size * part.transform.localScale.z);
             part.transform.parent = transform;
             if (i == 0)
@@ -145,8 +158,8 @@ public class CreatureGenerator : MonoBehaviour {
             lastGap = partSize;
             cps.Add(new CreaturePart(pos
                 , partSize
-                , (i == 0) ? CreaturePart.Part.head : CreaturePart.Part.body
-                , (i == 0) ? headPrefab : bodyPrefab
+                , (i == 0) ? CreaturePart.Part.head : (i < numParts - 1) ? CreaturePart.Part.body : CreaturePart.Part.tail
+                , (i == 0) ? headPrefab : (i < numParts - 1) ? bodyPrefab : (tailPrefab != null) ? tailPrefab : bodyPrefab 
                 ));
         }
         return cps;

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class FinAnimator : MonoBehaviour {
 
+    public enum Axis {X, Z };
+    public Axis axis = Axis.X;
     public enum Side { left, right };
     public Side side = Side.left;
 
@@ -49,7 +51,15 @@ public class FinAnimator : MonoBehaviour {
             
             float angle = Mathf.Sin((harmonic.theta + offset))
             * (harmonic.rampedAmplitude / initialAmplitude) * lerpedAmplitude * wigglyness;
-            transform.localRotation = Quaternion.Euler(angle, 0, 0);
+            switch (axis)
+            {
+                case Axis.X:
+                    transform.localRotation = Quaternion.Euler(angle, 0, 0);
+                    break;
+                case Axis.Z:
+                    transform.localRotation = Quaternion.Euler(0, 0, angle);
+                    break;
+            }
         }
 	}
 }

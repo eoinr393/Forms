@@ -46,15 +46,6 @@ public class Formation : SteeringBehaviour
                 float lookAhead = (dist / boid.maxSpeed);
                 newTarget = newTarget + (lookAhead * leaderBoid.velocity);
             }
-            /*
-            /*float pitchForce = target.y - position.y;
-            pitchForce *= (1.0f - pitchForceScale);
-            target.y -= pitchForce;
-
-            offsetPursuitTargetPos = target;
-
-            Utilities.checkNaN(target);
-            */
             targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta);
             return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
         }
