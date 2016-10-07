@@ -18,6 +18,7 @@ public class Formation : SteeringBehaviour
             leaderBoid = leader.GetComponentInChildren<Boid>();
             offset = transform.position - leader.transform.position;
             offset = Quaternion.Inverse(transform.rotation) * offset;
+            targetPos = leaderBoid.TransformPoint(targetPos);
         }
     }
 
@@ -36,14 +37,14 @@ public class Formation : SteeringBehaviour
     {
         if (leaderBoid != null)
         {
-            targetPos = leaderBoid.TransformPoint(offset);
-            targetPos.y = leaderBoid.position.y + offset.y;
+            Vector3 newTarget = leaderBoid.TransformPoint(offset);
+            newTarget.y = leaderBoid.position.y + offset.y;
 
             if (useDeadReconing)
             {
                 float dist = Vector3.Distance(boid.position, leaderBoid.position);
                 float lookAhead = (dist / boid.maxSpeed);
-                targetPos = targetPos + (lookAhead * leaderBoid.velocity);
+                newTarget = newTarget + (lookAhead * leaderBoid.velocity);
             }
             /*
             /*float pitchForce = target.y - position.y;
@@ -54,6 +55,7 @@ public class Formation : SteeringBehaviour
 
             Utilities.checkNaN(target);
             */
+            targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta);
             return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
         }
         else
