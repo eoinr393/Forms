@@ -16,6 +16,8 @@ public abstract class SteeringBehaviour: MonoBehaviour
     [Range(0.0f, 1.0f)]
     public float forceMagnitude;
 
+    public bool active = true;
+
     public abstract Vector3 Calculate();
 
     [HideInInspector]

@@ -36,11 +36,10 @@ public class Boid : MonoBehaviour
     public float bank;
 
     [HideInInspector]
-    public Flock flock;
+    public School school;
 
     public bool enforceNonPenetrationConstraint;
 
-    [HideInInspector]
     public Vector3 force = Vector3.zero;
 
     [HideInInspector]
@@ -54,7 +53,7 @@ public class Boid : MonoBehaviour
     public Vector3 gravity = new Vector3(0, -9, 0);
        
     [HideInInspector]
-    public bool multiThreadingEnabled = false;
+    public bool multiThreaded = false;
 
     [HideInInspector]
     public SteeringBehaviour[] behaviours;
@@ -63,8 +62,8 @@ public class Boid : MonoBehaviour
     {
         get
         {
-            float flockMultiplier = (flock == null) ? 1 : flock.timeMultiplier;
-            float timeDelta = multiThreadingEnabled ? flock.threadTimeDelta : Time.deltaTime;
+            float flockMultiplier = (school == null) ? 1 : school.timeMultiplier;
+            float timeDelta = multiThreaded ? CreatureManager.threadTimeDelta : Time.deltaTime;
             return timeDelta * flockMultiplier * timeMultiplier;
         }
     }       
@@ -109,7 +108,7 @@ public class Boid : MonoBehaviour
     {
         float smoothRate;
 
-        if (!multiThreadingEnabled)
+        if (!multiThreaded)
         {
             UpdateLocalFromTransform();
             force = CalculateForce();
@@ -120,9 +119,9 @@ public class Boid : MonoBehaviour
         if (timeAcc > preferredTimeDelta)
         {                
             float timeAccMult = timeAcc * timeMultiplier;
-            if (flock != null)
+            if (school != null)
             {
-                timeAccMult *= flock.timeMultiplier;
+                timeAccMult *= school.timeMultiplier;
             }
             Vector3 newAcceleration = force / mass;
             if (timeAcc > 0.0f)
@@ -180,7 +179,7 @@ public class Boid : MonoBehaviour
         if (preferredTimeDelta != 0.0f && integrateForces)
         {
             float timeDelta = Time.deltaTime * timeMultiplier;
-            timeDelta *= (flock == null) ? 1 : flock.timeMultiplier;
+            timeDelta *= (school == null) ? 1 : school.timeMultiplier;
             float dist = Vector3.Distance(transform.position, desiredPosition);
             float distThisFrame = dist * (timeDelta / preferredTimeDelta);
             transform.position = Vector3.MoveTowards(transform.position, desiredPosition, 50 * Time.deltaTime);
@@ -223,7 +222,7 @@ public class Boid : MonoBehaviour
 
         foreach (SteeringBehaviour behaviour in behaviours)
         {
-            if (behaviour.isActiveAndEnabled)
+            if (behaviour.active)
             {
                 Vector3 force = behaviour.Calculate() * behaviour.weight;
                 force *= weight;
@@ -270,7 +269,7 @@ public class Boid : MonoBehaviour
 
     public Vector3 ArriveForce(Vector3 target, float slowingDistance = 15.0f, float deceleration = 1.0f)
     {
-        Vector3 toTarget = target - transform.position;
+        Vector3 toTarget = target - position;
 
         float distance = toTarget.magnitude;
         if (distance == 0.0f)
