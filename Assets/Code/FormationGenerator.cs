@@ -108,7 +108,7 @@ public class FormationGenerator : MonoBehaviour {
                     formation = go.GetComponentInChildren<Boid>().gameObject.AddComponent<Formation>();
                     formation.weight = 100.0f;
                 }
-                GameObject myLeader = leader; //  ClosestChild(go);
+                GameObject myLeader = leader; // ClosestChild(go);
                 Boid boid = myLeader.GetComponentInChildren<Boid>();
                 formation.leader = myLeader.gameObject;
             }

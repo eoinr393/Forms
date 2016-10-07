@@ -37,7 +37,7 @@ public class Formation : SteeringBehaviour
         if (leaderBoid != null)
         {
             targetPos = leaderBoid.TransformPoint(offset);
-            targetPos.y = Mathf.Lerp(boid.position.y, targetPos.y, Time.deltaTime);
+            targetPos.y = leaderBoid.position.y + offset.y;
 
             if (useDeadReconing)
             {
