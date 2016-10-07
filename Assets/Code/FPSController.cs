@@ -45,7 +45,6 @@ namespace BGE
         void Walk(float units)
         {
             transform.position += mainCamera.transform.forward * units;
-            Debug.Log(transform.position);
         }
 
         void Fly(float units)
