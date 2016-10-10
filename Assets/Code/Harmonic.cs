@@ -29,6 +29,8 @@ public class Harmonic : SteeringBehaviour
 
     public Vector3 yawRoll = Vector3.zero;
 
+    public Vector3 worldTarget;
+
     public void Start()
     {
         theta = UnityEngine.Random.Range(0, Mathf.PI);
@@ -42,7 +44,6 @@ public class Harmonic : SteeringBehaviour
             Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
             Gizmos.DrawWireSphere(wanderCircleCenter, radius);
             Gizmos.color = new Color(0, 170, 0);
-            Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
             Gizmos.DrawLine(transform.position, worldTarget);
         }
     }
@@ -70,34 +71,30 @@ public class Harmonic : SteeringBehaviour
         }
 
         target *= radius;
-
-
+                
         // The forces 
-        Vector3 noPitch = boid.force;
+        /*Vector3 noPitch = boid.force;
         if (boid.force.magnitude < 0.01)
         {
             noPitch = boid.forward;
             noPitch.y = 0;           
         }
         noPitch.Normalize();
-        Vector3 worldTarget = boid.position + (target + (noPitch * distance));
+        worldTarget = boid.position + (target + (noPitch * distance));
+        */
 
-
-
-
-        /*yawRoll = boid.rotation.eulerAngles;
+        yawRoll = boid.rotation.eulerAngles;
         yawRoll.x = 0;
 
         Vector3 localTarget = target + (Vector3.forward * distance);
+        //Vector3 worldTarget = boid.TransformPoint(localTarget);
 
-        Vector3 worldTarget = boid.TransformPoint(localTarget);
-
-        Vector3 worldTargetOnY = transform.position + Quaternion.Euler(yawRoll) * localTarget;
+        worldTarget = transform.position + Quaternion.Euler(yawRoll) * localTarget;
         if (this.theta > Utilities.TWO_PI)
         {
             this.theta = Utilities.TWO_PI - this.theta;
         }
-        */
+        
 
         rampedSpeed = Mathf.Lerp(rampedSpeed, speed, Time.deltaTime * 2.0f);
         this.theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;

@@ -67,7 +67,13 @@ public class Boid : MonoBehaviour
             float timeDelta = multiThreaded ? CreatureManager.threadTimeDelta : Time.deltaTime;
             return timeDelta * flockMultiplier * timeMultiplier;
         }
-    }       
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        //Gizmos.DrawLine(transform.position, transform.position + force);
+    }
 
     void Start()
     {

@@ -95,6 +95,7 @@ public class CreatureGenerator : MonoBehaviour {
             }
             
             part.transform.localScale = new Vector3(cp.size * part.transform.localScale.x, cp.size * part.transform.localScale.y, cp.size * part.transform.localScale.z);
+            part.transform.rotation = transform.rotation;
             part.transform.parent = transform;
             if (i == 0)
             {
@@ -120,20 +121,22 @@ public class CreatureGenerator : MonoBehaviour {
         {
             case FinAnimator.Side.left:
                 fin = GameObject.Instantiate<GameObject>(leftFinPrefab);
-                pos.x = (pos.x - cp.size / 2);
+                pos -= (transform.right * cp.size / 2);
                 break;
             case FinAnimator.Side.right:
                 fin = GameObject.Instantiate<GameObject>(rightFinPrefab);
-                pos.x = (pos.x + cp.size / 2);
+                pos += (transform.right * cp.size / 2);
                 break;
         }
         fin.transform.position = pos;
+        //fin.transform.rotation = transform.rotation;
         fin.transform.localScale = new Vector3(scale, scale, scale);
         fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;
         fin.GetComponentInChildren<FinAnimator>().rotationOffset -= rotationOffset;
         fin.transform.parent = part.transform;
+        
         return fin;
     }
 
@@ -150,7 +153,7 @@ public class CreatureGenerator : MonoBehaviour {
         {            
             float partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));
             theta += thetaInc;
-            pos.z -= ((lastGap + partSize) / 2) + gap;
+            pos -= ((((lastGap + partSize) / 2) + gap) * transform.forward);
             if (flatten)
             {
                 pos.y -= (partSize / 2);
