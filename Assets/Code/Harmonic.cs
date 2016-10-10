@@ -71,8 +71,14 @@ public class Harmonic : SteeringBehaviour
 
         target *= radius;
 
-        Vector3 noPitch = boid.forward;
-        noPitch.y = 0;
+
+        // The forces 
+        Vector3 noPitch = boid.force;
+        if (boid.force.magnitude < 0.01)
+        {
+            noPitch = boid.forward;
+            noPitch.y = 0;           
+        }
         noPitch.Normalize();
         Vector3 worldTarget = boid.position + (target + (noPitch * distance));
 
