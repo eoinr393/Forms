@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 
-public class Harmonic: SteeringBehaviour
+public class Harmonic : SteeringBehaviour
 {
     [Range(0.0f, 360.0f)]
     public float speed = 30;
@@ -26,6 +26,8 @@ public class Harmonic: SteeringBehaviour
 
     [Range(0.0f, 500.0f)]
     public float distance = 5.0f;
+
+    public Vector3 yawRoll = Vector3.zero;
 
     public void Start()
     {
@@ -49,7 +51,7 @@ public class Harmonic: SteeringBehaviour
     {
         float n = Mathf.Sin(this.theta);
 
-        rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, boid.TimeDelta * 2.0f);
+        rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, Time.deltaTime * 2.0f);
 
         float t = Utilities.Map(n, -1.0f, 1.0f, -rampedAmplitude, rampedAmplitude);
         float theta = Utilities.DegreesToRads(t);
@@ -69,20 +71,30 @@ public class Harmonic: SteeringBehaviour
 
         target *= radius;
 
-        /*Vector3 localTarget = target + (Vector3.forward * distance);
+        Vector3 noPitch = boid.forward;
+        noPitch.y = 0;
+        noPitch.Normalize();
+        Vector3 worldTarget = boid.position + (target + (noPitch * distance));
+
+
+
+
+        /*yawRoll = boid.rotation.eulerAngles;
+        yawRoll.x = 0;
+
+        Vector3 localTarget = target + (Vector3.forward * distance);
+
         Vector3 worldTarget = boid.TransformPoint(localTarget);
+
+        Vector3 worldTargetOnY = transform.position + Quaternion.Euler(yawRoll) * localTarget;
+        if (this.theta > Utilities.TWO_PI)
+        {
+            this.theta = Utilities.TWO_PI - this.theta;
+        }
         */
 
-        Vector3 yawRoll = boid.rotation.eulerAngles;
-        yawRoll.x = 0;
-        Vector3 localTarget = target + (Vector3.forward * distance);
-        Vector3 worldTarget = boid.TransformPoint(localTarget);
-
-        Vector3 worldTargetOnY = boid.position + Quaternion.Euler(yawRoll) * localTarget;
-        
-        rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta * 2.0f);
+        rampedSpeed = Mathf.Lerp(rampedSpeed, speed, Time.deltaTime * 2.0f);
         this.theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
-
-        return boid.SeekForce(worldTargetOnY);
+        return boid.SeekForce(worldTarget);
     }
 }
