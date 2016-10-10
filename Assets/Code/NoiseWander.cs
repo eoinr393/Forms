@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class NoiseWander: SteeringBehaviour
 {
+
+    [Range(0, Mathf.PI)]
+    public float range = Mathf.PI;
+
     private Vector3 target = Vector3.zero;
     [Range(0.0f, 500.0f)]
     public float radius = 50.0f;
@@ -18,8 +22,6 @@ public class NoiseWander: SteeringBehaviour
     [Range(0.001f, 1.0f)]
     public float noisiness = 0.2f;
 
-    [Range(0.0f, 1.0f)]
-    public float straightness = 0.0f;
 
     private float noise = 0.0f;
 
@@ -39,7 +41,7 @@ public class NoiseWander: SteeringBehaviour
             Gizmos.DrawWireSphere(wanderCircleCenter, radius);
             Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
 
-            Gizmos.color = Color.green;
+            Gizmos.color = Color.cyan;
             Gizmos.DrawLine(transform.position, worldTarget);
         }
     }
@@ -47,7 +49,7 @@ public class NoiseWander: SteeringBehaviour
     public override Vector3 Calculate()
     {
         float n = Mathf.PerlinNoise(noise, 0);
-        float theta = Utilities.Map(n > straightness ? n - straightness : 0, 0.0f, 1.0f, 0, Mathf.PI * 2.0f);
+        float theta = Utilities.Map(n, 0.0f, 1.0f, Mathf.PI - range, Mathf.PI + range);
         target.x = Mathf.Sin(theta);
         target.z = -Mathf.Cos(theta);        
         target.y = 0;

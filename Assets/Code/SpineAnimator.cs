@@ -15,9 +15,7 @@ public class JointParam
 }
 
 public class SpineAnimator : MonoBehaviour {
-
-    public bool autoAssignBones = true;
-    
+    public bool autoAssignBones = true;    
     public List<GameObject> bones = new List<GameObject>();
 
     List<float> bondDistances = new List<float>();
@@ -26,6 +24,9 @@ public class SpineAnimator : MonoBehaviour {
 
     public float bondDamping;
     public float angularBondDamping;
+
+    public Vector3 centerOfMass;
+    public Quaternion averageRotation;
 
     void Start()
     {
@@ -63,6 +64,7 @@ public class SpineAnimator : MonoBehaviour {
     
 	void FixedUpdate ()
     {
+        centerOfMass = Vector3.zero ; 
         Transform prevFollower;
         for (int i = 0 ; i < bones.Count; i++)
         {
@@ -77,12 +79,12 @@ public class SpineAnimator : MonoBehaviour {
 
             Transform follower = bones[i].transform;
 
-            DelayedMovement(prevFollower, follower, bondDistances[i], i);            
+            DelayedMovement(prevFollower, follower, bondDistances[i], i);
+            centerOfMass += follower.position;
         }
+        centerOfMass /= bones.Count;
     }
-
     
-
     void DelayedMovement(Transform prevFollower, Transform follower, float bondDistance, int i)
     {
         float bondDamping;

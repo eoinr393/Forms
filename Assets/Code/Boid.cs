@@ -29,7 +29,8 @@ public class Boid : MonoBehaviour
     public float radius = 5.0f;
     public float maxTurnDegrees = 180.0f;
     public bool applyBanking = true;
-    public float straighteningTendancy = 0.2f;        
+    public float straighteningTendancy = 0.2f;
+    public float rollingTendancy = 0.05f;
     public bool integrateForces = true;
     public float preferredTimeDelta = 0.0f;
 
@@ -146,13 +147,15 @@ public class Boid : MonoBehaviour
             Vector3 globalUp = new Vector3(0, straighteningTendancy, 0);
             // acceleration points toward the center of local path curvature, the
             // length determines how much the vehicle will roll while turning
-            Vector3 accelUp = acceleration * 0.05f;
+            Vector3 accelUp = acceleration * rollingTendancy;
+            accelUp.y = 0; // Cancel out the up down
             // combined banking, sum of UP due to turning and global UP
             Vector3 bankUp = accelUp + globalUp;
             // blend bankUp into vehicle's UP basis vector
             smoothRate = timeAccMult;// * 3.0f;
             Vector3 tempUp = transform.up;
             Utilities.BlendIntoAccumulator(smoothRate, bankUp, ref tempUp);
+            Debug.DrawLine(transform.position, transform.position + (tempUp * 100));
 
             float speed = velocity.magnitude;
             if (speed > maxSpeed)
@@ -169,7 +172,9 @@ public class Boid : MonoBehaviour
 
             if (applyBanking && integrateForces)
             {
-                transform.LookAt(transform.position + transform.forward, tempUp);
+                //up = tempUp;
+                Quaternion q = Quaternion.LookRotation(transform.forward, tempUp);
+                transform.rotation = q;
             }
             velocity *= (1.0f - (damping * timeAccMult));
             timeAcc = 0.0f;
@@ -272,7 +277,7 @@ public class Boid : MonoBehaviour
         Vector3 toTarget = target - position;
 
         float distance = toTarget.magnitude;
-        if (distance == 0.0f)
+        if (distance < 10.0f)
         {
             return Vector3.zero;
         }

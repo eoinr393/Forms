@@ -68,19 +68,20 @@ public class Harmonic: SteeringBehaviour
         }
 
         target *= radius;
+
+        /*Vector3 localTarget = target + (Vector3.forward * distance);
+        Vector3 worldTarget = boid.TransformPoint(localTarget);
+        */
+
         Vector3 yawRoll = boid.rotation.eulerAngles;
         yawRoll.x = 0;
         Vector3 localTarget = target + (Vector3.forward * distance);
         Vector3 worldTarget = boid.TransformPoint(localTarget);
 
         Vector3 worldTargetOnY = boid.position + Quaternion.Euler(yawRoll) * localTarget;
+        
         rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta * 2.0f);
         this.theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
-
-        if (this.theta > Utilities.TWO_PI)
-        {
-            this.theta = Utilities.TWO_PI - this.theta;
-        }
 
         return boid.SeekForce(worldTargetOnY);
     }

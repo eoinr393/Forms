@@ -6,7 +6,7 @@ public class Formation : SteeringBehaviour
 {
     public Boid leaderBoid;
     public GameObject leader;
-    private Vector3 offset;
+    public Vector3 offset;
     private Vector3 targetPos;
     public bool useDeadReconing = false;
 
@@ -46,7 +46,7 @@ public class Formation : SteeringBehaviour
                 float lookAhead = (dist / boid.maxSpeed);
                 newTarget = newTarget + (lookAhead * leaderBoid.velocity);
             }
-            targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta);
+            targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta * 0.5f);
             return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
         }
         else

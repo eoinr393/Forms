@@ -23,7 +23,7 @@ public class FormationGenerator : MonoBehaviour {
             {
                 Vector3 left = new Vector3(-1, 0, -1) * gap;
                 left.x *= Random.Range(1.0f, 1.0f - variance);
-                left.y += gap * Random.Range(-variance, variance);
+                //left.y += gap * Random.Range(-variance, variance);
                 left.z *= Random.Range(1.0f, 1.0f - variance);
                 GenerateCreaturePosition(pos + left, current + 1, depth);
                 
@@ -32,7 +32,7 @@ public class FormationGenerator : MonoBehaviour {
             {
                 Vector3 right = new Vector3(1, 0, -1) * gap;
                 right.x *= Random.Range(1.0f, 1.0f - variance);
-                right.y += gap * Random.Range(-variance, variance);
+                //right.y += gap * Random.Range(-variance, variance);
                 right.z *= Random.Range(1.0f, 1.0f - variance);
                 GenerateCreaturePosition(pos + right, current + 1, depth);
             }
