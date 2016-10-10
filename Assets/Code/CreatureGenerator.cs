@@ -10,7 +10,7 @@ struct CreaturePart
     public enum Part { head, body, fin , tail};
     public Part part;
     public GameObject prefab;
-
+    
     public CreaturePart(Vector3 position, float scale, Part part, GameObject prefab)
     {
         this.position = position;
@@ -21,7 +21,9 @@ struct CreaturePart
 }
 
 public class CreatureGenerator : MonoBehaviour {
-    
+
+    public bool scaleFins = true;
+
     [Range(0.0f, Mathf.PI * 2.0f)]
     public float theta = 0.1f;
 
@@ -130,7 +132,10 @@ public class CreatureGenerator : MonoBehaviour {
         }
         fin.transform.position = pos;
         //fin.transform.rotation = transform.rotation;
-        fin.transform.localScale = new Vector3(scale, scale, scale);
+        if (scaleFins)
+        {
+            fin.transform.localScale = new Vector3(scale, scale, scale);
+        }
         fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;
