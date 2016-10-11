@@ -73,7 +73,7 @@ namespace BGE
 
             if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
             {
-                speed *= 10.0f;
+                speed *= 5.0f;
             }
 
             if (Input.GetKey(KeyCode.W))

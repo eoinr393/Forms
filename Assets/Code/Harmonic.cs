@@ -52,7 +52,7 @@ public class Harmonic : SteeringBehaviour
     {
         float n = Mathf.Sin(this.theta);
 
-        rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, Time.deltaTime * 2.0f);
+        rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, boid.TimeDelta * 2.0f);
 
         float t = Utilities.Map(n, -1.0f, 1.0f, -rampedAmplitude, rampedAmplitude);
         float theta = Utilities.DegreesToRads(t);
@@ -89,14 +89,14 @@ public class Harmonic : SteeringBehaviour
         Vector3 localTarget = target + (Vector3.forward * distance);
         //Vector3 worldTarget = boid.TransformPoint(localTarget);
 
-        worldTarget = transform.position + Quaternion.Euler(yawRoll) * localTarget;
+        worldTarget = boid.position + Quaternion.Euler(yawRoll) * localTarget;
         if (this.theta > Utilities.TWO_PI)
         {
             this.theta = Utilities.TWO_PI - this.theta;
         }
         
 
-        rampedSpeed = Mathf.Lerp(rampedSpeed, speed, Time.deltaTime * 2.0f);
+        rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta * 2.0f);
         this.theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
         return boid.SeekForce(worldTarget);
     }

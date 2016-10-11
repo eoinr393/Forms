@@ -53,22 +53,25 @@ public class CreatureManager : MonoBehaviour {
 
     void OnGUI()
     {
-        GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "" + message, style);
-        if (Event.current.type == EventType.Repaint)
+        if (showMessages)
         {
-            message.Length = 0;
-        }
-
-        if (Event.current.type == EventType.KeyDown)
-        {            
-            if (Event.current.keyCode == KeyCode.F4)
+            GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "" + message, style);
+            if (Event.current.type == EventType.Repaint)
             {
-                showMessages = !showMessages;
+                message.Length = 0;
             }
 
-            if (Event.current.keyCode == KeyCode.Escape)
+            if (Event.current.type == EventType.KeyDown)
             {
-                Application.Quit();
+                if (Event.current.keyCode == KeyCode.F4)
+                {
+                    showMessages = !showMessages;
+                }
+
+                if (Event.current.keyCode == KeyCode.Escape)
+                {
+                    Application.Quit();
+                }
             }
         }
     }
@@ -107,10 +110,7 @@ public class CreatureManager : MonoBehaviour {
         }
 
         StartUpdateThreads();
-        StartCoroutine("UpdateThreadTimeDelta");
-        
-        
-
+        StartCoroutine("UpdateThreadTimeDelta");        
     }
 
     void Update()
