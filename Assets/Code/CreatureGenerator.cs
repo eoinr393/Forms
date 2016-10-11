@@ -175,7 +175,12 @@ public class CreatureGenerator : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        CreateCreature();
+        // For some reason this method is being called twice
+        if (transform.childCount == 0)
+        {
+            Debug.Log(gameObject + " called awake. I have " + transform.childCount + " children");
+            CreateCreature();
+        }
 	}
 	
 	// Update is called once per frame
