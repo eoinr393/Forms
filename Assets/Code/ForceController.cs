@@ -89,6 +89,7 @@ public class ForceController : MonoBehaviour {
         float speed = this.speed;
 
         float runAxis = Input.GetAxis("Fire1");
+        Debug.Log(runAxis);
         float angularSpeed = 60.0f;
 
         if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
@@ -142,15 +143,17 @@ public class ForceController : MonoBehaviour {
 
 
         Yaw(mouseX * Time.deltaTime * angularSpeed);
-        float contYaw = 0; // Input.GetAxis("Yaw Axis");
-        float contPitch = 0; // Input.GetAxis("Pitch Axis");
-        Yaw(contYaw * Time.deltaTime * angularSpeed);
-
+        float contYaw = Input.GetAxis("Yaw Axis");
+        float contPitch = Input.GetAxis("Pitch Axis");
+        if (Mathf.Abs(contYaw) > 0.1f)
+        {
+            Yaw(contYaw * Time.deltaTime * angularSpeed);
+        }
         // If in Rift mode, dont pitch
         //if (ovrCamera == null)
         //{
         Pitch(-mouseY * Time.deltaTime * angularSpeed);
-        Pitch(contPitch * Time.deltaTime * angularSpeed);
+        //Pitch(contPitch * Time.deltaTime * angularSpeed);
         //}
         //else
         {
@@ -161,7 +164,7 @@ public class ForceController : MonoBehaviour {
         float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {
-            Walk(-contWalk * speed);
+            Walk(contWalk * speed);
         }
         if (Mathf.Abs(contStrafe) > 0.1f)
         {

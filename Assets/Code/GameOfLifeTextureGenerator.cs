@@ -32,6 +32,18 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         }
     }
 
+    private void StartingPattern(bool[,] board)
+    {
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < 12; j++)
+            {
+                board[i, j * 2] =  true;
+            }
+        }
+    }
+
     public override void GenerateTexture()
     {
         if (texture == null)
@@ -52,21 +64,23 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         next = new bool[size, size];
         //MakeGosperGun(size / 2, size / 2);
         //MakeTumbler(size / 2, size / 2);        
+        //StartingPattern(current);
         Randomise();
         StartCoroutine("UpdateBoard");
-        //StartCoroutine("Spawner");
+        StartCoroutine("Spawner");
     }
 
     IEnumerator Spawner()
     {
         while (true)
         {
-            int i = Random.Range(0, 6);
+            Randomise();
+            /*int i = Random.Range(0, 6);
             int x = Random.Range(5, size - 5);
             switch (i)
             {
                 case 0:
-                    Randomise();
+                    
                     //MakeGlider(x, 5);
                     break;
                 //case 1:
@@ -78,7 +92,8 @@ public class GameOfLifeTextureGenerator : TextureGenerator
                     //ClearBoard(current);
                     break;
             }
-            yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
+            */
+            yield return new WaitForSeconds(Random.Range(10.0f, 30.0f));
         }
     }
 
@@ -203,7 +218,7 @@ public class GameOfLifeTextureGenerator : TextureGenerator
             for (int col = 0; col < size; col++)
             {
                 float f = UnityEngine.Random.Range(0.0f, 1.0f);
-                if (f > 0.2f)
+                if (f < 0.5f)
                 {
                     current[row, col] = true;
                 }

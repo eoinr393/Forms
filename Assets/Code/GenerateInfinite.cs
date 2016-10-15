@@ -304,7 +304,7 @@ public class GenerateInfinite : MonoBehaviour {
         Mesh mesh = GenerateMesh(position);
         meshFilter.mesh = mesh;
         renderer.material.SetTexture("_MainTex", textureGenerator.texture);
-        renderer.material.color = color; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+        //renderer.material.color = color; //  new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
         /*Shader shader = Shader.Find("Diffuse");
 
         Material material = null;

@@ -23,6 +23,7 @@ struct CreaturePart
 public class CreatureGenerator : MonoBehaviour {
 
     public bool scaleFins = true;
+    public bool parentHeadToParent = false;
 
     [Range(0.0f, Mathf.PI * 2.0f)]
     public float theta = 0.1f;
@@ -102,7 +103,15 @@ public class CreatureGenerator : MonoBehaviour {
             if (i == 0)
             {
                 boid = part.GetComponent<Boid>();
+                if (parentHeadToParent)
+                {
+                    part.transform.parent = transform.parent;
+                }
             }
+            else
+            {
+                part.transform.parent = transform;
+            }        
 
             // Make fins if required            
             if (System.Array.Find(fla, p => p == "" + i) != null)
@@ -131,7 +140,7 @@ public class CreatureGenerator : MonoBehaviour {
                 break;
         }
         fin.transform.position = pos;
-        //fin.transform.rotation = transform.rotation;
+        fin.transform.rotation = fin.transform.rotation * transform.rotation;
         if (scaleFins)
         {
             fin.transform.localScale = new Vector3(scale, scale, scale);
