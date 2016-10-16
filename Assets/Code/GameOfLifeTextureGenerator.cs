@@ -35,12 +35,10 @@ public class GameOfLifeTextureGenerator : TextureGenerator
     private void StartingPattern(bool[,] board)
     {
 
-        for (int i = 0; i < size; i++)
+        for (int col = 0; col < size; col++)
         {
-            for (int j = 0; j < 12; j++)
-            {
-                board[i, j * 2] =  true;
-            }
+            board[20, col] = true;
+            board[30, col] = true;
         }
     }
 
@@ -64,10 +62,9 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         next = new bool[size, size];
         //MakeGosperGun(size / 2, size / 2);
         //MakeTumbler(size / 2, size / 2);        
-        //StartingPattern(current);
-        Randomise();
+        StartingPattern(current);
         StartCoroutine("UpdateBoard");
-        StartCoroutine("Spawner");
+        //StartCoroutine("Spawner");
     }
 
     IEnumerator Spawner()

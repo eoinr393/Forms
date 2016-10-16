@@ -145,7 +145,8 @@ public class ForceController : MonoBehaviour {
         Yaw(mouseX * Time.deltaTime * angularSpeed);
         float contYaw = Input.GetAxis("Yaw Axis");
         float contPitch = Input.GetAxis("Pitch Axis");
-        if (Mathf.Abs(contYaw) > 0.1f)
+        Debug.Log("Cont yaw: " +  contYaw);
+        if (Mathf.Abs(contYaw) > 0.2f)
         {
             Yaw(contYaw * Time.deltaTime * angularSpeed);
         }

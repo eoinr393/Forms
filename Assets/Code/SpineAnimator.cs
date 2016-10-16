@@ -36,6 +36,7 @@ public class SpineAnimator : MonoBehaviour {
         if (autoAssignBones)
         {
             bones.Clear();
+            Transform parent = (transform.parent.childCount > 1) ? transform.parent : transform.parent.parent;
             for (int i = 0; i < transform.parent.childCount; i++)
             {
                 GameObject child = transform.parent.GetChild(i).gameObject;

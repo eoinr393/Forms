@@ -23,7 +23,9 @@ struct CreaturePart
 public class CreatureGenerator : MonoBehaviour {
 
     public bool scaleFins = true;
-    public bool parentHeadToParent = false;
+    public float finRotatorOffset = 0.0f;
+
+    public float partOffset = 0.0f;
 
     [Range(0.0f, Mathf.PI * 2.0f)]
     public float theta = 0.1f;
@@ -84,6 +86,10 @@ public class CreatureGenerator : MonoBehaviour {
             CreaturePart cp = creatureParts[i];
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
             part.transform.position = cp.position;
+            if (i != 0)
+            {
+                part.transform.Translate(0, 0, partOffset);
+            }
             Renderer[] rs = part.GetComponentsInChildren<Renderer>();
             foreach (Renderer r in rs)
             {
@@ -103,10 +109,6 @@ public class CreatureGenerator : MonoBehaviour {
             if (i == 0)
             {
                 boid = part.GetComponent<Boid>();
-                if (parentHeadToParent)
-                {
-                    part.transform.parent = transform.parent;
-                }
             }
             else
             {
@@ -128,17 +130,20 @@ public class CreatureGenerator : MonoBehaviour {
     {
         GameObject fin = null; 
         Vector3 pos = cp.position;
+        float rotOffset = finRotatorOffset; 
         switch (side)
         {
             case FinAnimator.Side.left:
                 fin = GameObject.Instantiate<GameObject>(leftFinPrefab);
-                pos -= (transform.right * cp.size / 2);
+                pos -= (transform.right * cp.size / 2);                
                 break;
             case FinAnimator.Side.right:
                 fin = GameObject.Instantiate<GameObject>(rightFinPrefab);
                 pos += (transform.right * cp.size / 2);
+                rotOffset = -rotOffset;
                 break;
         }
+        pos += rotOffset * transform.right * scale;        
         fin.transform.position = pos;
         fin.transform.rotation = fin.transform.rotation * transform.rotation;
         if (scaleFins)
@@ -165,9 +170,10 @@ public class CreatureGenerator : MonoBehaviour {
         Vector3 pos = transform.position;
         for (int i = 0; i < numParts; i++)
         {            
-            float partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));
+            float partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));            
             theta += thetaInc;
-            pos -= ((((lastGap + partSize) / 2) + gap) * transform.forward);
+            float dist = partSize;
+            pos -= ((((lastGap + dist) / 2.0f) + gap) * transform.forward);
             if (flatten)
             {
                 pos.y -= (partSize / 2);
