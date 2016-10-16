@@ -98,6 +98,15 @@ public class CreatureGenerator : MonoBehaviour {
                 r.material.color = color;
             }
 
+            if (i == 0)
+            {
+                boid = part.GetComponent<Boid>();
+            }
+            else
+            {
+                part.transform.parent = transform;
+            }
+
             // Tail animator setup
             TailAnimator tailAnimator = part.GetComponentInChildren<TailAnimator>();
             if (tailAnimator != null)
@@ -110,18 +119,17 @@ public class CreatureGenerator : MonoBehaviour {
             {
                 finAnimator.boid = boid;
             }
-            
+
+            NoseAnimator noseAnimator = part.GetComponentInChildren<NoseAnimator>();
+            if (noseAnimator != null)
+            {
+                noseAnimator.boid = boid;
+            }
+
             part.transform.localScale = new Vector3(cp.size * part.transform.localScale.x, cp.size * part.transform.localScale.y, cp.size * part.transform.localScale.z);
             part.transform.rotation = transform.rotation;
             part.transform.parent = transform;
-            if (i == 0)
-            {
-                boid = part.GetComponent<Boid>();
-            }
-            else
-            {
-                part.transform.parent = transform;
-            }        
+              
 
             // Make fins if required            
             if (System.Array.Find(fla, p => p == "" + i) != null)
