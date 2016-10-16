@@ -102,6 +102,12 @@ public class CreatureGenerator : MonoBehaviour {
             {
                 tailAnimator.boid = boid;
             }
+
+            FinAnimator finAnimator = part.GetComponentInChildren<FinAnimator>();
+            if (finAnimator != null)
+            {
+                finAnimator.boid = boid;
+            }
             
             part.transform.localScale = new Vector3(cp.size * part.transform.localScale.x, cp.size * part.transform.localScale.y, cp.size * part.transform.localScale.z);
             part.transform.rotation = transform.rotation;
