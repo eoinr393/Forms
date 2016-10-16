@@ -22,6 +22,8 @@ struct CreaturePart
 
 public class CreatureGenerator : MonoBehaviour {
 
+    public bool makeRotator = false;
+
     public bool scaleFins = true;
     public float finRotatorOffset = 0.0f;
 
@@ -175,11 +177,18 @@ public class CreatureGenerator : MonoBehaviour {
         float lastGap = 0;
         Vector3 pos = transform.position;
         for (int i = 0; i < numParts; i++)
-        {            
-            float partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));            
-            theta += thetaInc;
-            float dist = partSize;
-            pos -= ((((lastGap + dist) / 2.0f) + gap) * transform.forward);
+        {
+            float partSize = 0;
+            if (makeRotator && i == 0)
+            {
+                partSize = 0.03f;
+            }
+            else
+            {
+                partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));
+                theta += thetaInc;
+            }
+            pos -= ((((lastGap + partSize) / 2.0f) + gap) * transform.forward);
             if (flatten)
             {
                 pos.y -= (partSize / 2);
