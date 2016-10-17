@@ -89,7 +89,6 @@ public class ForceController : MonoBehaviour {
         float speed = this.speed;
 
         float runAxis = Input.GetAxis("Fire1");
-        Debug.Log(runAxis);
         float angularSpeed = 60.0f;
 
         if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
@@ -145,7 +144,6 @@ public class ForceController : MonoBehaviour {
         Yaw(mouseX * Time.deltaTime * angularSpeed);
         float contYaw = Input.GetAxis("Yaw Axis");
         float contPitch = Input.GetAxis("Pitch Axis");
-        Debug.Log("Cont yaw: " +  contYaw);
         if (Mathf.Abs(contYaw) > 0.2f)
         {
             Yaw(contYaw * Time.deltaTime * angularSpeed);

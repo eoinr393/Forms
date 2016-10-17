@@ -6,17 +6,19 @@ using System;
 struct CreaturePart
 {
     public Vector3 position;
+    public Quaternion rotation;
     public float size;
-    public enum Part { head, body, fin , tail};
+    public enum Part { head, body, fin , tail, tenticle};
     public Part part;
     public GameObject prefab;
     
-    public CreaturePart(Vector3 position, float scale, Part part, GameObject prefab)
+    public CreaturePart(Vector3 position, float scale, Part part, GameObject prefab, Quaternion rotation)
     {
         this.position = position;
         this.size = scale;
         this.part = part;
         this.prefab = prefab;
+        this.rotation = rotation;
     }
 }
 
@@ -184,6 +186,9 @@ public class CreatureGenerator : MonoBehaviour {
         float theta = this.theta;
         float lastGap = 0;
         Vector3 pos = transform.position;
+
+
+
         for (int i = 0; i < numParts; i++)
         {
             float partSize = 0;
@@ -206,7 +211,7 @@ public class CreatureGenerator : MonoBehaviour {
                 , partSize
                 , (i == 0) ? CreaturePart.Part.head : (i < numParts - 1) ? CreaturePart.Part.body : CreaturePart.Part.tail
                 , (i == 0) ? headPrefab : (i < numParts - 1) ? bodyPrefab : (tailPrefab != null) ? tailPrefab : bodyPrefab 
-                ));
+                , Quaternion.identity));
         }
         return cps;
     }

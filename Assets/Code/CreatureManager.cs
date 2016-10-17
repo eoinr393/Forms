@@ -154,7 +154,7 @@ public class CreatureManager : MonoBehaviour {
                 boid.force = boid.CalculateForce();
             }
             threadCount++;
-            //Thread.Sleep(30);
+            //Thread.Sleep(100);
         }
     }
 

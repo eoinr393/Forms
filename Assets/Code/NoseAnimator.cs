@@ -35,10 +35,9 @@ public class NoseAnimator : MonoBehaviour {
         {
             float offset = rotationOffset * Mathf.Deg2Rad;
 
-            float angle = Mathf.Sin((harmonic.theta + offset))
-            * (harmonic.rampedAmplitude / initialAmplitude) * amplitude * wigglyness;
+            float angle = Utilities.Map(Mathf.Sin((harmonic.theta + offset)), -1, 1, 0, amplitude);
 
-            transform.localPosition = new Vector3(0, 0, angle);
+            transform.localScale = new Vector3(1, 1, angle);
         }
 	}
 }
