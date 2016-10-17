@@ -23,11 +23,11 @@ public class TenticleCreatureGenerator : MonoBehaviour {
             float theta = i * thetaInc;
             Vector3 pos = new Vector3();
             pos.x = transform.position.x + Mathf.Sin(theta) * radius;
-            pos.z = transform.position.z + Mathf.Cos(theta) * radius;
+            pos.z = transform.position.z - Mathf.Cos(theta) * radius;
             pos.y = transform.position.y;
             CreaturePart cp = new CreaturePart(pos, scale
                 , CreaturePart.Part.tenticle
-                , tenticlePrefab, Quaternion.AngleAxis(Mathf.Rad2Deg * theta, Vector3.up));
+                , tenticlePrefab, Quaternion.AngleAxis(Mathf.Rad2Deg * -theta, Vector3.up));
             list.Add(cp);
         }
 
