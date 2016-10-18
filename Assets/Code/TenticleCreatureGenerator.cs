@@ -13,6 +13,25 @@ public class TenticleCreatureGenerator : MonoBehaviour {
 
     public Color color;
 
+    public void OnDrawGizmos()
+    {
+        List<CreaturePart> cps = CreateCreatureParams();
+        Gizmos.color = Color.cyan;
+        foreach (CreaturePart cp in cps)
+        {
+            switch (cp.part)
+            {
+                case CreaturePart.Part.head:
+                    Gizmos.DrawWireSphere(cp.position, cp.size);
+                    break;
+                case CreaturePart.Part.tenticle:
+                    Gizmos.DrawWireSphere(cp.position, cp.size / 10);
+                    break;
+            }
+        }
+
+    }
+
     List<CreaturePart> CreateCreatureParams()
     {
         List<CreaturePart> list = new List<CreaturePart>();
