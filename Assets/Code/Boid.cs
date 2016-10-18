@@ -29,6 +29,7 @@ public class Boid : MonoBehaviour
     public float radius = 5.0f;
     public float maxTurnDegrees = 180.0f;
     public bool applyBanking = true;
+    public bool keepUpright = false;
     public float straighteningTendancy = 0.2f;
     public float rollingTendancy = 0.05f;
     public bool integrateForces = true;
@@ -174,11 +175,16 @@ public class Boid : MonoBehaviour
             if (speed > 0.01f && integrateForces)
             {
                 transform.forward = Vector3.RotateTowards(transform.forward, velocity, Mathf.Deg2Rad * maxTurnDegrees * Time.deltaTime, float.MaxValue);
+                if (keepUpright)
+                {
+                    Vector3 uprightForward = transform.forward;
+                    uprightForward.y = 0;
+                    transform.forward = uprightForward;
+                }
             }
 
             if (applyBanking && integrateForces)
             {
-                //up = tempUp;
                 Quaternion q = Quaternion.LookRotation(transform.forward, tempUp);
                 transform.rotation = q;
             }

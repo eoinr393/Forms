@@ -8,13 +8,16 @@ public class TenticleCreatureGenerator : MonoBehaviour {
 
     public int numTenticles = 8;
     public float radius = 20;
-    public float scale = 1.0f;
+    public float headScale = 1.0f;
+    public float tenticleScale = 1.0f;
+
+    public Color color;
 
     List<CreaturePart> CreateCreatureParams()
     {
         List<CreaturePart> list = new List<CreaturePart>();
 
-        CreaturePart headPart = new CreaturePart(transform.position, radius * 2, CreaturePart.Part.head, headPrefab, Quaternion.identity);
+        CreaturePart headPart = new CreaturePart(transform.position, headScale, CreaturePart.Part.head, headPrefab, Quaternion.identity);
         list.Add(headPart);
 
         float thetaInc = Mathf.PI * 2.0f / (numTenticles);
@@ -25,7 +28,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
             pos.x = transform.position.x + Mathf.Sin(theta) * radius;
             pos.z = transform.position.z - Mathf.Cos(theta) * radius;
             pos.y = transform.position.y;
-            CreaturePart cp = new CreaturePart(pos, scale
+            CreaturePart cp = new CreaturePart(pos, tenticleScale
                 , CreaturePart.Part.tenticle
                 , tenticlePrefab, Quaternion.AngleAxis(Mathf.Rad2Deg * -theta, Vector3.up));
             list.Add(cp);
@@ -45,19 +48,19 @@ public class TenticleCreatureGenerator : MonoBehaviour {
             GameObject newPart = GameObject.Instantiate<GameObject>(part.prefab);            
             newPart.transform.position = part.position;
             newPart.transform.rotation = part.rotation;
-            newPart.transform.localScale = new Vector3(scale, scale, scale);
-            newPart.transform.parent = transform;
+            newPart.transform.localScale = new Vector3(part.size, part.size, part.size);           
 
             Boid thisBoid = newPart.GetComponentInChildren<Boid>();
             if (thisBoid != null)
             {
                 boid = thisBoid;
+                newPart.transform.parent = transform;
             }
 
             FinAnimator anim = newPart.GetComponentInChildren<FinAnimator>();
             if (anim != null)
             {
-
+                newPart.transform.parent = boid.transform;
                 anim.boid = boid;
             }
         }
@@ -70,8 +73,8 @@ public class TenticleCreatureGenerator : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-	
-	}
+        Utilities.RecursiveSetColor(this.gameObject, color);
+    }
 	
 	// Update is called once per frame
 	void Update () {
