@@ -21,13 +21,18 @@ public class ForceController : MonoBehaviour {
      
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;        
+
+        desiredRotation = transform.rotation;
     }
+
+    Quaternion desiredRotation;
 
     void Yaw(float angle)
     {
         //rigidBody.AddTorque(Vector3.up * angle * 150);
         Quaternion rot = Quaternion.AngleAxis(angle, Vector3.up);
-        transform.rotation = rot * transform.rotation;
+        desiredRotation = rot * desiredRotation;
+        //transform.rotation = rot * transform.rotation;
     }
 
     void Roll(float angle)
@@ -38,17 +43,23 @@ public class ForceController : MonoBehaviour {
 
     void Pitch(float angle)
     {
-        float invcosTheta1 = Vector3.Dot(transform.forward, Vector3.up);
+        /*float invcosTheta1 = Vector3.Dot(transform.forward, Vector3.up);
         float threshold = 0.95f;
         if ((angle > 0 && invcosTheta1 < (-threshold)) || (angle < 0 && invcosTheta1 > (threshold)))
         {
             return;
         }
-
+        */
         // A pitch is a rotation around the right vector
+        
         Quaternion rot = Quaternion.AngleAxis(angle, transform.right);
+        desiredRotation = rot * desiredRotation;
 
-        transform.rotation = rot * transform.rotation;
+        
+        //Quaternion rot = Quaternion.AngleAxis(angle, transform.right);
+        //transform.rotation = rot * transform.rotation;
+        
+    
     }
 
     void Walk(float units)
@@ -142,32 +153,38 @@ public class ForceController : MonoBehaviour {
 
 
         Yaw(mouseX * Time.deltaTime * angularSpeed);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime);
+
         float contYaw = Input.GetAxis("Yaw Axis");
         float contPitch = Input.GetAxis("Pitch Axis");
+
+        CreatureManager.PrintFloat("Yaw Axis: ", contYaw);
+        CreatureManager.PrintFloat("Pitch Axis: ", contPitch);
         if (Mathf.Abs(contYaw) > 0.2f)
         {
-            Yaw(contYaw * Time.deltaTime * angularSpeed);
+            //Yaw(contYaw * Time.deltaTime * angularSpeed);
         }
         // If in Rift mode, dont pitch
-        //if (ovrCamera == null)
+        //if (ovrCamera == null)w
         //{
-        Pitch(-mouseY * Time.deltaTime * angularSpeed);
+        //Pitch(-mouseY * Time.deltaTime * angularSpeed);
         //Pitch(contPitch * Time.deltaTime * angularSpeed);
         //}
         //else
         {
-            Fly(-contPitch * speed);
+            //Fly(-contPitch * speed);
         }
 
         float contWalk = Input.GetAxis("Vertical");
         float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {
-            Walk(contWalk * speed);
+            //Walk(contWalk * speed);
         }
         if (Mathf.Abs(contStrafe) > 0.1f)
         {
-            Strafe(contStrafe * speed);
+            //Strafe(contStrafe * speed);
         }      
     }
 }

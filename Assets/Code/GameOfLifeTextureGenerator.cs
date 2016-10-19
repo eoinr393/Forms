@@ -34,7 +34,8 @@ public class GameOfLifeTextureGenerator : TextureGenerator
 
     private void StartingPattern(bool[,] board)
     {
-
+        generation = 0;
+        ClearBoard(current);
         for (int col = 0; col < size; col++)
         {
             board[20, col] = true;
@@ -58,6 +59,8 @@ public class GameOfLifeTextureGenerator : TextureGenerator
 
     void Start()
     {
+
+        generation = 0;
         current = new bool[size, size];
         next = new bool[size, size];
         //MakeGosperGun(size / 2, size / 2);
@@ -71,7 +74,6 @@ public class GameOfLifeTextureGenerator : TextureGenerator
     {
         while (true)
         {
-            Randomise();
             /*int i = Random.Range(0, 6);
             int x = Random.Range(5, size - 5);
             switch (i)
@@ -223,12 +225,14 @@ public class GameOfLifeTextureGenerator : TextureGenerator
         }
     }
 
+    public int generation = 0;
+
     System.Collections.IEnumerator ResetBoard()
     {
         while (true)
         {
             yield return new WaitForSeconds(speed * 50);
-            Randomise();
+            StartingPattern(current);
         }
     }
 
@@ -307,7 +311,12 @@ public class GameOfLifeTextureGenerator : TextureGenerator
                 t += tDelta;
                 texture.Apply();
                 yield return new WaitForSeconds(delay);
-            } 
+            }
+            generation++;
+            if (generation >= 150)
+            {
+                StartingPattern(current);
+            }
         }
     }
 

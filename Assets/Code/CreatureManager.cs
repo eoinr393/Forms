@@ -97,6 +97,7 @@ public class CreatureManager : MonoBehaviour {
         style.fontSize = 18;
         style.normal.textColor = Color.white;
         DontDestroyOnLoad(this);
+        Cursor.visible = false;
     }
 
     // Use this for initialization
