@@ -20,7 +20,7 @@ public class Boid : MonoBehaviour
     public float maxSpeed = 20.0f;
     public float maxForce = 10.0f;
     public float weight = 1.0f;
-    [Range(0.0f, 2.0f)]
+    [Range(0.0f, 10.0f)]
     public float timeMultiplier = 1.0f;
     [Range(0.0f, 1.0f)]
     public float damping = 0.01f;

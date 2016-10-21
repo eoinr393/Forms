@@ -34,7 +34,7 @@ public class TailAnimator : MonoBehaviour {
                     transform.localRotation = Quaternion.Euler(angle, 0, 0);
                     break;
             }
-            theta += speed * Time.deltaTime * boid.acceleration.magnitude;
+            theta += speed * boid.TimeDelta * boid.acceleration.magnitude;
         }
     }
 }
