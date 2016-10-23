@@ -59,23 +59,33 @@ public class ViveController : MonoBehaviour {
         }
         
         if (leftTrig > 0.2f)
-        {
-            leftEngine.SetActive(true);
+        {            
             rigidBody.AddForceAtPosition(leftTrackedObject.transform.forward * power * leftTrig, leftTrackedObject.transform.position);
         }
         else
         {
-            leftEngine.SetActive(false);
+
         }
+        leftEngine.GetComponent<JetFire>().fire = leftTrig;
+
+        float max = 3999;
+
+        SteamVR_Controller.Input(
+            SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost)
+            ).TriggerHapticPulse((ushort)(leftTrig * max));
+        SteamVR_Controller.Input(
+            SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost)
+            ).TriggerHapticPulse((ushort)(rightTrig * max));
+
+
+        rightEngine.GetComponent<JetFire>().fire = rightTrig;
 
         if (rightTrig > 0.2f)
         {
-            rightEngine.SetActive(true);
             rigidBody.AddForceAtPosition(rightTrackedObject.transform.forward * power * rightTrig, rightTrackedObject.transform.position);
         }
         else
         {
-            rightEngine.SetActive(false);
         }
 
         rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, maxSpeed);

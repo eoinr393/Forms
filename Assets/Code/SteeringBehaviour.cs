@@ -5,9 +5,9 @@ using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(Boid))]
-public abstract class SteeringBehaviour: MonoBehaviour
+public abstract class SteeringBehaviour : MonoBehaviour
 {
-    public bool active = true;
+    private bool active = true;
 
     [Range(0.0f, 200.0f)]
     public float weight = 1.0f;
@@ -27,5 +27,10 @@ public abstract class SteeringBehaviour: MonoBehaviour
     public void Awake()
     {
         boid = GetComponent<Boid>();
+    }
+
+    public void Update()
+    {
+        active = isActiveAndEnabled;
     }
 }
