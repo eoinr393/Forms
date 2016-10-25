@@ -7,7 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Boid))]
 public abstract class SteeringBehaviour : MonoBehaviour
 {
-    private bool active = true;
+    [HideInInspector]
+    public bool active = true;
 
     [Range(0.0f, 200.0f)]
     public float weight = 1.0f;

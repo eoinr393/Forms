@@ -15,6 +15,7 @@ public class VaryWiggle : MonoBehaviour {
     [Range(0, 1)]
     public float amplitudeVariation = 0.5f;
 
+    public bool glide = false;
 
     // Use this for initialization
     void Start () {
@@ -28,9 +29,22 @@ public class VaryWiggle : MonoBehaviour {
     {
         while (true)
         {
+            Debug.Log("Normal");
+            harmonic.amplitude = initialAmplitude;
+            harmonic.speed = initialSpeed;
             yield return new WaitForSeconds(Random.Range(3, 10));
+            Debug.Log("Adjusting");
             harmonic.amplitude = Random.Range(initialAmplitude - (initialAmplitude * speedVariation), initialAmplitude + (initialAmplitude * speedVariation));
             harmonic.speed = Random.Range(initialSpeed - (initialSpeed * amplitudeVariation), initialSpeed + (initialSpeed * amplitudeVariation));
+            yield return new WaitForSeconds(Random.Range(3, 10));
+            if (glide)
+            {
+                Debug.Log("Gliding");
+                harmonic.amplitude = initialAmplitude * 0.15f;
+                harmonic.speed = initialSpeed;                
+
+            }
+            yield return new WaitForSeconds(Random.Range(5, 7));
         }
     }
 }

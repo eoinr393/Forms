@@ -140,6 +140,11 @@ public class CreatureManager : MonoBehaviour {
         PrintFloat("Boid FPS: ", threadFPS);
         PrintFloat("ThreadCount: ", (int)threadCount);
         PrintFloat("Thread TimeDelta", threadTimeDelta);
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }        
     }
 
     long lastThreadCount = 0;

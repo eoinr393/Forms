@@ -180,7 +180,7 @@ public class ForceController : MonoBehaviour {
         float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {
-            //Walk(contWalk * speed);
+            Walk(contWalk * speed);
         }
         if (Mathf.Abs(contStrafe) > 0.1f)
         {
