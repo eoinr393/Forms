@@ -6,10 +6,13 @@ using UnityEngine;
 
 namespace BGE
 {
-    public class NewFishParts : MonoBehaviour
+    public class FishParts : MonoBehaviour
     {
+        [HideInInspector]
         public GameObject head;
+        [HideInInspector]
         public GameObject body;
+        [HideInInspector]
         public GameObject tail;
 
         List<GameObject> segments;
@@ -21,14 +24,13 @@ namespace BGE
         float theta;
         float angularVelocity = 5.00f;
 
-        public GameObject headRotGameObject;
-        public GameObject tailRotGameObject;
+        private Vector3 headRotPoint;
+        private Vector3 tailRotPoint;
 
         private Vector3 headSize;
         private Vector3 bodySize;
         private Vector3 tailSize;
 
-        [Range(0.0f, 2.0f)]
         public float speedMultiplier;
 
         public float headField;
@@ -39,9 +41,7 @@ namespace BGE
         [HideInInspector]
         public Boid boid;
 
-        public bool boidSpeedToAnimationSpeed = true;
-
-        public NewFishParts()
+        public FishParts()
         {
             segments = new List<GameObject>();
 
@@ -57,7 +57,7 @@ namespace BGE
             GameObject segment = null;
             segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Vector3 scale = new Vector3(1, segmentExtents, segmentExtents);
-            segment.transform.localScale = scale;
+            segment.transform.localScale = scale;            
             return segment;
         }
 
@@ -70,7 +70,26 @@ namespace BGE
 
 
         public void Start()
-        {            
+        {
+
+            if (transform.childCount != 3)
+            {
+                head = InstiantiateDefaultShape();
+                body = InstiantiateDefaultShape();
+                tail = InstiantiateDefaultShape();
+                LayoutSegments();
+            }
+            else
+            {
+                head = transform.GetChild(0).gameObject;
+                body = transform.GetChild(1).gameObject;
+                tail = transform.GetChild(2).gameObject;
+            }
+
+            segments.Add(head);
+            segments.Add(body);
+            segments.Add(tail);
+
             if (head.GetComponent<Collider>() != null)
             {
                 head.GetComponent<Collider>().enabled = false;
@@ -87,7 +106,32 @@ namespace BGE
             boid = (boidGameObject == null) ? GetComponent<Boid>() : boidGameObject.GetComponent<Boid>();
 
         }
-        
+
+        private void LayoutSegments()
+        {
+            bodySize = body.GetComponent<Renderer>().bounds.size;
+            headSize = head.GetComponent<Renderer>().bounds.size;
+            tailSize = tail.GetComponent<Renderer>().bounds.size;
+
+            body.transform.position = transform.position;
+
+            float headOffset = (bodySize.z / 2.0f) + gap + (headSize.z / 2.0f);
+            head.transform.position = transform.position + new Vector3(0, 0, headOffset);
+
+            float tailOffset = (bodySize.z / 2.0f) + gap + (tailSize.z / 2.0f);
+            tail.transform.position = transform.position + new Vector3(0, 0, -tailOffset);
+
+            head.transform.parent = transform;
+            tail.transform.parent = transform;
+            body.transform.parent = transform;
+
+            headRotPoint = head.transform.localPosition;
+            headRotPoint.z -= headSize.z / 2;
+
+            tailRotPoint = tail.transform.localPosition;
+            tailRotPoint.z += tailSize.z / 2;
+
+        }
 
         float oldHeadRot = 0;
         float oldTailRot = 0;
@@ -99,18 +143,16 @@ namespace BGE
         {
             // Animate the head            
             float headRot = Mathf.Sin(theta) * headField;
-            head.transform.RotateAround(headRotGameObject.transform.position, headRotGameObject.transform.up, headRot - oldHeadRot);
+            head.transform.RotateAround(transform.TransformPoint(headRotPoint), transform.up, headRot - oldHeadRot);
 
             oldHeadRot = headRot;
 
             // Animate the tail
             float tailRot = Mathf.Sin(theta) * tailField;
-            tail.transform.RotateAround(tailRotGameObject.transform.position, - tailRotGameObject.transform.up, tailRot - oldTailRot);
+            tail.transform.RotateAround(transform.TransformPoint(tailRotPoint), transform.up, tailRot - oldTailRot);
             oldTailRot = tailRot;
 
-            float speed;
-
-            speed = boidSpeedToAnimationSpeed ? boid.acceleration.magnitude : 1.0f; ;
+            float speed = boid.acceleration.magnitude;
             theta += speed * angularVelocity * Time.deltaTime * speedMultiplier;
             if (theta >= Mathf.PI * 2.0f)
             {

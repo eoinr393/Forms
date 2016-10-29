@@ -35,6 +35,8 @@ public class SceneAvoidance: SteeringBehaviour
     public enum ForceType { normal, incident, up, braking };
     public ForceType forceType = ForceType.normal;
 
+    public LayerMask mask = -1;
+
     public void Start()
     {
         StartCoroutine(UpdateFrontFeelers());
@@ -82,8 +84,8 @@ public class SceneAvoidance: SteeringBehaviour
             float forwardFeelerDepth = this.forwardFeelerDepth + ((boid.velocity.magnitude / boid.maxSpeed) * this.forwardFeelerDepth);
 
             // Forward feeler
-            //int layerMask = 1 << 9;
-            bool collided = Physics.SphereCast(transform.position, feelerRadius, boid.TransformDirection(Vector3.forward), out info, forwardFeelerDepth);
+            //int mask.value = 1 << 9;
+            bool collided = Physics.SphereCast(transform.position, feelerRadius, boid.TransformDirection(Vector3.forward), out info, forwardFeelerDepth, mask.value);
             feelers[0] = new FeelerInfo(info.point, info.normal
                 , collided, FeelerInfo.FeeelerType.front);
             yield return new WaitForSeconds(1.0f / frontFeelerUpdatesPerSecond);
@@ -130,28 +132,28 @@ public class SceneAvoidance: SteeringBehaviour
             // Left feeler
             feelerDirection = Vector3.forward;
             feelerDirection = Quaternion.AngleAxis(-45, Vector3.up) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, feelerRadius, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth);
+            collided = Physics.SphereCast(transform.position, feelerRadius, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
             feelers[1] = new FeelerInfo(info.point, info.normal,
                 collided, FeelerInfo.FeeelerType.side);
 
             // Right feeler
             feelerDirection = Vector3.forward;
             feelerDirection = Quaternion.AngleAxis(-45, Vector3.up) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth);
+            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
             feelers[2] = new FeelerInfo(info.point, info.normal
                 , collided, FeelerInfo.FeeelerType.side);
 
             // Up feeler
             feelerDirection = Vector3.forward;
             feelerDirection = Quaternion.AngleAxis(45, Vector3.right) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth);
+            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
             feelers[3] = new FeelerInfo(info.point, info.normal
                 , collided, FeelerInfo.FeeelerType.side);
 
             // Down feeler
             feelerDirection = Vector3.forward;
             feelerDirection = Quaternion.AngleAxis(-45, Vector3.right) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth);
+            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
             feelers[4] = new FeelerInfo(info.point, info.normal
                 , collided, FeelerInfo.FeeelerType.side);
             yield return new WaitForSeconds(1.0f / sideFeelerUpdatesPerSecond);

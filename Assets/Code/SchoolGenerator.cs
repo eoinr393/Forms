@@ -9,65 +9,56 @@ using UnityEngine;
 
 public class SchoolGenerator : School
 {
-	public int boidCount;
-	public GameObject boidPrefab;
+    public int boidCount;
+    public GameObject boidPrefab;
 
-	public bool spawnInTopHemisphere;
+    public bool spawnInTopHemisphere;
 
-	[Range(0, 1)]
-	public float spread;
+    [Range(0, 1)]
+    public float spread;
 
-	
 
-	SchoolGenerator()
-	{
-		boidCount = 200;
+    SchoolGenerator()
+    {
+        boidCount = 200;
 
-		spread = 1.0f;
-	}
+        spread = 1.0f;
+    }
 
-	
+    void Start()
+    {
+        //Application.targetFrameRate = 20;
+        int maxAudioBoids = 5;
+        int audioBoids = 0;
 
-	
-
-	
-
-	void Start()
-	{
-		//Application.targetFrameRate = 20;
-		int maxAudioBoids = 5;
-		int audioBoids = 0;
-
-		for (int i = 0; i < boidCount; i++)
-		{
-			Boid boid = GameObject.Instantiate<GameObject>(boidPrefab).GetComponent<Boid>();
-			boids.Add(boid);
+        for (int i = 0; i < boidCount; i++)
+        {
+            Boid boid = GameObject.Instantiate<GameObject>(boidPrefab).GetComponent<Boid>();
+            boids.Add(boid);
 
             Vector3 unit = UnityEngine.Random.insideUnitSphere;
-			if (spawnInTopHemisphere)
-			{
-				unit.y = Mathf.Abs(unit.y);
-			}
-			boid.transform.position = transform.position + unit * UnityEngine.Random.Range(0,  radius * spread);
-			boid.transform.parent = transform;
-			boid.school = this;
-			AudioSource audioSource = boid.GetComponent<AudioSource>();
-			if (audioSource != null)
-			{
-				if (audioBoids < maxAudioBoids)
-				{
-					audioSource.enabled = true;
-					audioSource.loop = true;
-					audioSource.Play();
-					audioBoids++;
-				}
-				else
-				{
-					audioSource.enabled = false;
-				}
-			}
-		}		
-	}
-
-	
+            if (spawnInTopHemisphere)
+            {
+                unit.y = Mathf.Abs(unit.y);
+            }
+            boid.transform.position = transform.position + unit * UnityEngine.Random.Range(0, radius * spread);
+            boid.transform.parent = transform;
+            boid.school = this;
+            AudioSource audioSource = boid.GetComponent<AudioSource>();
+            if (audioSource != null)
+            {
+                if (audioBoids < maxAudioBoids)
+                {
+                    audioSource.enabled = true;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                    audioBoids++;
+                }
+                else
+                {
+                    audioSource.enabled = false;
+                }
+            }
+        }
+    }        
 }     

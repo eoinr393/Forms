@@ -290,6 +290,7 @@ public class GenerateInfinite : MonoBehaviour {
     GameObject GenerateTile(Vector3 position)
     {
         GameObject tile = new GameObject();
+        tile.layer = this.gameObject.layer;
         tile.transform.parent = this.transform;
         MeshRenderer renderer = tile.AddComponent<MeshRenderer>();
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;

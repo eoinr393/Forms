@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FinAnimator : MonoBehaviour {
+public class FinAnimator : Animator {
 
     public enum Axis {X, Z };
     public Axis axis = Axis.X;
     public enum Side { left, right };
     public Side side = Side.left;
-
-    public Boid boid;
     private Harmonic harmonic;
     public float theta = 0;
     float initialAmplitude;

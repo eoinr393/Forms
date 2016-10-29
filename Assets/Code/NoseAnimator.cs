@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NoseAnimator : MonoBehaviour {
-
-    public Boid boid;
+public class NoseAnimator : Animator {
     private Harmonic harmonic;
     public float theta = 0;
     float initialAmplitude;

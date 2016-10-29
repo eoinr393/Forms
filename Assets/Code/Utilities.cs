@@ -96,6 +96,16 @@ public class Utilities
         return x;
     }
 
+    internal static void SetUpAnimators(GameObject part, Boid boid)
+    {
+        // Tail animator setup
+        Animator[] animators = part.GetComponentsInChildren<Animator>();
+        foreach (Animator a in animators)
+        {
+            a.boid = boid;
+        }
+    }
+
     // ----------------------------------------------------------------------------
     // remap a value specified relative to a pair of bounding values
     // to the corresponding value relative to another pair of bounds.

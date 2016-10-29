@@ -35,7 +35,12 @@ public class Boid : MonoBehaviour
     public bool integrateForces = true;
     public float preferredTimeDelta = 0.0f;
 
+    public bool tagNeighbours = false;
+
     public float bank;
+
+    [HideInInspector]
+    public  List<Boid> tagged = new List<Boid>();
 
     [HideInInspector]
     public School school;
@@ -237,6 +242,11 @@ public class Boid : MonoBehaviour
     {
         Vector3 totalForce = Vector3.zero;
 
+        if (tagNeighbours && school != null)
+        {
+            TagNeighboursSimple(school.neighbourDistance);
+        }
+
         foreach (SteeringBehaviour behaviour in behaviours)
         {
             if (behaviour.active)
@@ -300,5 +310,23 @@ public class Boid : MonoBehaviour
         Utilities.checkNaN(desired);
 
         return desired - velocity;
+    }
+
+    private int TagNeighboursSimple(float inRange)
+    {
+        tagged.Clear();
+
+        float inRangeSq = inRange * inRange;
+        foreach (Boid boid in school.boids)
+        {
+            if (boid != this)
+            {
+                if ((position - boid.position).sqrMagnitude < inRangeSq)
+                {
+                    tagged.Add(boid);
+                }
+            }
+        }
+        return tagged.Count;
     }
 }

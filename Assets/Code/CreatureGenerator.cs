@@ -89,6 +89,7 @@ public class CreatureGenerator : MonoBehaviour {
         {
             CreaturePart cp = creatureParts[i];
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
+            part.layer = this.gameObject.layer;
             part.transform.position = cp.position;
             if (i != 0)
             {
@@ -109,25 +110,8 @@ public class CreatureGenerator : MonoBehaviour {
                 part.transform.parent = transform;
             }
 
-            // Tail animator setup
-            TailAnimator tailAnimator = part.GetComponentInChildren<TailAnimator>();
-            if (tailAnimator != null)
-            {
-                tailAnimator.boid = boid;
-            }
-
-            FinAnimator finAnimator = part.GetComponentInChildren<FinAnimator>();
-            if (finAnimator != null)
-            {
-                finAnimator.boid = boid;
-            }
-
-            NoseAnimator noseAnimator = part.GetComponentInChildren<NoseAnimator>();
-            if (noseAnimator != null)
-            {
-                noseAnimator.boid = boid;
-            }
-
+            Utilities.SetUpAnimators(part, boid);
+            
             part.transform.localScale = new Vector3(cp.size * part.transform.localScale.x, cp.size * part.transform.localScale.y, cp.size * part.transform.localScale.z);
             part.transform.rotation = transform.rotation;
             part.transform.parent = transform;
@@ -168,6 +152,7 @@ public class CreatureGenerator : MonoBehaviour {
         {
             fin.transform.localScale = new Vector3(scale, scale, scale);
         }
+        fin.layer = this.gameObject.layer;
         fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TailAnimator : MonoBehaviour {
+public class TailAnimator : Animator {
     public enum Axis { Y, X };
     public Axis axis = Axis.Y;
 
-    public Boid boid;
     public float theta = 0;
     public float amplitude = 40.0f;
     public float speed = 0.1f;
