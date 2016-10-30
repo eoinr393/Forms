@@ -7,6 +7,12 @@ using UnityEngine;
 
 public class Seperation : SteeringBehaviour
 {
+
+    public void Start()
+    {
+        boid.tagNeighbours = true;
+    }
+
     public override Vector3 Calculate()
     {
         Vector3 steeringForce = Vector3.zero;

@@ -25,7 +25,7 @@ public class SchoolGenerator : School
         spread = 1.0f;
     }
 
-    void Start()
+    void Awake()
     {
         //Application.targetFrameRate = 20;
         int maxAudioBoids = 5;
@@ -34,8 +34,6 @@ public class SchoolGenerator : School
         for (int i = 0; i < boidCount; i++)
         {
             Boid boid = GameObject.Instantiate<GameObject>(boidPrefab).GetComponent<Boid>();
-            boids.Add(boid);
-
             Vector3 unit = UnityEngine.Random.insideUnitSphere;
             if (spawnInTopHemisphere)
             {
@@ -44,6 +42,8 @@ public class SchoolGenerator : School
             boid.transform.position = transform.position + unit * UnityEngine.Random.Range(0, radius * spread);
             boid.transform.parent = transform;
             boid.school = this;
+            boid.testField = "AAA";
+            boids.Add(boid);
             AudioSource audioSource = boid.GetComponent<AudioSource>();
             if (audioSource != null)
             {

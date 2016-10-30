@@ -42,8 +42,8 @@ public class Boid : MonoBehaviour
     [HideInInspector]
     public  List<Boid> tagged = new List<Boid>();
 
-    [HideInInspector]
-    public School school;
+    //[HideInInspector]
+    public volatile School school;
 
     public bool enforceNonPenetrationConstraint;
 
@@ -64,6 +64,8 @@ public class Boid : MonoBehaviour
 
     [HideInInspector]
     public SteeringBehaviour[] behaviours;
+
+    public string testField;
 
     public float TimeDelta
     {
@@ -88,6 +90,12 @@ public class Boid : MonoBehaviour
         UpdateLocalFromTransform();
 
         behaviours = GetComponents<SteeringBehaviour>();
+
+        //if (transform.parent.gameObject.GetComponent<School>() != null)
+        //{
+        //    school = transform.parent.gameObject.GetComponent<School>();
+        //}
+
     }
 
     #region Integration
@@ -118,7 +126,7 @@ public class Boid : MonoBehaviour
     Vector3 desiredPosition = Vector3.zero;
 
     void FixedUpdate()
-    {
+    {     
         float smoothRate;
 
         if (!multiThreaded)
@@ -244,7 +252,7 @@ public class Boid : MonoBehaviour
 
         if (tagNeighbours && school != null)
         {
-            TagNeighboursSimple(school.neighbourDistance);
+            int taggedCount = TagNeighboursSimple(school.neighbourDistance);
         }
 
         foreach (SteeringBehaviour behaviour in behaviours)
