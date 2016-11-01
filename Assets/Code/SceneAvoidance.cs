@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,8 +78,10 @@ public class SceneAvoidance: SteeringBehaviour
 
     System.Collections.IEnumerator UpdateFrontFeelers()
     {
+        yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
         while (true)
         {
+            
             RaycastHit info;
             float forwardFeelerDepth = this.forwardFeelerDepth + ((boid.velocity.magnitude / boid.maxSpeed) * this.forwardFeelerDepth);
 
@@ -120,6 +122,7 @@ public class SceneAvoidance: SteeringBehaviour
 
     System.Collections.IEnumerator UpdateSideFeelers()
     {
+        yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
         while (true)
         {
             Vector3 feelerDirection;

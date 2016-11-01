@@ -175,8 +175,7 @@ public class Boid : MonoBehaviour
             smoothRate = timeAccMult;// * 3.0f;
             Vector3 tempUp = transform.up;
             Utilities.BlendIntoAccumulator(smoothRate, bankUp, ref tempUp);
-            Debug.DrawLine(transform.position, transform.position + (tempUp * 100));
-
+            
             float speed = velocity.magnitude;
             if (speed > maxSpeed)
             {
