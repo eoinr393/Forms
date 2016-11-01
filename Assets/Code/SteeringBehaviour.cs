@@ -28,6 +28,7 @@ public abstract class SteeringBehaviour : MonoBehaviour
     public void Awake()
     {
         boid = GetComponent<Boid>();
+        active = isActiveAndEnabled;
     }
 
     public void Update()
