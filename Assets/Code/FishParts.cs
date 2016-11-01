@@ -57,7 +57,8 @@ namespace BGE
             GameObject segment = null;
             segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Vector3 scale = new Vector3(1, segmentExtents, segmentExtents);
-            segment.transform.localScale = scale;            
+            segment.transform.localScale = scale;
+            segment.GetComponentInChildren<Renderer>().material.color = Color.HSVToRGB(Random.Range(0.7f, 0.9f), 1.0f, 1.0f); 
             return segment;
         }
 

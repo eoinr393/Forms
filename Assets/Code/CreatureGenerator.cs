@@ -89,7 +89,6 @@ public class CreatureGenerator : MonoBehaviour {
         {
             CreaturePart cp = creatureParts[i];
             GameObject part = GameObject.Instantiate<GameObject>(cp.prefab);
-            part.layer = this.gameObject.layer;
             part.transform.position = cp.position;
             if (i != 0)
             {
@@ -152,7 +151,6 @@ public class CreatureGenerator : MonoBehaviour {
         {
             fin.transform.localScale = new Vector3(scale, scale, scale);
         }
-        fin.layer = this.gameObject.layer;
         fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;
@@ -210,6 +208,11 @@ public class CreatureGenerator : MonoBehaviour {
             CreateCreature();
         }
 	}
+
+    void Start()
+    {
+        Utilities.SetLayerRecursively(this.gameObject, this.gameObject.layer);
+    }
 	
 	// Update is called once per frame
 	void Update () {

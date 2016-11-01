@@ -36,8 +36,11 @@ public class Boid : MonoBehaviour
     public float preferredTimeDelta = 0.0f;
 
     public bool tagNeighbours = false;
+    public float tagNeighboursDither = 0.5f;
 
     public float bank;
+
+
 
     [HideInInspector]
     public  List<Boid> tagged = new List<Boid>();
@@ -321,16 +324,20 @@ public class Boid : MonoBehaviour
 
     private int TagNeighboursSimple(float inRange)
     {
-        tagged.Clear();
-
-        float inRangeSq = inRange * inRange;
-        foreach (Boid boid in school.boids)
+        float dice = Utilities.RandomRange(0.0f, 1.0f);
+        if (dice < tagNeighboursDither)
         {
-            if (boid != this)
+            tagged.Clear();
+
+            float inRangeSq = inRange * inRange;
+            foreach (Boid boid in school.boids)
             {
-                if ((position - boid.position).sqrMagnitude < inRangeSq)
+                if (boid != this)
                 {
-                    tagged.Add(boid);
+                    if ((position - boid.position).sqrMagnitude < inRangeSq)
+                    {
+                        tagged.Add(boid);
+                    }
                 }
             }
         }
