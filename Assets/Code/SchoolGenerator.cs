@@ -31,6 +31,8 @@ public class SchoolGenerator : School
         int maxAudioBoids = 5;
         int audioBoids = 0;
 
+        Color[] cols = { Palette.Random(), Palette.Random(), Palette.Random() };
+
         for (int i = 0; i < boidCount; i++)
         {
             Boid boid = GameObject.Instantiate<GameObject>(boidPrefab).GetComponent<Boid>();
@@ -42,7 +44,14 @@ public class SchoolGenerator : School
             boid.transform.position = transform.position + unit * UnityEngine.Random.Range(0, radius * spread);
             boid.transform.parent = transform;
             boid.school = this;
-            boid.testField = "AAA";
+            boid.GetComponent<Constrain>().radius = radius;
+            boid.GetComponent<Constrain>().centre = transform.position;
+            boid.GetComponent<Constrain>().centreOnPosition = false;
+
+            for (int j = 0; j < 3; j++)
+            {
+                boid.transform.GetChild(j).GetComponentInChildren<Renderer>().material.color = cols[j];
+            }
             boids.Add(boid);
             AudioSource audioSource = boid.GetComponent<AudioSource>();
             if (audioSource != null)

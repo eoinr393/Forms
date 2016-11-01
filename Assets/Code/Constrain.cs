@@ -14,7 +14,7 @@ public class Constrain: SteeringBehaviour
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.gray;
-        //Gizmos.DrawWireSphere(centre, radius);
+        Gizmos.DrawWireSphere(centre, radius);
     }
 
     public void Start()
