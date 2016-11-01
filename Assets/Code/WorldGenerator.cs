@@ -39,7 +39,7 @@ class GeneratedMesh
     public int[] triangles;
 }
 
-public class GenerateInfinite : MonoBehaviour {
+public class WorldGenerator : MonoBehaviour {
 	public GameObject player;
 
 	public int cellsPerTile = 10;
