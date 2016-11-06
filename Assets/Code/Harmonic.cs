@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Harmonic : SteeringBehaviour
 {
-    [Range(0.0f, 360.0f)]
+    [Range(0.0f, 3600.0f)]
     public float speed = 30;
     public float amplitude = 50;
     public Axis direction = Axis.Horizontal;

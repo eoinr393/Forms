@@ -16,6 +16,7 @@ public class JointParam
 
 public class SpineAnimator : MonoBehaviour {
     public bool autoAssignBones = true;    
+
     public List<GameObject> bones = new List<GameObject>();
 
     List<Vector3> bondOffsets = new List<Vector3>();

@@ -10,7 +10,7 @@ using UnityEngine;
 public class SchoolGenerator : School
 {
     public int boidCount;
-    public GameObject boidPrefab;
+    public GameObject prefab;
 
     public bool spawnInTopHemisphere;
 
@@ -35,25 +35,27 @@ public class SchoolGenerator : School
 
         for (int i = 0; i < boidCount; i++)
         {
-            Boid boid = GameObject.Instantiate<GameObject>(boidPrefab).GetComponent<Boid>();
+            GameObject fish = GameObject.Instantiate<GameObject>(prefab);
+            Boid boid = fish.GetComponentInChildren<Boid>();
             Vector3 unit = UnityEngine.Random.insideUnitSphere;
             if (spawnInTopHemisphere)
             {
                 unit.y = Mathf.Abs(unit.y);
             }
-            boid.transform.position = transform.position + unit * UnityEngine.Random.Range(0, radius * spread);
-            boid.transform.parent = transform;
+            fish.transform.position = transform.position + unit * UnityEngine.Random.Range(0, radius * spread);
+            fish.transform.parent = transform;
             boid.school = this;
             boid.GetComponent<Constrain>().radius = radius;
             boid.GetComponent<Constrain>().centre = transform.position;
             boid.GetComponent<Constrain>().centreOnPosition = false;
 
-            for (int j = 0; j < 3; j++)
+            /*for (int j = 0; j < 3; j++)
             {
-                boid.transform.GetChild(j).GetComponentInChildren<Renderer>().material.color = cols[j];
+                fish.transform.GetChild(j).GetComponentInChildren<Renderer>().material.color = cols[j];
             }
+            */
             boids.Add(boid);
-            AudioSource audioSource = boid.GetComponent<AudioSource>();
+            AudioSource audioSource = fish.GetComponent<AudioSource>();
             if (audioSource != null)
             {
                 if (audioBoids < maxAudioBoids)

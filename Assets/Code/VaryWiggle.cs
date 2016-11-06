@@ -6,7 +6,9 @@ using BGE;
 public class VaryWiggle : MonoBehaviour {
 
     Harmonic harmonic;
+    Boid boid;
     float initialSpeed;
+    float initialBoidSpeed;
     float initialAmplitude;
 
     [Range(0, 1)]
@@ -20,6 +22,8 @@ public class VaryWiggle : MonoBehaviour {
     // Use this for initialization
     void Start () {
         harmonic = GetComponent<Harmonic>();
+        boid = GetComponent<Boid>();
+        initialBoidSpeed = boid.maxSpeed;
         initialAmplitude = harmonic.amplitude;
         initialSpeed = harmonic.speed;
         StartCoroutine("VaryWiggleInterval");
@@ -34,6 +38,11 @@ public class VaryWiggle : MonoBehaviour {
             yield return new WaitForSeconds(Random.Range(3, 10));
             harmonic.amplitude = Random.Range(initialAmplitude - (initialAmplitude * speedVariation), initialAmplitude + (initialAmplitude * speedVariation));
             harmonic.speed = Random.Range(initialSpeed - (initialSpeed * amplitudeVariation), initialSpeed + (initialSpeed * amplitudeVariation));
+
+            float variationThisTime = harmonic.speed / initialSpeed;
+
+            boid.maxSpeed = initialBoidSpeed * variationThisTime;
+
             yield return new WaitForSeconds(Random.Range(3, 10));
             if (glide)
             {

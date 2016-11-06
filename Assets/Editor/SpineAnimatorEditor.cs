@@ -2,6 +2,7 @@
 using UnityEditor;
 using System.Collections.Generic;
 
+/*
 [CustomEditor(typeof(SpineAnimator))]
 public class SpineAnimatorEditor : Editor
 {
@@ -33,3 +34,4 @@ public class SpineAnimatorEditor : Editor
         }        
     }
 }
+*/
