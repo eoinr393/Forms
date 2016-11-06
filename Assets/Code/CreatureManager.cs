@@ -22,7 +22,7 @@ public class CreatureManager : MonoBehaviour {
     [Header("Debugging")]
     public bool showMessages;
 
-    public static void PrintMessage(string message)
+    public static void PrintString(string message)
     {
         if (instance != null)
         {
@@ -111,7 +111,6 @@ public class CreatureManager : MonoBehaviour {
         }
 
         StartUpdateThreads();
-        StartCoroutine("UpdateThreadTimeDelta");        
     }
 
     void Update()
@@ -152,30 +151,28 @@ public class CreatureManager : MonoBehaviour {
 
     void UpdateThread()
     {
+        float maxFPS = 100.0f;
+        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
         while (running)
         {
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            // Update all the boids
             for (int i = 0; i < boids.Length; i++)
             {
                 Boid boid = boids[i];
                 boid.force = boid.CalculateForce();
             }
+            stopwatch.Stop();
+            threadTimeDelta = (float) ((double) stopwatch.ElapsedTicks / System.Diagnostics.Stopwatch.Frequency);
             threadCount++;
-            //Thread.Sleep(100);
-        }
-    }
-
-    System.Collections.IEnumerator UpdateThreadTimeDelta()
-    {
-        while (true)
-        {
-            long newThreadCount = threadCount;
-            threadFPS = newThreadCount - lastThreadCount;
-            if (threadFPS > float.Epsilon)
+            if (threadTimeDelta < 0.01f)
             {
-                threadTimeDelta = 1.0f / threadFPS;
+                Thread.Sleep(10);
+                threadTimeDelta = 0.01f;
             }
-            lastThreadCount = newThreadCount;
-            yield return new WaitForSeconds(1.0f);
+            threadFPS = 1.0f / threadTimeDelta;
         }
     }
 

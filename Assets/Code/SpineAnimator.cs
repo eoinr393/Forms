@@ -19,6 +19,7 @@ public class SpineAnimator : MonoBehaviour {
     public List<GameObject> bones = new List<GameObject>();
 
     List<float> bondDistances = new List<float>();
+    List<Quaternion> startRotations = new List<Quaternion>();
 
     public List<JointParam> jointParams = new List<JointParam>();
 
@@ -36,6 +37,7 @@ public class SpineAnimator : MonoBehaviour {
         if (autoAssignBones)
         {
             bones.Clear();
+            startRotations.Add(transform.rotation);
             Transform parent = (transform.parent.childCount > 1) ? transform.parent : transform.parent.parent;
             for (int i = 0; i < transform.parent.childCount; i++)
             {
@@ -43,6 +45,7 @@ public class SpineAnimator : MonoBehaviour {
                 if (child != this.gameObject)
                 {
                     bones.Add(child);
+                    startRotations.Add(child.transform.rotation);
                 }
             }
         }
@@ -103,8 +106,12 @@ public class SpineAnimator : MonoBehaviour {
             angularBondDamping = this.angularBondDamping;
         }
 
-
+        
         Vector3 wantedPosition = Utilities.TransformPointNoScale(new Vector3(0, 0, -bondDistance), prevFollower.transform);
+        if (autoAssignBones)
+        {
+            wantedPosition = Quaternion.Inverse(startRotations[i]) * wantedPosition;
+        } 
         follower.transform.position = Vector3.Lerp(follower.transform.position, wantedPosition, Time.deltaTime * bondDamping);
 
         Quaternion wantedRotation = Quaternion.LookRotation(prevFollower.position - follower.transform.position, prevFollower.up);
