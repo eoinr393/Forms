@@ -18,7 +18,7 @@ public class SpineAnimator : MonoBehaviour {
     public bool autoAssignBones = true;    
     public List<GameObject> bones = new List<GameObject>();
 
-    List<float> bondDistances = new List<float>();
+    List<Vector3> bondOffsets = new List<Vector3>();
     List<Quaternion> startRotations = new List<Quaternion>();
 
     public List<JointParam> jointParams = new List<JointParam>();
@@ -32,7 +32,7 @@ public class SpineAnimator : MonoBehaviour {
     void Start()
     {
         Transform prevFollower;
-        bondDistances.Clear();
+        bondOffsets.Clear();
 
         if (autoAssignBones)
         {
@@ -62,7 +62,10 @@ public class SpineAnimator : MonoBehaviour {
             }
 
             Transform follower = bones[i].transform;
-            bondDistances.Add(Vector3.Distance(prevFollower.position, follower.position));
+            Vector3 offset = follower.position - prevFollower.position;
+            offset = Quaternion.Inverse(prevFollower.transform.rotation) * offset;
+            bondOffsets.Add(offset);
+
         }
     }
     
@@ -83,13 +86,13 @@ public class SpineAnimator : MonoBehaviour {
 
             Transform follower = bones[i].transform;
 
-            DelayedMovement(prevFollower, follower, bondDistances[i], i);
+            DelayedMovement(prevFollower, follower, bondOffsets[i], i);
             centerOfMass += follower.position;
         }
         centerOfMass /= bones.Count;
     }
     
-    void DelayedMovement(Transform prevFollower, Transform follower, float bondDistance, int i)
+    void DelayedMovement(Transform target, Transform follower, Vector3 bondOffset, int i)
     {
         float bondDamping;
         float angularBondDamping;
@@ -107,14 +110,13 @@ public class SpineAnimator : MonoBehaviour {
         }
 
         
-        Vector3 wantedPosition = Utilities.TransformPointNoScale(new Vector3(0, 0, -bondDistance), prevFollower.transform);
-        if (autoAssignBones)
-        {
-            wantedPosition = Quaternion.Inverse(startRotations[i]) * wantedPosition;
-        } 
+        Vector3 wantedPosition = Utilities.TransformPointNoScale(bondOffset, target.transform);
         follower.transform.position = Vector3.Lerp(follower.transform.position, wantedPosition, Time.deltaTime * bondDamping);
 
-        Quaternion wantedRotation = Quaternion.LookRotation(prevFollower.position - follower.transform.position, prevFollower.up);
+        Quaternion wantedRotation = Quaternion.LookRotation(target.position - follower.transform.position, target.up);
+        //wantedRotation = startRotations[i + 1] * wantedRotation;
+
+        wantedRotation = target.transform.rotation;
         follower.transform.rotation = Quaternion.Slerp(follower.transform.rotation, wantedRotation, Time.deltaTime * angularBondDamping);
     }
 }
