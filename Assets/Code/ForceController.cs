@@ -163,7 +163,7 @@ public class ForceController : MonoBehaviour {
         CreatureManager.PrintFloat("Pitch Axis: ", contPitch);
         if (Mathf.Abs(contYaw) > 0.2f)
         {
-            Yaw(contYaw * Time.deltaTime * angularSpeed);
+            //Yaw(contYaw * Time.deltaTime * angularSpeed);
         }
         // If in Rift mode, dont pitch
         //if (ovrCamera == null)w
@@ -173,14 +173,14 @@ public class ForceController : MonoBehaviour {
         //}
         //else
         {
-            Fly(-contPitch * speed);
+            //Fly(-contPitch * speed);
         }
 
         float contWalk = Input.GetAxis("Vertical");
         float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {
-            Walk(contWalk * speed);
+            //Walk(contWalk * speed);
         }
         if (Mathf.Abs(contStrafe) > 0.1f)
         {

@@ -31,6 +31,8 @@ public class Harmonic : SteeringBehaviour
 
     public Vector3 worldTarget;
 
+    public Boid forwardBoid = null;
+
     public void Start()
     {
         theta = UnityEngine.Random.Range(0, Mathf.PI);
@@ -71,13 +73,14 @@ public class Harmonic : SteeringBehaviour
         }
 
         target *= radius;
-                
+        
         // The forces 
-        /*Vector3 noPitch = boid.force;
-        if (boid.force.magnitude < 0.01)
+        /*
+        Vector3 noPitch = boid.force;
+        //if (boid.force.magnitude < 0.01)
         {
             noPitch = boid.forward;
-            noPitch.y = 0;           
+            //noPitch.y = 0;           
         }
         noPitch.Normalize();
         worldTarget = boid.position + (target + (noPitch * distance));
@@ -95,7 +98,6 @@ public class Harmonic : SteeringBehaviour
             this.theta = Utilities.TWO_PI - this.theta;
         }
         
-
         rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta);
         this.theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
         return boid.SeekForce(worldTarget);

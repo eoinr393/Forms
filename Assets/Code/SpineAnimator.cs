@@ -15,7 +15,11 @@ public class JointParam
 }
 
 public class SpineAnimator : MonoBehaviour {
+
+    public enum AlignmentStrategy { LookAt, AlignToHead, LocalAlignToHead }
+    public AlignmentStrategy alignmentStrategy = AlignmentStrategy.LookAt;
     public bool autoAssignBones = true;    
+    public bool alignToHead = false;
 
     public List<GameObject> bones = new List<GameObject>();
 
@@ -114,10 +118,22 @@ public class SpineAnimator : MonoBehaviour {
         Vector3 wantedPosition = Utilities.TransformPointNoScale(bondOffset, target.transform);
         follower.transform.position = Vector3.Lerp(follower.transform.position, wantedPosition, Time.deltaTime * bondDamping);
 
-        Quaternion wantedRotation = Quaternion.LookRotation(target.position - follower.transform.position, target.up);
-        //wantedRotation = startRotations[i + 1] * wantedRotation;
+        Quaternion wantedRotation;
+        switch (alignmentStrategy)
+        {
 
-        wantedRotation = target.transform.rotation;
-        follower.transform.rotation = Quaternion.Slerp(follower.transform.rotation, wantedRotation, Time.deltaTime * angularBondDamping);
+            case AlignmentStrategy.LookAt:
+                wantedRotation = Quaternion.LookRotation(target.position - follower.transform.position, target.up);
+                follower.transform.rotation = Quaternion.Slerp(follower.transform.rotation, wantedRotation, Time.deltaTime * angularBondDamping);
+                break;
+            case AlignmentStrategy.AlignToHead:
+                wantedRotation = target.transform.rotation;
+                follower.transform.rotation = Quaternion.Slerp(follower.transform.rotation, wantedRotation, Time.deltaTime * angularBondDamping);
+                break;
+            case AlignmentStrategy.LocalAlignToHead:
+                wantedRotation = target.transform.localRotation;
+                follower.transform.localRotation = Quaternion.Slerp(follower.transform.localRotation, wantedRotation, Time.deltaTime * angularBondDamping);
+                break;
+        }
     }
 }
