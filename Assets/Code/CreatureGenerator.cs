@@ -63,6 +63,8 @@ public class CreatureGenerator : MonoBehaviour {
     public float finRotationOffset = 20.0f;
 
     public string finList;
+
+    public float lengthVariation = 0;
     
     public void OnDrawGizmos()
     {
@@ -181,7 +183,7 @@ public class CreatureGenerator : MonoBehaviour {
             }
             else
             {
-                partSize = verticalSize * Mathf.Abs(Mathf.Sin(theta));
+                partSize = verticalSize  * Mathf.Abs(Mathf.Sin(theta)) + (verticalSize * lengthVariation * UnityEngine.Random.Range(0.0f, 1.0f));
                 theta += thetaInc;
             }
             pos -= ((((lastGap + partSize) / 2.0f) + gap) * transform.forward);
