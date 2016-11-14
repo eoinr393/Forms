@@ -13,6 +13,10 @@ public class NoseAnimator : Animator {
     [Range(0, 2)]
     public float wigglyness = 1;
 
+    public bool xAxis = false;
+    public bool yAxis = false;
+    public bool zAxis = false;
+
 
     // Use this for initialization
     void Start () {
@@ -33,9 +37,13 @@ public class NoseAnimator : Animator {
         {
             float offset = rotationOffset * Mathf.Deg2Rad;
 
-            float angle = Utilities.Map(Mathf.Sin((harmonic.theta + offset)), -1, 1, 0, amplitude);
+            float angle = Utilities.Map(Mathf.Sin((harmonic.theta + offset)), -1, 1, 1, amplitude);
 
-            transform.localScale = new Vector3(1, 1, angle);
+            transform.localScale = new Vector3(
+                xAxis ? angle : 1
+                , yAxis ? angle : 1
+                , zAxis ? angle : 1
+                );
         }
-	}
+    }
 }

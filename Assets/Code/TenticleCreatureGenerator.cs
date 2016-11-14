@@ -11,6 +11,8 @@ public class TenticleCreatureGenerator : MonoBehaviour {
     public float headScale = 1.0f;
     public float tenticleScale = 1.0f;
 
+    public float tenticleAngle = 0;
+
     public Color color;
 
     public void OnDrawGizmos()
@@ -36,9 +38,11 @@ public class TenticleCreatureGenerator : MonoBehaviour {
     {
         List<CreaturePart> list = new List<CreaturePart>();
 
-        CreaturePart headPart = new CreaturePart(transform.position, headScale, CreaturePart.Part.head, headPrefab, Quaternion.identity);
-        list.Add(headPart);
-
+        if (headPrefab != null)
+        {
+            CreaturePart headPart = new CreaturePart(transform.position, headScale, CreaturePart.Part.head, headPrefab, Quaternion.identity);
+            list.Add(headPart);
+        }
         float thetaInc = Mathf.PI * 2.0f / (numTenticles);
         for (int i = 0; i < numTenticles; i++)
         {
@@ -47,9 +51,11 @@ public class TenticleCreatureGenerator : MonoBehaviour {
             pos.x = transform.position.x + Mathf.Sin(theta) * radius;
             pos.z = transform.position.z - Mathf.Cos(theta) * radius;
             pos.y = transform.position.y;
+            Quaternion q = Quaternion.identity;
+            q.eulerAngles = new Vector3(- tenticleAngle, Mathf.Rad2Deg * -theta, 0); // Quaternion.AngleAxis(Mathf.Rad2Deg * -theta, Vector3.up) * Quaternion.;
             CreaturePart cp = new CreaturePart(pos, tenticleScale
                 , CreaturePart.Part.tenticle
-                , tenticlePrefab, Quaternion.AngleAxis(Mathf.Rad2Deg * -theta, Vector3.up));
+                , tenticlePrefab, q);
             list.Add(cp);
         }
 
@@ -59,6 +65,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
     void CreateCreature()
     {
         List<CreaturePart> parts = CreateCreatureParams();
+        Debug.Log("Creating creature from " + gameObject + " Parts: " + parts.Count);
         Boid boid = null;
         for(int i = 0; i < parts.Count; i ++)
         {
@@ -67,7 +74,9 @@ public class TenticleCreatureGenerator : MonoBehaviour {
             GameObject newPart = GameObject.Instantiate<GameObject>(part.prefab);            
             newPart.transform.position = part.position;
             newPart.transform.rotation = part.rotation;
-            newPart.transform.localScale = new Vector3(part.size, part.size, part.size);           
+            newPart.transform.localScale = new Vector3(part.size, part.size, part.size);
+
+            newPart.transform.parent = transform;
 
             Boid thisBoid = newPart.GetComponentInChildren<Boid>();
             if (thisBoid != null)
@@ -92,7 +101,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Utilities.RecursiveSetColor(this.gameObject, color);
+        //Utilities.RecursiveSetColor(this.gameObject, color);
     }
 	
 	// Update is called once per frame

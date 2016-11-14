@@ -97,7 +97,7 @@ public class CreatureGenerator : MonoBehaviour {
             Renderer[] rs = part.GetComponentsInChildren<Renderer>();
             foreach (Renderer r in rs)
             {
-                r.material.color = color;
+                // r.material.color = color;
             }
 
             if (i == 0)
