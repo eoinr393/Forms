@@ -45,6 +45,7 @@ public class CreatureGenerator : MonoBehaviour {
     public float gap = 1;
 
     public Color color = Color.blue;
+    public bool assignColors = true;
 
     [Range(1.0f, 5000.0f)]
     public float verticalSize = 1.0f;
@@ -96,12 +97,7 @@ public class CreatureGenerator : MonoBehaviour {
             {
                 part.transform.Translate(0, 0, partOffset);
             }
-            Renderer[] rs = part.GetComponentsInChildren<Renderer>();
-            foreach (Renderer r in rs)
-            {
-                // r.material.color = color;
-            }
-
+            
             if (i == 0)
             {
                 boid = part.GetComponent<Boid>();
@@ -153,7 +149,6 @@ public class CreatureGenerator : MonoBehaviour {
         {
             fin.transform.localScale = new Vector3(scale, scale, scale);
         }
-        fin.GetComponentInChildren<Renderer>().material.color = color;
         fin.GetComponentInChildren<FinAnimator>().boid = boid;
         fin.GetComponentInChildren<FinAnimator>().side = side;
         fin.GetComponentInChildren<FinAnimator>().rotationOffset -= rotationOffset;
@@ -214,6 +209,10 @@ public class CreatureGenerator : MonoBehaviour {
     void Start()
     {
         Utilities.SetLayerRecursively(this.gameObject, this.gameObject.layer);
+        if (assignColors)
+        {
+            //Utilities.RecursiveSetColor(this.gameObject, color);
+        }
     }
 	
 	// Update is called once per frame

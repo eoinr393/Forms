@@ -6,6 +6,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
     public GameObject tenticlePrefab;
     public GameObject headPrefab;
 
+
     public int numTenticles = 8;
     public float radius = 20;
     public float headScale = 1.0f;
@@ -14,6 +15,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
     public float tenticleAngle = 0;
 
     public Color color;
+    public bool assignColors = true;
 
     public void OnDrawGizmos()
     {
@@ -82,13 +84,13 @@ public class TenticleCreatureGenerator : MonoBehaviour {
             if (thisBoid != null)
             {
                 boid = thisBoid;
-                newPart.transform.parent = transform;
+                newPart.transform.parent = boid.transform.GetChild(0).transform;
             }
 
             FinAnimator anim = newPart.GetComponentInChildren<FinAnimator>();
             if (anim != null)
             {
-                newPart.transform.parent = boid.transform;
+                newPart.transform.parent = boid.transform.GetChild(0).transform;
                 anim.boid = boid;
             }
         }
@@ -99,9 +101,15 @@ public class TenticleCreatureGenerator : MonoBehaviour {
         CreateCreature();
     }
 
+    
+
     // Use this for initialization
-    void Start () {
-        //Utilities.RecursiveSetColor(this.gameObject, color);
+    void Start()
+    {
+        if (assignColors)
+        {
+            Utilities.RecursiveSetColor(this.gameObject, color);
+        }
     }
 	
 	// Update is called once per frame

@@ -15,7 +15,7 @@ public class Harmonic : SteeringBehaviour
 
     [HideInInspector]
     public float theta = 0.0f;
-    private Vector3 target = Vector3.zero;
+    protected Vector3 target = Vector3.zero;
 
     [HideInInspector]
     public float rampedSpeed = 0;
@@ -24,7 +24,7 @@ public class Harmonic : SteeringBehaviour
     [Range(0.0f, 500.0f)]
     public float radius = 50.0f;
 
-    [Range(0.0f, 500.0f)]
+    [Range(-500.0f, 500.0f)]
     public float distance = 5.0f;
 
     public Vector3 yawRoll = Vector3.zero;
@@ -38,7 +38,7 @@ public class Harmonic : SteeringBehaviour
         theta = UnityEngine.Random.Range(0, Mathf.PI);
     }
 
-    public void OnDrawGizmos()
+    public virtual void OnDrawGizmos()
     {
         if (isActiveAndEnabled)
         {
@@ -53,7 +53,6 @@ public class Harmonic : SteeringBehaviour
     public override Vector3 Calculate()
     {
         float n = Mathf.Sin(this.theta);
-
         rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, boid.TimeDelta);
 
         float t = Utilities.Map(n, -1.0f, 1.0f, -rampedAmplitude, rampedAmplitude);
