@@ -211,7 +211,7 @@ public class CreatureGenerator : MonoBehaviour {
         Utilities.SetLayerRecursively(this.gameObject, this.gameObject.layer);
         if (assignColors)
         {
-            //Utilities.RecursiveSetColor(this.gameObject, color);
+            Utilities.RecursiveSetColor(this.gameObject, color);
         }
     }
 	
