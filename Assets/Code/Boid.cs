@@ -128,6 +128,9 @@ public class Boid : MonoBehaviour
     float timeAcc = 0;
     Vector3 desiredPosition = Vector3.zero;
 
+    [HideInInspector]
+    public float gravityAcceleration = 0;
+
     void FixedUpdate()
     {     
         float smoothRate;
@@ -154,10 +157,6 @@ public class Boid : MonoBehaviour
                 Utilities.BlendIntoAccumulator(smoothRate, newAcceleration, ref acceleration);
             }
 
-            if (applyGravity)
-            {
-                acceleration += gravity;
-            }
             velocity += acceleration * timeAccMult;
 
             if (integrateForces)
@@ -198,6 +197,8 @@ public class Boid : MonoBehaviour
                 }
             }
 
+
+
             if (applyBanking && integrateForces)
             {
                 Quaternion q = Quaternion.LookRotation(transform.forward, tempUp);
@@ -205,6 +206,13 @@ public class Boid : MonoBehaviour
             }
             velocity *= (1.0f - (damping * timeAccMult));
             timeAcc = 0.0f;
+
+            if (applyGravity)
+            {
+                gravityAcceleration += gravity.y;
+                position.y += gravityAcceleration;
+            }
+            
             UpdateLocalFromTransform();
         }
 

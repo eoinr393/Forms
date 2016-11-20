@@ -10,7 +10,7 @@ public class JitterWander: SteeringBehaviour
     [Range(0.0f, 100.0f)]
     public float radius = 10.0f;
 
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 1000.0f)]
     public float jitter = 5.0f;
 
     [Range(0.0f, 100.0f)]

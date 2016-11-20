@@ -22,7 +22,7 @@ public class CreatureManager : MonoBehaviour {
     [Header("Debugging")]
     public bool showMessages;
 
-    public static void PrintString(string message)
+    public static void Log(string message)
     {
         if (instance != null)
         {

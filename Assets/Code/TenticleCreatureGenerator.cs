@@ -42,7 +42,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
 
         if (headPrefab != null)
         {
-            CreaturePart headPart = new CreaturePart(transform.position, headScale, CreaturePart.Part.head, headPrefab, Quaternion.identity);
+            CreaturePart headPart = new CreaturePart(transform.position, headScale, CreaturePart.Part.head, headPrefab, headPrefab.transform.rotation);
             list.Add(headPart);
         }
         float thetaInc = Mathf.PI * 2.0f / (numTenticles);
