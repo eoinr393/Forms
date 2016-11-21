@@ -207,12 +207,13 @@ public class Boid : MonoBehaviour
             velocity *= (1.0f - (damping * timeAccMult));
             timeAcc = 0.0f;
 
+            gravityAcceleration += (acceleration.y * TimeDelta);
             if (applyGravity)
             {
-                gravityAcceleration += gravity.y;
-                position.y += gravityAcceleration;
+                gravityAcceleration += gravity.y * TimeDelta;
+                desiredPosition.y += gravityAcceleration;
             }
-            
+
             UpdateLocalFromTransform();
         }
 

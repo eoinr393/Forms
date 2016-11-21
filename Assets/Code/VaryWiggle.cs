@@ -33,12 +33,6 @@ public class VaryWiggle : MonoBehaviour {
     {
         while (true)
         {
-            Debug.Log("Default");
-            harmonic.amplitude = initialAmplitude;
-            harmonic.speed = initialSpeed;
-            boid.applyGravity = false;
-            harmonic.enabled = true;
-            yield return new WaitForSeconds(Random.Range(3, 10));
             Debug.Log("Accelerated");
             harmonic.enabled = true;
             harmonic.amplitude = Random.Range(initialAmplitude - (initialAmplitude * speedVariation), initialAmplitude + (initialAmplitude * speedVariation));
@@ -47,18 +41,14 @@ public class VaryWiggle : MonoBehaviour {
             float variationThisTime = harmonic.speed / initialSpeed;
 
             boid.maxSpeed = initialBoidSpeed * variationThisTime;
-            boid.applyGravity = false;
-            harmonic.enabled = false;
             yield return new WaitForSeconds(Random.Range(5, 10));
             if (glide)
             {
-                harmonic.amplitude = initialAmplitude * 0.15f;
+                harmonic.amplitude = initialAmplitude * 0.2f;
                 harmonic.speed = initialSpeed;
-                boid.applyGravity = true;
-                boid.gravityAcceleration = 0;
                 Debug.Log("Gliding");
             }
-            yield return new WaitForSeconds(Random.Range(12, 20));
+            yield return new WaitForSeconds(Random.Range(5, 20));
         }
     }
 }

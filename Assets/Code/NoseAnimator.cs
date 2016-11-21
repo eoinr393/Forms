@@ -30,14 +30,18 @@ public class NoseAnimator : Animator {
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    float angle = 1.0f;
+
+    // Update is called once per frame
+    void Update () {
         if (harmonic != null)
         {
             float offset = rotationOffset * Mathf.Deg2Rad;
 
-            float angle = Utilities.Map(Mathf.Sin((harmonic.theta + offset)), -1, 1, 1, amplitude);
+
+            angle = Mathf.Lerp(angle, Utilities.Map(Mathf.Sin((harmonic.theta + offset)), -1.0f, 1.0f, 1.0f, amplitude), Time.deltaTime);
+
             CreatureManager.Log("Scale: " + angle);
             transform.localScale = new Vector3(
                 xAxis ? angle : 1
