@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Utilities
 {
-    public static float TWO_PI = Mathf.PI * 2.0f;
+    public const float TWO_PI = Mathf.PI * 2.0f;
         
     private static System.Random Random = new System.Random(Guid.NewGuid().GetHashCode());
 

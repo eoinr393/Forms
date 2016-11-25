@@ -6,13 +6,27 @@ using UnityEngine;
     
 public class Hover:Harmonic
 {
+    public bool automatic = true;
     public override void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(boid.transform.position, boid.transform.position + (force));
+        if (boid != null)
+        {
+            Gizmos.DrawLine(boid.transform.position, boid.transform.position + (force));
+        }
         CreatureManager.Log("Theta" + theta);
         CreatureManager.Log("Force" + force);
     }
+
+    float oldTheta = 0.0f;
+
+    public override void Start()
+    {
+        oldTheta = theta;
+        base.Start();
+    }
+
+    public float thetaDelta;
 
     public override Vector3 Calculate()
     {
@@ -20,16 +34,21 @@ public class Hover:Harmonic
         theta = theta % (Utilities.TWO_PI);
         rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, boid.TimeDelta);
 
-
-        if (theta < Mathf.PI)
+        if (automatic)
         {
-            force = boid.forward 
-                * Mathf.Abs(Utilities.Map(theta, 0, Mathf.PI, 0, 1)) 
-                * rampedAmplitude;                    
+            rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta);
+            theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
         }
 
-        rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta);
-        theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
+        thetaDelta = theta - oldTheta;
+        if ((theta < Mathf.PI & thetaDelta > 0) || (theta > Mathf.PI && thetaDelta < 0))
+        {
+            force = boid.forward 
+                * Mathf.Abs(thetaDelta)
+                * rampedAmplitude;                    
+        }        
+        
+        oldTheta = theta;
         return force;
     }
 }

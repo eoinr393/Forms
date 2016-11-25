@@ -8,6 +8,8 @@ public class FinAnimator : Animator {
     public enum Side { left, right };
     public Side side = Side.left;
     private Harmonic harmonic;
+
+    [Range(0.0f, Utilities.TWO_PI)]
     public float theta = 0;
     float initialAmplitude;
     public float amplitude = 40.0f;
@@ -35,6 +37,7 @@ public class FinAnimator : Animator {
     void Update () {        
         if (harmonic != null)
         {
+            theta = harmonic.theta;
             float offset = rotationOffset * Mathf.Deg2Rad;
 
             // Are we Banking?
@@ -47,7 +50,7 @@ public class FinAnimator : Animator {
                 lerpedAmplitude  = Mathf.Lerp(lerpedAmplitude, amplitude, Time.deltaTime);
             }
             
-            float angle = Mathf.Sin((harmonic.theta + offset))
+            float angle = Mathf.Sin((theta + offset))
             * (harmonic.rampedAmplitude / initialAmplitude) * lerpedAmplitude * wigglyness;
             switch (axis)
             {

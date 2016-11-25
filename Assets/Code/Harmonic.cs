@@ -13,8 +13,10 @@ public class Harmonic : SteeringBehaviour
     public Axis direction = Axis.Horizontal;
     public enum Axis { Horizontal, Vertical };
 
-    [HideInInspector]
+    [Range(0.0f, Utilities.TWO_PI)]
     public float theta = 0.0f;
+
+    [HideInInspector]
     protected Vector3 target = Vector3.zero;
 
     [HideInInspector]
@@ -33,7 +35,7 @@ public class Harmonic : SteeringBehaviour
 
     public Boid forwardBoid = null;
 
-    public void Start()
+    public virtual void Start()
     {
         theta = UnityEngine.Random.Range(0, Mathf.PI);
     }
