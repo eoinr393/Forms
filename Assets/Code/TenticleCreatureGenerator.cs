@@ -93,6 +93,7 @@ public class TenticleCreatureGenerator : MonoBehaviour {
                 newPart.transform.parent = boid.transform.GetChild(0).transform;
                 anim.boid = boid;
             }
+            newPart.SetActive(true);
         }
     }
 
