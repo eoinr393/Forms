@@ -18,7 +18,7 @@ public class ForceController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;        
 
@@ -188,8 +188,6 @@ public class ForceController : MonoBehaviour {
         }
 
         float contWalk = Input.GetAxis("Vertical");
-
-        Debug.Log(contWalk);
         float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {

@@ -13,6 +13,8 @@ public class BoidRider : MonoBehaviour {
 	
 	}
 
+
+
     void OnTriggerEnter(Collider c)
     {
         Debug.Log("Trigger!!!" + c);
@@ -26,6 +28,7 @@ public class BoidRider : MonoBehaviour {
             other.GetComponent<Rigidbody>().velocity = Vector3.zero;
             Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);
             boid.integrateForces = true;
+            boid.GetComponent<HumanController>().enabled = true;
             Debug.Log(boid);
         }
     }
