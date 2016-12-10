@@ -8,7 +8,7 @@ struct CreaturePart
     public Vector3 position;
     public Quaternion rotation;
     public float size;
-    public enum Part { head, body, fin , tail, tenticle};
+    public enum Part { head, body, fin , tail, tenticle, seat};
     public Part part;
     public GameObject prefab;
     
@@ -60,6 +60,7 @@ public class CreatureGenerator : MonoBehaviour {
     public GameObject tailPrefab;
     public GameObject leftFinPrefab;
     public GameObject rightFinPrefab;
+    public GameObject seatPrefab;
 
     public float finRotationOffset = 20.0f;
 
@@ -167,7 +168,7 @@ public class CreatureGenerator : MonoBehaviour {
         float lastGap = 0;
         Vector3 pos = transform.position;
 
-
+        int half = (numParts / 2) - 1; 
 
         for (int i = 0; i < numParts; i++)
         {
@@ -187,11 +188,24 @@ public class CreatureGenerator : MonoBehaviour {
                 pos.y -= (partSize / 2);
             }
             lastGap = partSize;
-            cps.Add(new CreaturePart(pos
+            if (i == half && seatPrefab != null)
+            {
+                cps.Add(new CreaturePart(pos
+                                , partSize
+                                , CreaturePart.Part.seat
+                                , seatPrefab
+                                , Quaternion.identity));
+            }
+            else
+            {
+                cps.Add(new CreaturePart(pos
                 , partSize
                 , (i == 0) ? CreaturePart.Part.head : (i < numParts - 1) ? CreaturePart.Part.body : CreaturePart.Part.tail
-                , (i == 0) ? headPrefab : (i < numParts - 1) ? bodyPrefab : (tailPrefab != null) ? tailPrefab : bodyPrefab 
+                , (i == 0) ? headPrefab : (i < numParts - 1) ? bodyPrefab : (tailPrefab != null) ? tailPrefab : bodyPrefab
                 , Quaternion.identity));
+
+            }
+
         }
         return cps;
     }

@@ -12,7 +12,7 @@ namespace BGE
         // Use this for initialization
         void Start()
         {
-            mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            mainCamera = GameObject.FindGameObjectWithTag("Player");
         }
 
         void Yaw(float angle)

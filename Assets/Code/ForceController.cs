@@ -37,19 +37,23 @@ public class ForceController : MonoBehaviour {
 
     void Roll(float angle)
     {
-        Quaternion rot = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = rot * transform.rotation;
+        //Quaternion rot = Quaternion.AngleAxis(angle, Vector3.forward);
+        //transform.rotation = rot * transform.rotation;
+
+        Quaternion rot = Quaternion.AngleAxis(angle, transform.forward);
+        desiredRotation = rot * desiredRotation;
+
     }
 
     void Pitch(float angle)
     {
-        /*float invcosTheta1 = Vector3.Dot(transform.forward, Vector3.up);
+        float invcosTheta1 = Vector3.Dot(transform.forward, Vector3.up);
         float threshold = 0.95f;
         if ((angle > 0 && invcosTheta1 < (-threshold)) || (angle < 0 && invcosTheta1 > (threshold)))
         {
             return;
         }
-        */
+        
         // A pitch is a rotation around the right vector
         
         Quaternion rot = Quaternion.AngleAxis(angle, transform.right);
@@ -127,7 +131,7 @@ public class ForceController : MonoBehaviour {
             Strafe(speed);
         }
 
-        /*
+        
         if (Input.GetKey(KeyCode.Q))
         {
             Roll(-Time.deltaTime * angularSpeed);
@@ -136,7 +140,7 @@ public class ForceController : MonoBehaviour {
         {
             Roll(Time.deltaTime * angularSpeed);
         }
-        */
+        
         if (Input.GetKey(KeyCode.R))
         {
             Fly(speed);
@@ -151,16 +155,24 @@ public class ForceController : MonoBehaviour {
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
+        if (mouseX != 0)
+        {
+            Yaw(mouseX * Time.deltaTime * angularSpeed);
+        }
+        else if (mouseY != 0)
+        {
+            Pitch(-mouseY * Time.deltaTime * angularSpeed);
+        }
 
-        Yaw(mouseX * Time.deltaTime * angularSpeed);
-
+        //transform.up = Vector3.Lerp(transform.up, Vector3.up, Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime);
-
         float contYaw = Input.GetAxis("Yaw Axis");
         float contPitch = Input.GetAxis("Pitch Axis");
 
         CreatureManager.PrintFloat("Yaw Axis: ", contYaw);
         CreatureManager.PrintFloat("Pitch Axis: ", contPitch);
+
+
         if (Mathf.Abs(contYaw) > 0.2f)
         {
             //Yaw(contYaw * Time.deltaTime * angularSpeed);

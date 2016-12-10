@@ -39,8 +39,7 @@ public class Boid : MonoBehaviour
     public float tagNeighboursDither = 0.5f;
 
     public float bank;
-
-
+    
 
     [HideInInspector]
     public  List<Boid> tagged = new List<Boid>();

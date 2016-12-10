@@ -33,7 +33,7 @@ public class VaryWiggle : MonoBehaviour {
     {
         while (true)
         {
-            Debug.Log("Accelerated");
+            //Debug.Log("Accelerated");
             harmonic.enabled = true;
             harmonic.amplitude = Random.Range(initialAmplitude - (initialAmplitude * amplitudeVariation), initialAmplitude + (initialAmplitude * amplitudeVariation));
             harmonic.speed = Random.Range(initialSpeed - (initialSpeed * speedVariation), initialSpeed + (initialSpeed * speedVariation));
@@ -46,7 +46,7 @@ public class VaryWiggle : MonoBehaviour {
             {
                 harmonic.amplitude = initialAmplitude * 0.2f;
                 harmonic.speed = initialSpeed;
-                Debug.Log("Gliding");
+                //Debug.Log("Gliding");
             }
             yield return new WaitForSeconds(Random.Range(5, 20));
         }

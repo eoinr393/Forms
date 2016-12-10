@@ -37,12 +37,25 @@ public class Utilities
         return degrees * Mathf.Deg2Rad;
     }
 
+    public static Boid FindBoidInHierarchy(GameObject root, int startDepth = 0)
+    {
+        Boid boid = root.GetComponentInChildren<Boid>();
+        if (boid == null)
+        {
+            return FindBoidInHierarchy(root.transform.parent.gameObject, startDepth ++);
+        }
+        else
+        {
+            return boid;
+        }
+    }
+
     public static void RecursiveSetColor(GameObject boid, Color color)
     {
         if (boid != null)
         {
             Renderer renderer = boid.GetComponent<Renderer>();
-            if (renderer != null)
+            if (renderer != null && ! renderer.materials[0].name.Contains("Trans"))
             {
                 renderer.material.color = color;
             }

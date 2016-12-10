@@ -7,7 +7,6 @@ public class RotateMe : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         axis = Random.insideUnitSphere;
-        GetComponent<Renderer>().material.color = Color.red;
 	}   
 	
 	// Update is called once per frame
