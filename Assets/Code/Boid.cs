@@ -141,6 +141,9 @@ public class Boid : MonoBehaviour
             force = CalculateForce();
         }
 
+        GetComponent<Rigidbody>().AddForce(force);
+        transform.forward = GetComponent<Rigidbody>().velocity;
+        /*
         timeAcc += Time.deltaTime;
             
         if (timeAcc > preferredTimeDelta)
@@ -228,6 +231,7 @@ public class Boid : MonoBehaviour
         {
             if (integrateForces) transform.position = desiredPosition;
         }            
+        */
     }
 
     private bool AccumulateForce(ref Vector3 runningTotal, ref Vector3 clampedForce, Vector3 force)
