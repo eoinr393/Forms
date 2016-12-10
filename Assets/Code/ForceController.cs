@@ -18,7 +18,7 @@ public class ForceController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-     
+        Cursor.lockState = CursorLockMode.Locked;
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;        
 
@@ -164,7 +164,6 @@ public class ForceController : MonoBehaviour {
             Pitch(-mouseY * Time.deltaTime * angularSpeed);
         }
 
-        //transform.up = Vector3.Lerp(transform.up, Vector3.up, Time.deltaTime);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime);
         float contYaw = Input.GetAxis("Yaw Axis");
         float contPitch = Input.GetAxis("Pitch Axis");
@@ -175,7 +174,7 @@ public class ForceController : MonoBehaviour {
 
         if (Mathf.Abs(contYaw) > 0.2f)
         {
-            //Yaw(contYaw * Time.deltaTime * angularSpeed);
+            Yaw(contYaw * Time.deltaTime * angularSpeed);
         }
         // If in Rift mode, dont pitch
         //if (ovrCamera == null)w
@@ -185,18 +184,20 @@ public class ForceController : MonoBehaviour {
         //}
         //else
         {
-            //Fly(-contPitch * speed);
+            Fly(-contPitch * speed);
         }
 
         float contWalk = Input.GetAxis("Vertical");
+
+        Debug.Log(contWalk);
         float contStrafe = Input.GetAxis("Horizontal");
         if (Mathf.Abs(contWalk) > 0.1f)
         {
-            //Walk(contWalk * speed);
+            Walk(contWalk * speed);
         }
         if (Mathf.Abs(contStrafe) > 0.1f)
         {
-            //Strafe(contStrafe * speed);
+            Strafe(contStrafe * speed);
         }      
     }
 }
