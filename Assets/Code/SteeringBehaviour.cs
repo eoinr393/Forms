@@ -31,7 +31,7 @@ public abstract class SteeringBehaviour : MonoBehaviour
         active = isActiveAndEnabled;
     }
 
-    public void Update()
+    public virtual void Update()
     {
         active = isActiveAndEnabled;
     }

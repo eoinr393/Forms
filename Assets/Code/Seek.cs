@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class Seek : SteeringBehaviour
 {
+    public GameObject targetGameObject = null;
     public Vector3 target = Vector3.zero;
-    public bool seekPlayer = false;
 
     public void OnDrawGizmos()
     {
@@ -19,5 +19,13 @@ public class Seek : SteeringBehaviour
     public override Vector3 Calculate()
     {
         return boid.SeekForce(target);    
+    }
+
+    public override void Update()
+    {
+        if (targetGameObject != null)
+        {
+            target = targetGameObject.transform.position;
+        }
     }
 }
