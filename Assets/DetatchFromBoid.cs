@@ -16,9 +16,7 @@ public class DetatchFromBoid : MonoBehaviour {
             Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);
             if (boid != null)
             {
-                boid.GetComponent<HumanController>().enabled = false;
-                GetComponent<ForceController>().enabled = true;
-                boid.integrateForces = false;
+                boid.GetComponent<Harmonic>().enabled = false;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 this.transform.parent = null;
             }
