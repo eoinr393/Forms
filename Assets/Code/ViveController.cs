@@ -55,6 +55,8 @@ public class ViveController : MonoBehaviour {
 
     Quaternion desiredYaw;
 
+    public float diff;
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -64,8 +66,7 @@ public class ViveController : MonoBehaviour {
         if (leftTrackedObject != null && leftTrackedObject.isActiveAndEnabled)
         {
             // The trigger button
-            leftTrig = leftController.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis1).x;
-            
+            leftTrig = leftController.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis1).x;            
         }
         
         if (rightTrackedObject != null && rightTrackedObject.isActiveAndEnabled)
