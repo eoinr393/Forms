@@ -28,7 +28,13 @@ public class BoidRider : MonoBehaviour
             other.GetComponent<Rigidbody>().velocity = Vector3.zero;
             Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);
             FindObjectOfType<ViveController>().boid = boid;
+            boid.GetComponent<PlayerSteering>().enabled = true;
             boid.GetComponent<Harmonic>().enabled = true;
+            RotateMe r = GetComponent<RotateMe>();
+            if (r != null)
+            {
+                r.speed = 0;
+            }
             boid.damping = 0.01f;
             Debug.Log(boid);
         }

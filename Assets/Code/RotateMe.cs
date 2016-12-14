@@ -4,6 +4,7 @@ using System.Collections;
 public class RotateMe : MonoBehaviour {
     public float speed = 0.1f;
     Vector3 axis;
+    float lerpedSpeed = 0;
 	// Use this for initialization
 	void Start () {
         axis = Random.insideUnitSphere;
@@ -11,6 +12,7 @@ public class RotateMe : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Rotate(axis, speed * Time.deltaTime * 360);
+        lerpedSpeed = Mathf.Lerp(lerpedSpeed, speed, Time.deltaTime);
+        transform.Rotate(axis, lerpedSpeed * Time.deltaTime * 360);
 	}
 }

@@ -14,8 +14,6 @@ public class Hover:Harmonic
         {
             Gizmos.DrawLine(boid.transform.position, boid.transform.position + (force));
         }
-        CreatureManager.Log("Theta" + theta);
-        CreatureManager.Log("Force" + force);
     }
 
     float oldTheta = 0.0f;

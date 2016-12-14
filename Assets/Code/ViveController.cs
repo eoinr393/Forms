@@ -45,6 +45,7 @@ public class ViveController : MonoBehaviour {
         {
             boid.GetComponent<Harmonic>().active = false;
             boid.GetComponent<Harmonic>().enabled = false;
+            boid.GetComponent<PlayerSteering>().enabled = false;
             boid.damping = 0.5f;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             this.transform.parent = null;
@@ -54,8 +55,6 @@ public class ViveController : MonoBehaviour {
 
 
     Quaternion desiredYaw;
-
-    public float diff;
 
     // Update is called once per frame
     void FixedUpdate()
@@ -84,21 +83,8 @@ public class ViveController : MonoBehaviour {
         {
 
         }
-        leftEngine.GetComponent<JetFire>().fire = leftTrig;
-
-        float max = 3999;
-
-        /*
-        SteamVR_Controller.Input(
-            SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost)
-            ).TriggerHapticPulse((ushort)(leftTrig * max));
-        SteamVR_Controller.Input(
-            SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost)
-            ).TriggerHapticPulse((ushort)(rightTrig * max));
-
-        */
+        leftEngine.GetComponent<JetFire>().fire = leftTrig;        
         rightEngine.GetComponent<JetFire>().fire = rightTrig;
-
         if (rightTrig > 0.2f)
         {
             DetatchFromBoid();
@@ -110,11 +96,7 @@ public class ViveController : MonoBehaviour {
 
         rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, maxSpeed);
 
-        if (boid != null)
-        {
-
-        }
-
+        
             //rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, 10f);
 
             /*

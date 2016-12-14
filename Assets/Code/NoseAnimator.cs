@@ -42,7 +42,6 @@ public class NoseAnimator : Animator {
 
             angle = Mathf.Lerp(angle, Utilities.Map(Mathf.Sin((harmonic.theta + offset)), -1.0f, 1.0f, 1.0f, amplitude), Time.deltaTime);
 
-            CreatureManager.Log("Scale: " + angle);
             transform.localScale = new Vector3(
                 xAxis ? angle : 1
                 , yAxis ? angle : 1
