@@ -197,7 +197,7 @@ namespace BGE.Forms
             // For some reason this method is being called twice
             if (transform.childCount == 0)
             {
-                Debug.Log(gameObject + " called awake. I have " + transform.childCount + " children");
+                //Debug.Log(gameObject + " called awake. I have " + transform.childCount + " children");
                 CreateCreature();
             }
         }

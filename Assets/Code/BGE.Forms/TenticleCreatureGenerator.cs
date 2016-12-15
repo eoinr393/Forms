@@ -69,7 +69,6 @@ namespace BGE.Forms
         void CreateCreature()
         {
             List<CreaturePart> parts = CreateCreatureParams();
-            Debug.Log("Creating creature from " + gameObject + " Parts: " + parts.Count);
             Boid boid = null;
             for(int i = 0; i < parts.Count; i ++)
             {
