@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LerpController : MonoBehaviour {
+namespace BGE.Forms
+{
+    public class LerpController : MonoBehaviour {
 
-    public float height;
+        public float height;
 
-	// Use this for initialization
-	void Start () {
+        // Use this for initialization
+        void Start () {
 	
-	}
+        }
 	
-	// Update is called once per frame
-	void Update () {
-	}
+        // Update is called once per frame
+        void Update () {
+        }
+    }
 }

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using BGE;
+using BGE.Forms;
 using System.Collections.Generic;
 
 public class Palette : MonoBehaviour {

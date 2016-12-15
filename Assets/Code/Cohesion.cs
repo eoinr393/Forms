@@ -4,42 +4,44 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-
-public class Cohesion : SteeringBehaviour
+namespace BGE.Forms
 {
-
-    public void Start()
+    public class Cohesion : SteeringBehaviour
     {
-        boid.tagNeighbours = true;
-    }
 
-    public override Vector3 Calculate()
-    {
-        Vector3 steeringForce = Vector3.zero;
-        Vector3 centreOfMass = Vector3.zero;
-        int taggedCount = 0;
-        foreach (Boid other in boid.tagged)
+        public void Start()
         {
-            if (other != this)
-            {
-                centreOfMass += other.position;
-                taggedCount++;
-            }
+            boid.tagNeighbours = true;
         }
-        if (taggedCount > 0)
-        {
-            centreOfMass /= (float)taggedCount;
 
-            if (centreOfMass.sqrMagnitude == 0)
+        public override Vector3 Calculate()
+        {
+            Vector3 steeringForce = Vector3.zero;
+            Vector3 centreOfMass = Vector3.zero;
+            int taggedCount = 0;
+            foreach (Boid other in boid.tagged)
             {
-                steeringForce = Vector3.zero;
+                if (other != this)
+                {
+                    centreOfMass += other.position;
+                    taggedCount++;
+                }
             }
-            else
+            if (taggedCount > 0)
             {
-                steeringForce = Vector3.Normalize(boid.SeekForce(centreOfMass));
+                centreOfMass /= (float)taggedCount;
+
+                if (centreOfMass.sqrMagnitude == 0)
+                {
+                    steeringForce = Vector3.zero;
+                }
+                else
+                {
+                    steeringForce = Vector3.Normalize(boid.SeekForce(centreOfMass));
+                }
             }
+            Utilities.checkNaN(steeringForce);
+            return steeringForce;
         }
-        Utilities.checkNaN(steeringForce);
-        return steeringForce;
     }
 }

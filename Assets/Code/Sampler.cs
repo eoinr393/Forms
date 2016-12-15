@@ -1,33 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Sampler : MonoBehaviour
+namespace BGE.Forms
 {
-    public enum operations { add, subtract, multiply, divide , ignore};
-    public operations operation = operations.add;
-
-    public Sampler()
+    public abstract class Sampler : MonoBehaviour
     {
-    }
+        public enum operations { add, subtract, multiply, divide , ignore};
+        public operations operation = operations.add;
 
-    public abstract float Sample(float x, float y);
-
-    public float Operate(float input, float x, float y)
-    {
-        switch (operation)
+        public Sampler()
         {
-            case operations.add:
-                return input + Sample(x, y);
-            case operations.subtract:
-                return input - Sample(x, y);
-            case operations.multiply:
-                return input * Sample(x, y);
-            case operations.divide:
-                return input / Sample(x, y);
-            case operations.ignore:
-                return input;
-            default:
-                return 0;
+        }
+
+        public abstract float Sample(float x, float y);
+
+        public float Operate(float input, float x, float y)
+        {
+            switch (operation)
+            {
+                case operations.add:
+                    return input + Sample(x, y);
+                case operations.subtract:
+                    return input - Sample(x, y);
+                case operations.multiply:
+                    return input * Sample(x, y);
+                case operations.divide:
+                    return input / Sample(x, y);
+                case operations.ignore:
+                    return input;
+                default:
+                    return 0;
+            }
         }
     }
 }

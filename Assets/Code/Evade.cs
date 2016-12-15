@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-
-public class Evade: SteeringBehaviour
+namespace BGE.Forms
 {
-    public Boid enemy = null;    
-
-    public override Vector3 Calculate()
+    public class Evade: SteeringBehaviour
     {
-        float dist = (enemy.position - boid.position).magnitude;
-        float lookAhead = boid.maxSpeed;
+        public Boid enemy = null;    
 
-        Vector3 target = enemy.position + (lookAhead * enemy.velocity);
-        return boid.FleeForce(target);
+        public override Vector3 Calculate()
+        {
+            float dist = (enemy.position - boid.position).magnitude;
+            float lookAhead = boid.maxSpeed;
+
+            Vector3 target = enemy.position + (lookAhead * enemy.velocity);
+            return boid.FleeForce(target);
+        }
     }
 }

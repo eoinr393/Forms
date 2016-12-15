@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using BGE;
+using BGE.Forms;
 
 public class Coalesse : MonoBehaviour {
     School flock;

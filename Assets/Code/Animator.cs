@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-
-public class Animator : MonoBehaviour {
-    public Boid boid;    
+namespace BGE.Forms
+{
+    public class Animator : MonoBehaviour {
+        public Boid boid;    
+    }
 }

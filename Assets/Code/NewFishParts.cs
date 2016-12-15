@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BGE.Forms;
 using UnityEngine;
 
-namespace BGE
+namespace BGE.Forms
 {
     public class NewFishParts : MonoBehaviour
     {

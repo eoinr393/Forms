@@ -4,163 +4,166 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-struct FeelerInfo
+namespace BGE.Forms
 {
-    public Vector3 point;
-    public Vector3 normal;
-    public bool collided;
-    public FeeelerType feelerType;
-    public enum FeeelerType { front, side };
-    
-    public FeelerInfo(Vector3 point, Vector3 normal, bool collided, FeeelerType feelerType)
+    public class SceneAvoidance: SteeringBehaviour
     {
-        this.point = point;
-        this.normal = normal;
-        this.collided = collided;
-        this.feelerType = feelerType;
-    }
-}
+        public float scale = 4.0f;
+        public float forwardFeelerDepth = 30;
+        public float sideFeelerDepth = 15;
+        FeelerInfo[] feelers = new FeelerInfo[5];
 
-public class SceneAvoidance: SteeringBehaviour
-{
-    public float scale = 4.0f;
-    public float forwardFeelerDepth = 30;
-    public float sideFeelerDepth = 15;
-    FeelerInfo[] feelers = new FeelerInfo[5];
+        public float frontFeelerUpdatesPerSecond = 10.0f;
+        public float sideFeelerUpdatesPerSecond = 5.0f;
 
-    public float frontFeelerUpdatesPerSecond = 10.0f;
-    public float sideFeelerUpdatesPerSecond = 5.0f;
+        public float feelerRadius = 2.0f;
+        public enum ForceType { normal, incident, up, braking };
+        public ForceType forceType = ForceType.normal;
 
-    public float feelerRadius = 2.0f;
-    public enum ForceType { normal, incident, up, braking };
-    public ForceType forceType = ForceType.normal;
+        public LayerMask mask = -1;
 
-    public LayerMask mask = -1;
-
-    public void Start()
-    {
-        StartCoroutine(UpdateFrontFeelers());
-        StartCoroutine(UpdateSideFeelers());
-    }
-
-    public void OnDrawGizmos()
-    {
-        foreach (FeelerInfo feeler in feelers)
+        public void Start()
         {
-            
-            if (feeler.collided)
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawLine(transform.position, feeler.point);
+            StartCoroutine(UpdateFrontFeelers());
+            StartCoroutine(UpdateSideFeelers());
+        }
 
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(feeler.point, feeler.point + (feeler.normal * 5));
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(feeler.point, feeler.point + force);
+        public void OnDrawGizmos()
+        {
+            foreach (FeelerInfo feeler in feelers)
+            {
+            
+                if (feeler.collided)
+                {
+                    Gizmos.color = Color.cyan;
+                    Gizmos.DrawLine(transform.position, feeler.point);
+
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawLine(feeler.point, feeler.point + (feeler.normal * 5));
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawLine(feeler.point, feeler.point + force);
+                }
             }
         }
-    }
 
-    public override Vector3 Calculate()
-    {
-        Vector3 force = Vector3.zero;
-
-        for (int i = 0; i < feelers.Length; i++)
+        public override Vector3 Calculate()
         {
-            FeelerInfo info = feelers[i];
-            if (info.collided)
+            Vector3 force = Vector3.zero;
+
+            for (int i = 0; i < feelers.Length; i++)
             {
-                force += CalculateSceneAvoidanceForce(info);
+                FeelerInfo info = feelers[i];
+                if (info.collided)
+                {
+                    force += CalculateSceneAvoidanceForce(info);
+                }
+            }
+            return force;
+        }
+
+        System.Collections.IEnumerator UpdateFrontFeelers()
+        {
+            yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
+            while (true)
+            {
+            
+                RaycastHit info;
+                float forwardFeelerDepth = this.forwardFeelerDepth + ((boid.velocity.magnitude / boid.maxSpeed) * this.forwardFeelerDepth);
+
+                // Forward feeler
+                //int mask.value = 1 << 9;
+                bool collided = Physics.SphereCast(transform.position, feelerRadius, boid.TransformDirection(Vector3.forward), out info, forwardFeelerDepth, mask.value);
+                feelers[0] = new FeelerInfo(info.point, info.normal
+                    , collided, FeelerInfo.FeeelerType.front);
+                yield return new WaitForSeconds(1.0f / frontFeelerUpdatesPerSecond);
             }
         }
-        return force;
-    }
 
-    System.Collections.IEnumerator UpdateFrontFeelers()
-    {
-        yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
-        while (true)
+        Vector3 CalculateSceneAvoidanceForce(FeelerInfo info)
         {
-            
-            RaycastHit info;
-            float forwardFeelerDepth = this.forwardFeelerDepth + ((boid.velocity.magnitude / boid.maxSpeed) * this.forwardFeelerDepth);
+            Vector3 force = Vector3.zero;
 
-            // Forward feeler
-            //int mask.value = 1 << 9;
-            bool collided = Physics.SphereCast(transform.position, feelerRadius, boid.TransformDirection(Vector3.forward), out info, forwardFeelerDepth, mask.value);
-            feelers[0] = new FeelerInfo(info.point, info.normal
-                , collided, FeelerInfo.FeeelerType.front);
-            yield return new WaitForSeconds(1.0f / frontFeelerUpdatesPerSecond);
+            Vector3 fromTarget = fromTarget = boid.position - info.point;
+            float dist = Vector3.Distance(boid.position, info.point);
+
+            switch (forceType)
+            {
+                case ForceType.normal:
+                    force = info.normal * (forwardFeelerDepth * scale / dist);
+                    break;
+                case ForceType.incident:
+                    fromTarget.Normalize();
+                    force -= Vector3.Reflect(fromTarget, info.normal) * (forwardFeelerDepth / dist);
+                    break;
+                case ForceType.up:
+                    force += Vector3.up * (forwardFeelerDepth * scale / dist);
+                    break;
+                case ForceType.braking:
+                    force += fromTarget * (forwardFeelerDepth / dist);
+                    break;
+            }
+            return force;
         }
-    }
 
-    Vector3 CalculateSceneAvoidanceForce(FeelerInfo info)
-    {
-        Vector3 force = Vector3.zero;
-
-        Vector3 fromTarget = fromTarget = boid.position - info.point;
-        float dist = Vector3.Distance(boid.position, info.point);
-
-        switch (forceType)
+        System.Collections.IEnumerator UpdateSideFeelers()
         {
-            case ForceType.normal:
-                force = info.normal * (forwardFeelerDepth * scale / dist);
-                break;
-            case ForceType.incident:
-                fromTarget.Normalize();
-                force -= Vector3.Reflect(fromTarget, info.normal) * (forwardFeelerDepth / dist);
-                break;
-            case ForceType.up:
-                force += Vector3.up * (forwardFeelerDepth * scale / dist);
-                break;
-            case ForceType.braking:
-                force += fromTarget * (forwardFeelerDepth / dist);
-                break;
+            yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
+            while (true)
+            {
+                Vector3 feelerDirection;
+                RaycastHit info;
+                bool collided;
+
+                float sideFeelerDepth = this.sideFeelerDepth + ((boid.velocity.magnitude / boid.maxSpeed) * this.sideFeelerDepth);
+
+
+                // Left feeler
+                feelerDirection = Vector3.forward;
+                feelerDirection = Quaternion.AngleAxis(-45, Vector3.up) * feelerDirection;
+                collided = Physics.SphereCast(transform.position, feelerRadius, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
+                feelers[1] = new FeelerInfo(info.point, info.normal,
+                    collided, FeelerInfo.FeeelerType.side);
+
+                // Right feeler
+                feelerDirection = Vector3.forward;
+                feelerDirection = Quaternion.AngleAxis(-45, Vector3.up) * feelerDirection;
+                collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
+                feelers[2] = new FeelerInfo(info.point, info.normal
+                    , collided, FeelerInfo.FeeelerType.side);
+
+                // Up feeler
+                feelerDirection = Vector3.forward;
+                feelerDirection = Quaternion.AngleAxis(45, Vector3.right) * feelerDirection;
+                collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
+                feelers[3] = new FeelerInfo(info.point, info.normal
+                    , collided, FeelerInfo.FeeelerType.side);
+
+                // Down feeler
+                feelerDirection = Vector3.forward;
+                feelerDirection = Quaternion.AngleAxis(-45, Vector3.right) * feelerDirection;
+                collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
+                feelers[4] = new FeelerInfo(info.point, info.normal
+                    , collided, FeelerInfo.FeeelerType.side);
+                yield return new WaitForSeconds(1.0f / sideFeelerUpdatesPerSecond);
+            }
         }
-        return force;
-    }
-
-    System.Collections.IEnumerator UpdateSideFeelers()
-    {
-        yield return new WaitForSeconds(Random.Range(0.0f, 0.5f));
-        while (true)
-        {
-            Vector3 feelerDirection;
-            RaycastHit info;
-            bool collided;
-
-            float sideFeelerDepth = this.sideFeelerDepth + ((boid.velocity.magnitude / boid.maxSpeed) * this.sideFeelerDepth);
-
-
-            // Left feeler
-            feelerDirection = Vector3.forward;
-            feelerDirection = Quaternion.AngleAxis(-45, Vector3.up) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, feelerRadius, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
-            feelers[1] = new FeelerInfo(info.point, info.normal,
-                collided, FeelerInfo.FeeelerType.side);
-
-            // Right feeler
-            feelerDirection = Vector3.forward;
-            feelerDirection = Quaternion.AngleAxis(-45, Vector3.up) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
-            feelers[2] = new FeelerInfo(info.point, info.normal
-                , collided, FeelerInfo.FeeelerType.side);
-
-            // Up feeler
-            feelerDirection = Vector3.forward;
-            feelerDirection = Quaternion.AngleAxis(45, Vector3.right) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
-            feelers[3] = new FeelerInfo(info.point, info.normal
-                , collided, FeelerInfo.FeeelerType.side);
-
-            // Down feeler
-            feelerDirection = Vector3.forward;
-            feelerDirection = Quaternion.AngleAxis(-45, Vector3.right) * feelerDirection;
-            collided = Physics.SphereCast(transform.position, 2, transform.TransformDirection(feelerDirection), out info, sideFeelerDepth, mask.value);
-            feelers[4] = new FeelerInfo(info.point, info.normal
-                , collided, FeelerInfo.FeeelerType.side);
-            yield return new WaitForSeconds(1.0f / sideFeelerUpdatesPerSecond);
-        }
-    }
     
+    }
+
+    struct FeelerInfo
+    {
+        public Vector3 point;
+        public Vector3 normal;
+        public bool collided;
+        public FeeelerType feelerType;
+        public enum FeeelerType { front, side };
+    
+        public FeelerInfo(Vector3 point, Vector3 normal, bool collided, FeeelerType feelerType)
+        {
+            this.point = point;
+            this.normal = normal;
+            this.collided = collided;
+            this.feelerType = feelerType;
+        }
+    }
 }

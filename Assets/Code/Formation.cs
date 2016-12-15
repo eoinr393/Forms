@@ -2,56 +2,59 @@
 using System.Collections;
 using System;
 
-public class Formation : SteeringBehaviour
+namespace BGE.Forms
 {
-    public Boid leaderBoid;
-    public GameObject leader;
-    public Vector3 offset;
-    private Vector3 targetPos;
-    public bool useDeadReconing = false;
-
-
-    public void Start()
+    public class Formation : SteeringBehaviour
     {
-        if (leader  != null)
-        {
-            leaderBoid = leader.GetComponentInChildren<Boid>();
-            offset = transform.position - leader.transform.position;
-            offset = Quaternion.Inverse(transform.rotation) * offset;
-            targetPos = leaderBoid.TransformPoint(targetPos);
-        }
-    }
+        public Boid leaderBoid;
+        public GameObject leader;
+        public Vector3 offset;
+        private Vector3 targetPos;
+        public bool useDeadReconing = false;
 
-    public void OnDrawGizmos()
-    {
-        if (isActiveAndEnabled && leaderBoid != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, targetPos);
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, leaderBoid.transform.position);
-        }
-    }
 
-    public override Vector3 Calculate()
-    {
-        if (leaderBoid != null)
+        public void Start()
         {
-            Vector3 newTarget = leaderBoid.TransformPoint(offset);
-            newTarget.y = leaderBoid.position.y + offset.y;
-
-            if (useDeadReconing)
+            if (leader  != null)
             {
-                float dist = Vector3.Distance(boid.position, leaderBoid.position);
-                float lookAhead = (dist / boid.maxSpeed);
-                newTarget = newTarget + (lookAhead * leaderBoid.velocity);
+                leaderBoid = leader.GetComponentInChildren<Boid>();
+                offset = transform.position - leader.transform.position;
+                offset = Quaternion.Inverse(transform.rotation) * offset;
+                targetPos = leaderBoid.TransformPoint(targetPos);
             }
-            targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta * 0.5f);
-            return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
         }
-        else
+
+        public void OnDrawGizmos()
         {
-            return Vector3.zero;
+            if (isActiveAndEnabled && leaderBoid != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(transform.position, targetPos);
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawLine(transform.position, leaderBoid.transform.position);
+            }
+        }
+
+        public override Vector3 Calculate()
+        {
+            if (leaderBoid != null)
+            {
+                Vector3 newTarget = leaderBoid.TransformPoint(offset);
+                newTarget.y = leaderBoid.position.y + offset.y;
+
+                if (useDeadReconing)
+                {
+                    float dist = Vector3.Distance(boid.position, leaderBoid.position);
+                    float lookAhead = (dist / boid.maxSpeed);
+                    newTarget = newTarget + (lookAhead * leaderBoid.velocity);
+                }
+                targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta * 0.5f);
+                return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
+            }
+            else
+            {
+                return Vector3.zero;
+            }
         }
     }
 }

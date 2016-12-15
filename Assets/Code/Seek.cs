@@ -4,28 +4,30 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-
-public class Seek : SteeringBehaviour
+namespace BGE.Forms
 {
-    public GameObject targetGameObject = null;
-    public Vector3 target = Vector3.zero;
+    public class Seek : SteeringBehaviour
+    {
+        public GameObject targetGameObject = null;
+        public Vector3 target = Vector3.zero;
 
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, target);
-    }
-    
-    public override Vector3 Calculate()
-    {
-        return boid.SeekForce(target);    
-    }
-
-    public override void Update()
-    {
-        if (targetGameObject != null)
+        public void OnDrawGizmos()
         {
-            target = targetGameObject.transform.position;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position, target);
+        }
+    
+        public override Vector3 Calculate()
+        {
+            return boid.SeekForce(target);    
+        }
+
+        public override void Update()
+        {
+            if (targetGameObject != null)
+            {
+                target = targetGameObject.transform.position;
+            }
         }
     }
 }

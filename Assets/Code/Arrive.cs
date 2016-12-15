@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-
-public class Arrive: SteeringBehaviour
+namespace BGE.Forms
 {
-    public Vector3 targetPosition = Vector3.zero;
-    public float slowingDistance = 15.0f;
-
-    [Range(0.0f, 1.0f)]
-    public float deceleration = 0.9f;
-
-
-    public override Vector3 Calculate()
+    public class Arrive: SteeringBehaviour
     {
-        return boid.ArriveForce(targetPosition, slowingDistance, deceleration);
+        public Vector3 targetPosition = Vector3.zero;
+        public float slowingDistance = 15.0f;
+
+        [Range(0.0f, 1.0f)]
+        public float deceleration = 0.9f;
+
+
+        public override Vector3 Calculate()
+        {
+            return boid.ArriveForce(targetPosition, slowingDistance, deceleration);
+        }
     }
 }

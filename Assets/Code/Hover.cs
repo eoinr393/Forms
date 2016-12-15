@@ -3,51 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-    
-public class Hover:Harmonic
+
+namespace BGE.Forms
 {
-    public bool automatic = true;
-    public override void OnDrawGizmos()
+    public class Hover:Harmonic
     {
-        Gizmos.color = Color.yellow;
-        if (boid != null)
+        public bool automatic = true;
+        public override void OnDrawGizmos()
         {
-            Gizmos.DrawLine(boid.transform.position, boid.transform.position + (force));
-        }
-    }
-
-    float oldTheta = 0.0f;
-
-    public override void Start()
-    {
-        oldTheta = theta;
-        base.Start();
-    }
-
-    public float thetaDelta;
-
-    public override Vector3 Calculate()
-    {
-        Vector3 force = Vector3.zero;
-        theta = theta % (Utilities.TWO_PI);
-        rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, boid.TimeDelta);
-
-        if (automatic)
-        {
-            rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta);
-            theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
+            Gizmos.color = Color.yellow;
+            if (boid != null)
+            {
+                Gizmos.DrawLine(boid.transform.position, boid.transform.position + (force));
+            }
         }
 
-        thetaDelta = theta - oldTheta;
-        if ((theta < Mathf.PI & thetaDelta > 0) || (theta > Mathf.PI && thetaDelta < 0))
+        float oldTheta = 0.0f;
+
+        public override void Start()
         {
-            force = boid.forward 
-                * Mathf.Abs(thetaDelta)
-                * rampedAmplitude;                    
-        }        
+            oldTheta = theta;
+            base.Start();
+        }
+
+        public float thetaDelta;
+
+        public override Vector3 Calculate()
+        {
+            Vector3 force = Vector3.zero;
+            theta = theta % (Utilities.TWO_PI);
+            rampedAmplitude = Mathf.Lerp(rampedAmplitude, amplitude, boid.TimeDelta);
+
+            if (automatic)
+            {
+                rampedSpeed = Mathf.Lerp(rampedSpeed, speed, boid.TimeDelta);
+                theta += boid.TimeDelta * rampedSpeed * Mathf.Deg2Rad;
+            }
+
+            thetaDelta = theta - oldTheta;
+            if ((theta < Mathf.PI & thetaDelta > 0) || (theta > Mathf.PI && thetaDelta < 0))
+            {
+                force = boid.forward 
+                        * Mathf.Abs(thetaDelta)
+                        * rampedAmplitude;                    
+            }        
         
-        oldTheta = theta;
-        return force;
+            oldTheta = theta;
+            return force;
+        }
     }
 }
-

@@ -4,27 +4,29 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-
-public class Flee : SteeringBehaviour
+namespace BGE.Forms
 {
-    public float fleeRange = 100.0f;
-    public Vector3 target = Vector3.zero;
-    public Boid targetBoid;
-
-    public override Vector3 Calculate()
+    public class Flee : SteeringBehaviour
     {
-        if (targetBoid != null)
-        {
-            target = targetBoid.position;
-        }    
+        public float fleeRange = 100.0f;
+        public Vector3 target = Vector3.zero;
+        public Boid targetBoid;
 
-        if (Vector3.Distance(boid.position, target) < fleeRange)
+        public override Vector3 Calculate()
         {
-            return boid.FleeForce(target);
+            if (targetBoid != null)
+            {
+                target = targetBoid.position;
+            }    
+
+            if (Vector3.Distance(boid.position, target) < fleeRange)
+            {
+                return boid.FleeForce(target);
+            }
+            else
+            {
+                return Vector3.zero;
+            }    
         }
-        else
-        {
-            return Vector3.zero;
-        }    
     }
 }

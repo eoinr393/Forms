@@ -1,100 +1,102 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ViveController : MonoBehaviour {
+namespace BGE.Forms
+{
+    public class ViveController : MonoBehaviour {
 
-    public SteamVR_TrackedObject leftTrackedObject;
-    public SteamVR_TrackedObject rightTrackedObject;
-    private Rigidbody rigidBody;
+        public SteamVR_TrackedObject leftTrackedObject;
+        public SteamVR_TrackedObject rightTrackedObject;
+        private Rigidbody rigidBody;
 
-    public GameObject leftEngine;
-    public GameObject rightEngine;
+        public GameObject leftEngine;
+        public GameObject rightEngine;
 
-    public GameObject head;
-    public float maxSpeed = 250.0f;
-    public float power = 1000.0f;
+        public GameObject head;
+        public float maxSpeed = 250.0f;
+        public float power = 1000.0f;
 
-    public Boid boid; // Am I controlling a boid?
+        public Boid boid; // Am I controlling a boid?
 
-    private SteamVR_Controller.Device leftController
-    {
-        get
+        private SteamVR_Controller.Device leftController
         {
-            return SteamVR_Controller.Input((int)leftTrackedObject.index);
+            get
+            {
+                return SteamVR_Controller.Input((int)leftTrackedObject.index);
+            }
         }
-    }
 
-    private SteamVR_Controller.Device rightController
-    {
-        get
+        private SteamVR_Controller.Device rightController
         {
-            return SteamVR_Controller.Input((int)rightTrackedObject.index);
+            get
+            {
+                return SteamVR_Controller.Input((int)rightTrackedObject.index);
+            }
         }
-    }
 
-    // Use this for initialization
-    void Start()
-    {
-        rigidBody = GetComponent<Rigidbody>();
-        desiredYaw = transform.rotation;
-    }
-
-    void DetatchFromBoid()
-    {
-        if (boid != null)
+        // Use this for initialization
+        void Start()
         {
-            boid.GetComponent<Harmonic>().active = false;
-            boid.GetComponent<Harmonic>().enabled = false;
-            boid.GetComponent<PlayerSteering>().enabled = false;
-            boid.damping = 0.5f;
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            this.transform.parent = null;
-            boid = null;
+            rigidBody = GetComponent<Rigidbody>();
+            desiredYaw = transform.rotation;
         }
-    }
 
-
-    Quaternion desiredYaw;
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        float leftTrig = 0.0f;
-        float rightTrig = 0.0f;
-
-        if (leftTrackedObject != null && leftTrackedObject.isActiveAndEnabled)
+        void DetatchFromBoid()
         {
-            // The trigger button
-            leftTrig = leftController.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis1).x;            
+            if (boid != null)
+            {
+                boid.GetComponent<Harmonic>().active = false;
+                boid.GetComponent<Harmonic>().enabled = false;
+                boid.GetComponent<PlayerSteering>().enabled = false;
+                boid.damping = 0.5f;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                this.transform.parent = null;
+                boid = null;
+            }
         }
+
+
+        Quaternion desiredYaw;
+
+        // Update is called once per frame
+        void FixedUpdate()
+        {
+            float leftTrig = 0.0f;
+            float rightTrig = 0.0f;
+
+            if (leftTrackedObject != null && leftTrackedObject.isActiveAndEnabled)
+            {
+                // The trigger button
+                leftTrig = leftController.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis1).x;            
+            }
         
-        if (rightTrackedObject != null && rightTrackedObject.isActiveAndEnabled)
-        {
-            // The trigger button
-            rightTrig = rightController.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis1).x;
-        }
+            if (rightTrackedObject != null && rightTrackedObject.isActiveAndEnabled)
+            {
+                // The trigger button
+                rightTrig = rightController.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis1).x;
+            }
         
-        if (leftTrig > 0.2f)
-        {
-            DetatchFromBoid();
-            rigidBody.AddForceAtPosition(leftTrackedObject.transform.forward * power * leftTrig, leftTrackedObject.transform.position);
-        }
-        else
-        {
+            if (leftTrig > 0.2f)
+            {
+                DetatchFromBoid();
+                rigidBody.AddForceAtPosition(leftTrackedObject.transform.forward * power * leftTrig, leftTrackedObject.transform.position);
+            }
+            else
+            {
 
-        }
-        leftEngine.GetComponent<JetFire>().fire = leftTrig;        
-        rightEngine.GetComponent<JetFire>().fire = rightTrig;
-        if (rightTrig > 0.2f)
-        {
-            DetatchFromBoid();
-            rigidBody.AddForceAtPosition(rightTrackedObject.transform.forward * power * rightTrig, rightTrackedObject.transform.position);
-        }
-        else
-        {
-        }
+            }
+            leftEngine.GetComponent<JetFire>().fire = leftTrig;        
+            rightEngine.GetComponent<JetFire>().fire = rightTrig;
+            if (rightTrig > 0.2f)
+            {
+                DetatchFromBoid();
+                rigidBody.AddForceAtPosition(rightTrackedObject.transform.forward * power * rightTrig, rightTrackedObject.transform.position);
+            }
+            else
+            {
+            }
 
-        rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, maxSpeed);
+            rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, maxSpeed);
 
         
             //rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, 10f);
@@ -117,4 +119,5 @@ public class ViveController : MonoBehaviour {
             transform.rotation = Quaternion.Slerp(transform.rotation, desiredYaw, Time.deltaTime);
             */
         }
+    }
 }
