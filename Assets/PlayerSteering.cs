@@ -9,7 +9,7 @@ public class PlayerSteering : SteeringBehaviour {
     public float rightForce;
 
     private ViveController viveController;
-    private Vector3 viveForce
+    private Vector3 viveForce;
     public void Start()
     {
         viveController = FindObjectOfType<ViveController>();
