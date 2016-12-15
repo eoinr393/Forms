@@ -1,6 +1,5 @@
-﻿using System.Collections;
+﻿using BGE.Forms;
 using UnityEngine;
-using BGE.Forms;
 
 namespace BGE.Forms
 {
