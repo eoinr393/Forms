@@ -227,7 +227,6 @@ MonoBehaviour:
   distance: 100
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &4329271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +388,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -779,7 +777,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -812,7 +809,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &62183382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1517,7 +1513,6 @@ MonoBehaviour:
   distance: 0
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &142989185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1956,7 +1951,6 @@ MonoBehaviour:
   distance: 5
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
   automatic: 1
   thetaDelta: 0
 --- !u!114 &184242815
@@ -2203,7 +2197,6 @@ MonoBehaviour:
   distance: 2
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &189166077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2594,7 +2587,6 @@ MonoBehaviour:
   distance: 156
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
   automatic: 1
   thetaDelta: 0
 --- !u!1001 &213491308
@@ -2822,7 +2814,6 @@ MonoBehaviour:
   distance: 100
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &233267911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3003,7 +2994,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -3315,7 +3305,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 10
@@ -3435,7 +3424,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 10
@@ -4268,7 +4256,6 @@ MonoBehaviour:
   distance: 100
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &349846120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4327,7 +4314,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 1
   bones: []
   jointParams: []
   bondDamping: 25
@@ -4946,7 +4932,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 10
@@ -5224,7 +5209,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &475269958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5284,7 +5268,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -5985,7 +5968,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 10
@@ -6089,7 +6071,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &587879528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6240,7 +6221,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -7504,7 +7484,6 @@ MonoBehaviour:
   distance: 156
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
   automatic: 1
   thetaDelta: 0
 --- !u!1001 &685490675
@@ -8145,7 +8124,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &795903287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8316,7 +8294,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -9010,12 +8987,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boid: {fileID: 0}
-  axis: 1
+  driver: 1
+  axis: 0
   theta: 0
   amplitude: 40
   speed: 0.1
-  wigglyness: 1
-  lerpedAmplitude: 0
 --- !u!1 &936940527
 GameObject:
   m_ObjectHideFlags: 0
@@ -9060,7 +9036,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 1
   autoAssignBones: 0
-  alignToHead: 0
   bones:
   - {fileID: 1572485848}
   - {fileID: 146888080}
@@ -9265,7 +9240,6 @@ MonoBehaviour:
   distance: 0
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &955624318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10098,7 +10072,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1026808525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10157,7 +10130,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -10566,7 +10538,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1072054585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10672,7 +10643,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -10866,7 +10836,6 @@ MonoBehaviour:
   distance: 5
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1087607918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11536,7 +11505,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 10
@@ -11878,7 +11846,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1249419333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11983,7 +11950,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -12522,7 +12488,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1320999004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12536,7 +12501,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -12746,7 +12710,6 @@ MonoBehaviour:
   distance: 2
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1337630944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14132,7 +14095,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 10
@@ -15330,7 +15292,6 @@ MonoBehaviour:
   distance: 0
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1641147837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16280,7 +16241,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1866507630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16431,7 +16391,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -16624,7 +16583,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1874633685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16775,7 +16733,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -17078,7 +17035,6 @@ MonoBehaviour:
   distance: 20
   yawRoll: {x: 0, y: 0, z: 0}
   worldTarget: {x: 0, y: 0, z: 0}
-  forwardBoid: {fileID: 0}
 --- !u!114 &1885644607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17137,7 +17093,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 25
@@ -17806,7 +17761,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 1
-  alignToHead: 0
   bones: []
   jointParams: []
   bondDamping: 23
@@ -17825,12 +17779,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boid: {fileID: 0}
-  axis: 0
+  driver: 1
+  axis: 1
   theta: 0
   amplitude: 40
   speed: 0.1
-  wigglyness: 1
-  lerpedAmplitude: 0
 --- !u!1 &1988060751
 GameObject:
   m_ObjectHideFlags: 0
@@ -18271,7 +18224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 0
   autoAssignBones: 0
-  alignToHead: 1
   bones:
   - {fileID: 1889769265}
   - {fileID: 2044854982}
@@ -18421,12 +18373,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boid: {fileID: 0}
+  driver: 1
   axis: 1
   theta: 0
   amplitude: 40
   speed: 0.1
-  wigglyness: 1
-  lerpedAmplitude: 0
 --- !u!1 &2044854982
 GameObject:
   m_ObjectHideFlags: 0
@@ -18869,7 +18820,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignmentStrategy: 1
   autoAssignBones: 0
-  alignToHead: 1
   bones:
   - {fileID: 171753071}
   - {fileID: 1893809734}
