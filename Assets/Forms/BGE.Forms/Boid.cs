@@ -81,13 +81,6 @@ namespace BGE.Forms
                 return timeDelta * flockMultiplier * timeMultiplier;
             }
         }
-
-        public void OnDrawGizmos()
-        {
-            Gizmos.color = Color.magenta;
-            //Gizmos.DrawLine(transform.position, transform.position + force);
-        }
-
         void Start()
         {
             desiredPosition = transform.position;
@@ -193,7 +186,7 @@ namespace BGE.Forms
                 }
                 Utilities.checkNaN(velocity);
 
-                if (speed > 0.01f && integrateForces)
+                if (speed > 0.01f)
                 {
                     transform.forward = Vector3.RotateTowards(transform.forward, velocity, Mathf.Deg2Rad * maxTurnDegrees * Time.deltaTime, float.MaxValue);
                     if (keepUpright)
@@ -206,7 +199,7 @@ namespace BGE.Forms
 
 
 
-                if (applyBanking && integrateForces)
+                if (applyBanking)
                 {
                     Quaternion q = Quaternion.LookRotation(transform.forward, tempUp);
                     transform.rotation = q;

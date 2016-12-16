@@ -34,8 +34,6 @@ namespace BGE.Forms
 
         public Vector3 worldTarget;
 
-        public Boid forwardBoid = null;
-
         public virtual void Start()
         {
             theta = UnityEngine.Random.Range(0, Mathf.PI);
@@ -45,11 +43,15 @@ namespace BGE.Forms
         {
             if (isActiveAndEnabled)
             {
-                Gizmos.color = new Color(0, 0, 170);
+                Gizmos.color = Color.blue;
                 Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
                 Gizmos.DrawWireSphere(wanderCircleCenter, radius);
-                Gizmos.color = new Color(0, 170, 0);
-                Gizmos.DrawLine(transform.position, worldTarget);
+
+                if (worldTarget != Vector3.zero)
+                {
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawLine(transform.position, worldTarget);
+                }
             }
         }
 

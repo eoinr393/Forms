@@ -37,25 +37,25 @@ namespace BGE.Forms
             for (int i = 0; i < boidCount; i++)
             {
                 GameObject fish = GameObject.Instantiate<GameObject>(prefab);
-                Boid boid = fish.GetComponentInChildren<Boid>();
                 Vector3 unit = UnityEngine.Random.insideUnitSphere;
                 if (spawnInTopHemisphere)
                 {
                     unit.y = Mathf.Abs(unit.y);
                 }
-                fish.transform.position = transform.position + unit * UnityEngine.Random.Range(0, radius * spread);
-                fish.transform.parent = transform;
-                boid.school = this;
-                boid.GetComponent<Constrain>().radius = radius;
-                boid.GetComponent<Constrain>().centre = transform.position;
-                boid.GetComponent<Constrain>().centreOnPosition = false;
 
-                /*for (int j = 0; j < 3; j++)
-            {
-                fish.transform.GetChild(j).GetComponentInChildren<Renderer>().material.color = cols[j];
-            }
-            */
-                boids.Add(boid);
+                fish.transform.position = transform.position + unit*UnityEngine.Random.Range(0, radius*spread);
+                fish.transform.parent = transform;
+                Boid boid = fish.GetComponentInChildren<Boid>();
+                if (boid != null)
+                {
+                    boid.school = this;
+                    boid.GetComponent<Constrain>().radius = radius;
+                    boid.GetComponent<Constrain>().centre = transform.position;
+                    boid.GetComponent<Constrain>().centreOnPosition = false;
+
+                    boids.Add(boid);
+                }
+
                 AudioSource audioSource = fish.GetComponent<AudioSource>();
                 if (audioSource != null)
                 {

@@ -8,7 +8,6 @@ namespace BGE.Forms
         public enum AlignmentStrategy { LookAt, AlignToHead, LocalAlignToHead }
         public AlignmentStrategy alignmentStrategy = AlignmentStrategy.LookAt;
         public bool autoAssignBones = true;    
-        public bool alignToHead = false;
 
         public List<GameObject> bones = new List<GameObject>();
 
@@ -17,10 +16,12 @@ namespace BGE.Forms
 
         public List<JointParam> jointParams = new List<JointParam>();
 
-        public float bondDamping;
-        public float angularBondDamping;
+        public float bondDamping = 10;
+        public float angularBondDamping = 12;
 
+        [HideInInspector]
         public Vector3 centerOfMass;
+        [HideInInspector]
         public Quaternion averageRotation;
 
         void Start()

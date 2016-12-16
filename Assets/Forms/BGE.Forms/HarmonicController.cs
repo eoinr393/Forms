@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace BGE.Forms
 {
-    public class VaryWiggle : MonoBehaviour {
+    public class HarmonicController : MonoBehaviour {
 
         Harmonic harmonic;
         Boid boid;
@@ -41,14 +41,14 @@ namespace BGE.Forms
                 float variationThisTime = harmonic.speed / initialSpeed;
 
                 boid.maxSpeed = initialBoidSpeed * variationThisTime;
-                yield return new WaitForSeconds(Random.Range(5, 10));
+                yield return new WaitForSeconds(Random.Range(3, 7));
                 if (glide)
                 {
                     harmonic.amplitude = initialAmplitude * 0.2f;
                     harmonic.speed = initialSpeed;
-                    //Debug.Log("Gliding");
+                    yield return new WaitForSeconds(Random.Range(3, 7));
                 }
-                yield return new WaitForSeconds(Random.Range(5, 20));
+                
             }
         }
     }

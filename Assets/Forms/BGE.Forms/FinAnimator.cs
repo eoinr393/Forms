@@ -5,9 +5,9 @@ namespace BGE.Forms
 {
     public class FinAnimator : Animator {
 
-        public enum Axis {X, Z };
+        public enum Axis {X, Y, Z};
         public Axis axis = Axis.X;
-        public enum Side { left, right };
+        public enum Side { left, right , tail};
         public Side side = Side.left;
         private Harmonic harmonic;
 
@@ -19,7 +19,7 @@ namespace BGE.Forms
         [Range(0, 360)]
         public float rotationOffset = 220;
 
-        [Range(0, 2)]
+        [Range(0, 8)]
         public float wigglyness = 1;
         // Use this for initialization
         void Start () {
@@ -34,6 +34,7 @@ namespace BGE.Forms
             }
         }
 
+        [HideInInspector]
         public float lerpedAmplitude;
         // Update is called once per frame
         void Update () {        
@@ -52,12 +53,15 @@ namespace BGE.Forms
                     lerpedAmplitude  = Mathf.Lerp(lerpedAmplitude, amplitude, Time.deltaTime);
                 }
             
-                float angle = Mathf.Sin((theta + offset))
-                              * (harmonic.rampedAmplitude / initialAmplitude) * lerpedAmplitude * wigglyness;
+                float angle = Mathf.Sin((theta * wigglyness + offset))
+                              * (harmonic.rampedAmplitude / initialAmplitude) * lerpedAmplitude;
                 switch (axis)
                 {
                     case Axis.X:
                         transform.localRotation = Quaternion.Euler(angle, 0, 0);
+                        break;
+                    case Axis.Y:
+                        transform.localRotation = Quaternion.Euler(0, angle, 0);
                         break;
                     case Axis.Z:
                         transform.localRotation = Quaternion.Euler(0, 0, angle);
