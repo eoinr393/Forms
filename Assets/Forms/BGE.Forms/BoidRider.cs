@@ -33,7 +33,14 @@ namespace BGE.Forms
                 boid.GetComponent<PlayerSteering>().Activate(true);
                 boid.GetComponent<Harmonic>().Activate(true);
 
-
+                HarmonicController hc = boid.GetComponent<HarmonicController>();
+                if (boid.GetComponent<HarmonicController>() != null)
+                {
+                    hc.enabled = false;
+                    boid.GetComponent<Harmonic>().amplitude = hc.initialAmplitude;
+                    boid.GetComponent<Harmonic>().speed = hc.initialSpeed;
+                }
+                
                 Constrain con = boid.GetComponent<Constrain>();
                 if (con != null)
                 {

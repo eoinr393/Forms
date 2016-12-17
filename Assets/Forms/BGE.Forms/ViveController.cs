@@ -62,7 +62,14 @@ namespace BGE.Forms
                 {
                     con.Activate(true);
                 }
-                boid.GetComponent<Harmonic>().Activate(false);
+
+                HarmonicController hc = boid.GetComponent<HarmonicController>();
+                if (boid.GetComponent<HarmonicController>() != null)
+                {
+                    hc.enabled = true;
+                }
+
+                boid.GetComponent<Harmonic>().Activate(true);
                 boid.GetComponent<PlayerSteering>().Activate(false);
                 boid.damping = 0.5f;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -120,7 +127,16 @@ namespace BGE.Forms
 
             rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, maxSpeed);
 
-        
+            float max = 3500;
+
+            SteamVR_Controller.Input(
+                SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost)
+                ).TriggerHapticPulse((ushort)(leftTrig * max));
+            SteamVR_Controller.Input(
+                SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost)
+                ).TriggerHapticPulse((ushort)(rightTrig * max));
+
+
             //rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, 10f);
 
             /*

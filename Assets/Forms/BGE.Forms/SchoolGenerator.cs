@@ -32,7 +32,7 @@ namespace BGE.Forms
             int maxAudioBoids = 5;
             int audioBoids = 0;
 
-            Color[] cols = { Palette.Random(), Palette.Random(), Palette.Random() };
+            //Color[] cols = { Palette.Random(), Palette.Random(), Palette.Random() };
 
             for (int i = 0; i < boidCount; i++)
             {

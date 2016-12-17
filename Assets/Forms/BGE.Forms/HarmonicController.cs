@@ -7,9 +7,13 @@ namespace BGE.Forms
 
         Harmonic harmonic;
         Boid boid;
-        float initialSpeed;
+
+        [HideInInspector]
+        public float initialSpeed;
         float initialBoidSpeed;
-        float initialAmplitude;
+
+        [HideInInspector]
+        public float initialAmplitude;
 
         [Range(0, 1)]
         public float speedVariation = 0.5f;

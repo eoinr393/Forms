@@ -13,7 +13,8 @@ public class Palette : MonoBehaviour {
 
     public static Color Random()
     {
-        return new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f));
+       //return Color.red;
+       return new Color(UnityEngine.Random.Range(0.7f, 2.0f), UnityEngine.Random.Range(0.1f, 0.2f), UnityEngine.Random.Range(0.1f, 0.2f));
     }
 
     public static Color RandomNot(Color c)
