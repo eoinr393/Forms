@@ -17,6 +17,7 @@ namespace BGE.Forms
             if (transform.position.y > plane.transform.position.y + 100)
             {
                 transform.position = orig;
+                GetComponent<Boid>().desiredPosition = orig;
             }
         }
     }

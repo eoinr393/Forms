@@ -41,28 +41,39 @@ namespace BGE.Forms
             desiredYaw = transform.rotation;
         }
 
+        System.Collections.IEnumerator StraightenUp()
+        {
+            float t = 0;
+            Vector3 current = transform.up;
+            while (t < 1.0f)
+            {
+                transform.up = Vector3.Lerp(transform.up, Vector3.up, t);
+                t += Time.deltaTime;
+                yield return null;
+            }
+        }
+
         void DetatchFromBoid()
         {
             if (boid != null)
             {
-                boid.GetComponent<Harmonic>().Activate(false);
-                boid.GetComponent<PlayerSteering>().Activate(false);
-                boid.damping = 0.5f;
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
-                this.transform.parent = null;
-                transform.up = Vector3.up;
-                boid = null;
-                RotateMe[] r = FindObjectsOfType<RotateMe>();
-                foreach (RotateMe rm in r)
-                {
-                    rm.speed = 0.1f;
-                }
-
                 Constrain con = boid.GetComponent<Constrain>();
                 if (con != null)
                 {
                     con.Activate(true);
                 }
+                boid.GetComponent<Harmonic>().Activate(false);
+                boid.GetComponent<PlayerSteering>().Activate(false);
+                boid.damping = 0.5f;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                this.transform.parent = null;
+                StartCoroutine("StraightenUp");
+                boid = null;
+                RotateMe[] r = FindObjectsOfType<RotateMe>();
+                foreach (RotateMe rm in r)
+                {
+                    rm.speed = 0.1f;
+                }                
             }
         }
 

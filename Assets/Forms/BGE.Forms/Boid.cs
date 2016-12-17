@@ -121,7 +121,9 @@ namespace BGE.Forms
         }
 
         float timeAcc = 0;
-        Vector3 desiredPosition = Vector3.zero;
+
+        [HideInInspector]
+        public Vector3 desiredPosition = Vector3.zero;
 
         [HideInInspector]
         public float gravityAcceleration = 0;
