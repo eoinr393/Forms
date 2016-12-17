@@ -11,6 +11,11 @@ public class PlayerSteering : SteeringBehaviour {
 
     private ViveController viveController;
     private Vector3 viveForce;
+
+    private Quaternion average;
+
+    private bool pickedUp = false;
+
     public void Start()
     {
         viveController = FindObjectOfType<ViveController>();
@@ -27,13 +32,17 @@ public class PlayerSteering : SteeringBehaviour {
         {
             if (viveController.leftTrackedObject != null && viveController.rightTrackedObject != null)
             {
-                Quaternion average = Quaternion.Slerp(viveController.leftTrackedObject.transform.localRotation
-    , viveController.rightTrackedObject.transform.localRotation, 0.5f);
+                average = Quaternion.Slerp(viveController.leftTrackedObject.transform.rotation
+                    , viveController.rightTrackedObject.transform.rotation, 0.5f);
 
-                /*        
-                float viveRightForce = viveController.leftTrackedObject.transform.position.y - viveController.rightTrackedObject.transform.position.y;
-                rightForce += (viveRightForce * 0.5f);
+                //average = viveController.leftTrackedObject.transform.rotation;
 
+                //float viveRightForce = viveController.leftTrackedObject.transform.position.y - viveController.rightTrackedObject.transform.position.y;
+                //rightForce += (viveRightForce * 3.0f);
+
+                CreatureManager.Log("Yaw: " + rightForce);
+
+                /*
                 Quaternion average = Quaternion.Slerp(viveController.leftTrackedObject.transform.localRotation
                     , viveController.rightTrackedObject.transform.localRotation, 0.5f);
                 Vector3 ypr = average.eulerAngles;
@@ -44,7 +53,7 @@ public class PlayerSteering : SteeringBehaviour {
                 }
                 pitch = Utilities.Map(pitch, -90, 90, 1, -1);
                 CreatureManager.Log("Pitch: " + pitch);
-                upForce += (pitch * 0.5f);
+                //upForce += (pitch * 0.5f);
                 */
 
             }
@@ -55,8 +64,12 @@ public class PlayerSteering : SteeringBehaviour {
 
     public override Vector3 Calculate()
     {
+        /*
         Vector3 force = boid.right * rightForce * power
             + boid.up * (upForce) * power;
+            */
+        Vector3 force = average * Vector3.forward * power;
+        
         return force;
     }
 }

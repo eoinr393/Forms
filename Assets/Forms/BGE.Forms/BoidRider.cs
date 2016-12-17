@@ -30,8 +30,17 @@ namespace BGE.Forms
                 other.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);
                 FindObjectOfType<ViveController>().boid = boid;
-                boid.GetComponent<PlayerSteering>().enabled = true;
-                boid.GetComponent<Harmonic>().enabled = true;
+                boid.GetComponent<PlayerSteering>().Activate(true);
+                boid.GetComponent<Harmonic>().Activate(true);
+
+
+                Constrain con = boid.GetComponent<Constrain>();
+                if (con != null)
+                {
+                    con.Activate(false);
+                }
+                boid.GetComponent<NoiseWander>().Activate(false);
+                
                 RotateMe r = GetComponent<RotateMe>();
                 if (r != null)
                 {

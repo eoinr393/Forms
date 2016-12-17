@@ -15,12 +15,21 @@ public class DetatchFromBoid : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);
+            
+
             if (boid != null)
             {
-                boid.GetComponent<Harmonic>().enabled = false;
+                boid.GetComponent<Harmonic>().Activate(true);
+                boid.GetComponent<NoiseWander>().Activate(true);
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 this.transform.parent = null;
             }
+            RotateMe[] r = FindObjectsOfType<RotateMe>();
+            foreach (RotateMe rm in r)
+            {
+                rm.speed = 0.1f;
+            }
+
         }
 	}
 }
