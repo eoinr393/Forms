@@ -265,6 +265,27 @@ namespace BGE.Forms
             return color;
         }
 
+        public static List<Renderer> GetRenderersinChildrenRecursive(GameObject root)
+        {
+            List<Renderer> ret = new List<Renderer>();
+            return GetRenderersinChildrenRecursive(root, ret);
+        }
+
+        private static List<Renderer> GetRenderersinChildrenRecursive(GameObject root, List<Renderer> list)
+        {
+            Renderer[] rs = root.GetComponents<Renderer>();
+            foreach (Renderer r in rs)
+            {
+                list.Add(r);
+            }
+            for (int i = 0; i < root.transform.childCount; i++)
+            {
+                GetRenderersinChildrenRecursive(root.transform.GetChild(i).gameObject, list);
+            }
+            return list;
+        }
+     
+
         public static void SetLayerRecursively(GameObject obj, int newLayer)
         {
             if (null == obj)

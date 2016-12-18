@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 namespace BGE.Forms
@@ -129,12 +130,27 @@ namespace BGE.Forms
 
             float max = 3500;
 
-            SteamVR_Controller.Input(
-                SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost)
-                ).TriggerHapticPulse((ushort)(leftTrig * max));
-            SteamVR_Controller.Input(
-                SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost)
-                ).TriggerHapticPulse((ushort)(rightTrig * max));
+            try
+            {
+
+                SteamVR_Controller.Device l = SteamVR_Controller.Input(
+                    SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost));
+                if (l != null)
+                {
+                    l.TriggerHapticPulse((ushort) (leftTrig*max));
+                }
+
+                SteamVR_Controller.Device r = SteamVR_Controller.Input(
+                    SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost));
+                if (r != null)
+                {
+                    r.TriggerHapticPulse((ushort) (rightTrig*max));
+                }
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                
+            }
 
 
             //rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, 10f);
