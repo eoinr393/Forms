@@ -49,7 +49,7 @@ namespace BGE.Forms
             theta = 0;
             speedMultiplier = 1.0f;
             headField = 5;
-            tailField = 50;
+            tailField = 50; 
         }
 
         public GameObject InstiantiateDefaultShape()
@@ -57,10 +57,11 @@ namespace BGE.Forms
 
             GameObject segment = null;
             segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            segment.layer = this.gameObject.layer;
             Vector3 scale = new Vector3(1, segmentExtents, segmentExtents);
             segment.transform.localScale = scale;
 
-            segment.GetComponent<Renderer>().material.color = Palette.Random();
+            //segment.GetComponent<Renderer>().material.color = Palette.Random();
             return segment;
         }
 

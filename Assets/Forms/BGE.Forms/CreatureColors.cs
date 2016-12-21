@@ -69,7 +69,7 @@ namespace BGE.Forms
                 }
 
                 // The Sardines
-                if (r.gameObject.layer == 15)
+                if (r.gameObject.layer == 16)
                 {
                     r.material.color = p.colors[8];
                 }

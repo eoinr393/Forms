@@ -60,12 +60,17 @@ namespace BGE.Forms
         public float textureScaling = 1.0f;
 
         public Color color = Color.blue;
-    
+
+        public Sampler[] GetSamplers()
+        {
+            return samplers ?? (samplers = GetComponents<Sampler>());
+        }
+        
         void OnDrawGizmos()
         {
             if (drawGizmos)
             {
-                samplers = GetComponents<Sampler>();
+                samplers = GetSamplers();
                 textureGenerator = GetComponent<TextureGenerator>();
                 if (samplers == null)
                 {
@@ -98,7 +103,7 @@ namespace BGE.Forms
 
         void Awake()
         {
-            samplers = GetComponents<Sampler>();        
+            samplers = GetSamplers();
             if (samplers == null)
             {
                 Debug.Log("Sampler is null! Add a sampler to the NoiseForm");
@@ -194,6 +199,18 @@ namespace BGE.Forms
             }
         }
 
+        public float Sample(float x, float y)
+        {
+            float sample = 0;
+
+
+            foreach (Sampler sampler in GetSamplers())
+            {
+                sample = sampler.Operate(sample, x, y);
+            }
+            return sample;
+        }
+
         Mesh GenerateMesh(Vector3 position)
         {
 
@@ -234,13 +251,10 @@ namespace BGE.Forms
 
                     // Add all the samplers together to make the height
                     Vector3 cell = (position / cellSize) + tileBottomLeft + new Vector3(x, 0, z);
-                    foreach (Sampler sampler in samplers)
-                    {
-                        cellBottomLeft.y = sampler.Operate(cellBottomLeft.y, cell.x, cell.z);
-                        cellTopLeft.y = sampler.Operate(cellTopLeft.y, cell.x, cell.z + 1);
-                        cellTopRight.y = sampler.Operate(cellTopRight.y, cell.x + 1, cell.z + 1);
-                        cellBottomRight.y = sampler.Operate(cellBottomRight.y, cell.x + 1, cell.z);
-                    }
+                    cellBottomLeft.y = Sample(cell.x, cell.z);
+                    cellTopLeft.y = Sample(cell.x, cell.z + 1);
+                    cellTopRight.y = Sample(cell.x + 1, cell.z + 1);
+                    cellBottomRight.y = Sample(cell.x + 1, cell.z);
 
                     // Make the vertices
                     gm.vertices[vertex++] = cellBottomLeft;

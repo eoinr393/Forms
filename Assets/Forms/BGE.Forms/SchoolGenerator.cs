@@ -17,8 +17,7 @@ namespace BGE.Forms
 
         [Range(0, 1)]
         public float spread;
-
-
+        
         SchoolGenerator()
         {
             boidCount = 200;
@@ -32,18 +31,16 @@ namespace BGE.Forms
             int maxAudioBoids = 5;
             int audioBoids = 0;
 
-            //Color[] cols = { Palette.Random(), Palette.Random(), Palette.Random() };
+            WorldGenerator wg = FindObjectOfType<WorldGenerator>();
 
             for (int i = 0; i < boidCount; i++)
             {
                 GameObject fish = GameObject.Instantiate<GameObject>(prefab);
                 Vector3 unit = UnityEngine.Random.insideUnitSphere;
-                if (spawnInTopHemisphere)
-                {
-                    unit.y = Mathf.Abs(unit.y);
-                }
 
-                fish.transform.position = transform.position + unit*UnityEngine.Random.Range(0, radius*spread);
+                Vector3 pos = transform.position + unit*UnityEngine.Random.Range(0, radius*spread);
+                pos.y = wg.Sample(pos.x, pos.z) + 20;
+                fish.transform.position = pos;
                 fish.transform.parent = transform;
                 Boid boid = fish.GetComponentInChildren<Boid>();
                 if (boid != null)
