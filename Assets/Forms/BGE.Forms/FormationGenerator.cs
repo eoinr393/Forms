@@ -115,6 +115,8 @@ namespace BGE.Forms
                     formation.leader = myLeader.gameObject;
                 }
             }
+
+            Utilities.SetLayerRecursively(this.gameObject, this.gameObject.layer);
         }
 	
         // Update is called once per frame

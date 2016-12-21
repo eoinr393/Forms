@@ -40,8 +40,8 @@ namespace BGE.Forms
             {
                 Vector3 center = school.transform.position; // CenterOfMass();
                 Color color = Palette.Random();
-                Color color1 = Palette.RandomNot(color);
-                Color color2 = Palette.RandomNot(color1);
+                Color color1 = Palette.Random();
+                Color color2 = Palette.Random();
                 float radius = 20;
                 int boidsTagged = 0;
                 while (boidsTagged < school.boids.Count)

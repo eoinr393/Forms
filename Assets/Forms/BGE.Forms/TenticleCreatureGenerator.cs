@@ -112,6 +112,7 @@ namespace BGE.Forms
             {
                 Utilities.RecursiveSetColor(this.gameObject, color);
             }
+            Utilities.SetLayerRecursively(this.gameObject, this.gameObject.layer);
         }
 	
         // Update is called once per frame
