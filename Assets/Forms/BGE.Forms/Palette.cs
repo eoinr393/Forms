@@ -5,29 +5,48 @@ using System.Collections.Generic;
 
 public class Palette
 {
-    public Color[] colors;
+    public Color[] creatureColors;
+    public Color[] backColors;
+
     public float h = 0.25f;
-    public Palette(int seed, int count, float h, int numCols, int rotation)
+    public Palette(int cSeed, int bSeed, int count)
     {
         this.h = h;
-        System.Random random = new System.Random(seed);
-        colors = new Color[count];
+        System.Random cRandom = new System.Random(cSeed);
+        System.Random bRandom = new System.Random(bSeed);
+        creatureColors = new Color[count];
+        backColors = new Color[count];
 
         // Algorithm 1, random hue, same sat and value
         HSBColor baseColor = new HSBColor(
-            Utilities.RandomRange(random, 0.0f, 1.0f)
-            , Utilities.RandomRange(random, 0.5f, 1.0f)
-            , Utilities.RandomRange(random, 0.5f, 1.0f)
+            Utilities.RandomRange(cRandom, 0.0f, 1.0f)
+            , Utilities.RandomRange(cRandom, 0.5f, 1.0f)
+            , Utilities.RandomRange(cRandom, 0.5f, 1.0f)
             );
         for (int i = 0; i < count; i++)
         {
             HSBColor thisColor = new HSBColor(
-                Utilities.RandomRange(random, 0.0f, 1.0f)
+                Utilities.RandomRange(cRandom, 0.0f, 1.0f)
                 , baseColor.s
                 , baseColor.b
                 );
-            colors[i] = thisColor.ToColor();
+            creatureColors[i] = thisColor.ToColor();
         }
+
+        float b = 0.6f;
+        float range = 0.2f;
+        float bb = Utilities.RandomRange(bRandom, 0, 0.6f);
+        for (int i = 0; i < count; i++)
+        {
+            HSBColor thisColor = new HSBColor(
+                Utilities.RandomRange(bRandom, b - (range) , b + range)
+                , baseColor.s
+                , bb 
+                );
+            backColors[i] = thisColor.ToColor();
+        }
+
+
 
         // Algorithm 2, range of hues between 2 colours, same sat and value
         /*
@@ -49,7 +68,7 @@ public class Palette
                 , baseColor1.s
                 , baseColor1.b
                 );
-            colors[i] = thisColor.ToColor();
+            creatureColors[i] = thisColor.ToColor();
         }
         */
 
@@ -65,7 +84,7 @@ public class Palette
                 , s
                 , v
                 );
-            colors[i] = thisColor.ToColor();
+            creatureColors[i] = thisColor.ToColor();
         }
         */
         /*
@@ -80,7 +99,7 @@ public class Palette
                 , s
                 , v
                 );
-            colors[i] = thisColor.ToColor();
+            creatureColors[i] = thisColor.ToColor();
         }
         */
 

@@ -79,7 +79,7 @@ namespace UnityStandardAssets.ImageEffects
         public override void OnInspectorGUI () {
             serObj.Update ();
 
-            GUILayout.Label ("Use curves to tweak RGB channel colors", EditorStyles.miniBoldLabel);
+            GUILayout.Label ("Use curves to tweak RGB channel creatureColors", EditorStyles.miniBoldLabel);
 
             saturation.floatValue = EditorGUILayout.Slider( "Saturation", saturation.floatValue, 0.0f, 5.0f);
 
