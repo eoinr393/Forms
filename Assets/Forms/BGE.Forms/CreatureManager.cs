@@ -145,7 +145,12 @@ namespace BGE.Forms
             if (Input.GetKey(KeyCode.Escape))
             {
                 Application.Quit();
-            }        
+            }
+
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                showMessages = !showMessages;
+            }
         }
 
         long lastThreadCount = 0;

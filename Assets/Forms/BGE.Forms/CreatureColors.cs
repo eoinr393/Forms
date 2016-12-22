@@ -6,7 +6,17 @@ namespace BGE.Forms
     public class CreatureColors : MonoBehaviour
     {
         public GameObject root;
-        public int seed = 42; 
+        public int seed = 42;
+
+        [Range(0.0f, 1.0f)]
+        public float h = 0.25f;
+
+        [Range(2, 20)]
+        public int numCols = 5;
+
+        [Range(0, 20)]
+        public int rotation = 0;
+
         // Use this for initialization
         void Start()
         {
@@ -45,8 +55,8 @@ namespace BGE.Forms
         void RecolorScene()
         {
             List<Renderer> rs = GetRenderers();
-            Palette p = new Palette(seed, 10);
-
+            Palette p = new Palette(seed, 10, h, numCols, rotation);
+            
             foreach (Renderer r in rs)
             {
 
