@@ -10,15 +10,20 @@ namespace BGE.Forms
         
         private static System.Random Random = new System.Random(Guid.NewGuid().GetHashCode());
 
+        public static float RandomRange(System.Random r, float min, float max)
+        {
+            double f = 0.0f;
+            lock (r)
+            {
+                f = r.NextDouble();
+            }
+            return Map((float)f, 0.0f, 1.0f, min, max);
+        }
+
         // Cant use the Unity one on a thread
         public static float RandomRange(float min, float max)
         {
-            double f = 0.0f;
-            lock (Random)
-            {
-                f = Random.NextDouble();
-            }
-            return Map((float) f, 0.0f, 1.0f, min, max);
+            return RandomRange(Random, min, max);
         }
 
 

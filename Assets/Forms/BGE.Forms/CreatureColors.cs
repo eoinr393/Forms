@@ -6,6 +6,7 @@ namespace BGE.Forms
     public class CreatureColors : MonoBehaviour
     {
         public GameObject root;
+        public int seed = 42; 
         // Use this for initialization
         void Start()
         {
@@ -16,14 +17,35 @@ namespace BGE.Forms
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
+                seed++;
                 RecolorScene();
             }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                seed--;
+                RecolorScene();
+            }
+            CreatureManager.Log("Color seed: " + seed);
+        }
+
+        private List<Renderer> renderers;
+
+        List<Renderer> GetRenderers()
+        {
+            return renderers ?? (renderers = Utilities.GetRenderersinChildrenRecursive(root));
+        }
+
+        private TrailRenderer[] trailRenderers;
+
+        TrailRenderer[] GetTrailRendereres()
+        {
+            return trailRenderers ?? (trailRenderers = FindObjectsOfType<TrailRenderer>());
         }
 
         void RecolorScene()
         {
-            List<Renderer> rs = Utilities.GetRenderersinChildrenRecursive(root);
-            Palette p = new Palette(10);
+            List<Renderer> rs = GetRenderers();
+            Palette p = new Palette(seed, 10);
 
             foreach (Renderer r in rs)
             {
@@ -72,6 +94,11 @@ namespace BGE.Forms
                 if (r.gameObject.layer == 16)
                 {
                     r.material.color = p.colors[8];
+                    TrailRenderer[] trs = GetTrailRendereres();
+                    foreach (var tr in trs)
+                    {
+                        tr.material.SetColor("_TintColor", p.colors[9]);
+                    }
                 }
 
             }
