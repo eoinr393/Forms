@@ -136,11 +136,11 @@ namespace BGE.Forms
         
             if (Input.GetKey(KeyCode.Q))
             {
-                Roll(-Time.deltaTime * angularSpeed);
+                //Roll(-Time.deltaTime * angularSpeed);
             }
             if (Input.GetKey(KeyCode.E))
             {
-                Roll(Time.deltaTime * angularSpeed);
+                //Roll(Time.deltaTime * angularSpeed);
             }
         
             if (Input.GetKey(KeyCode.R))

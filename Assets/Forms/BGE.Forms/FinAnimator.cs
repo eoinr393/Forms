@@ -21,6 +21,8 @@ namespace BGE.Forms
 
         [Range(0, 8)]
         public float wigglyness = 1;
+
+        public bool flipDirection = false;
         // Use this for initialization
         void Start () {
             if (boid != null)
@@ -55,6 +57,7 @@ namespace BGE.Forms
             
                 float angle = Mathf.Sin((theta * wigglyness + offset))
                               * (harmonic.rampedAmplitude / initialAmplitude) * lerpedAmplitude;
+                angle = flipDirection ? -angle : angle;
                 switch (axis)
                 {
                     case Axis.X:
