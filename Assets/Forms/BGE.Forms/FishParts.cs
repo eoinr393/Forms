@@ -61,7 +61,7 @@ namespace BGE.Forms
             Vector3 scale = new Vector3(1, segmentExtents, segmentExtents);
             segment.transform.localScale = scale;
 
-            //segment.GetComponent<Renderer>().material.color = Palette.Random();
+            segment.GetComponent<Renderer>().material.color = Palette.Random();
             return segment;
         }
 
@@ -81,6 +81,8 @@ namespace BGE.Forms
                 head = InstiantiateDefaultShape();
                 body = InstiantiateDefaultShape();
                 tail = InstiantiateDefaultShape();
+
+                
                 LayoutSegments();
             }
             else

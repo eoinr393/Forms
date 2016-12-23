@@ -11,40 +11,54 @@ public class Palette
     public float h = 0.25f;
     public Palette(int cSeed, int bSeed, int count)
     {
-        this.h = h;
+        
         System.Random cRandom = new System.Random(cSeed);
         System.Random bRandom = new System.Random(bSeed);
         creatureColors = new Color[count];
         backColors = new Color[count];
 
         // Algorithm 1, random hue, same sat and value
-        HSBColor baseColor = new HSBColor(
-            Utilities.RandomRange(cRandom, 0.0f, 1.0f)
-            , Utilities.RandomRange(cRandom, 0.5f, 1.0f)
-            , Utilities.RandomRange(cRandom, 0.5f, 1.0f)
-            );
+        
+        float s = Utilities.RandomRange(cRandom, 0.9f, 1.0f);
+        float b = Utilities.RandomRange(cRandom, 0.0f, 1.0f);
+        float h = Utilities.RandomRange(cRandom, 0.0f, 1.0f);
+        float interval = 1.0f/count;
         for (int i = 0; i < count; i++)
         {
             HSBColor thisColor = new HSBColor(
-                Utilities.RandomRange(cRandom, 0.0f, 1.0f)
-                , baseColor.s
-                , baseColor.b
+                //(h + (interval * i)) % 1.0f
+                Utilities.RandomRange(cRandom, 0, 1)
+                , s
+                , b
+                );
+            creatureColors[i] = thisColor.ToColor();
+        }
+        for (int i = 0; i < count; i++)
+        {
+            HSBColor thisColor = new HSBColor(
+                //(h + (interval * i)) % 1.0f
+                Utilities.RandomRange(cRandom, 0, 1)
+                , s
+                , b
+                );
+            backColors[i] = thisColor.ToColor();
+        }
+        /*
+        float b = 0.9f;
+        float h = 0.6f;
+        float range = 0.1f;
+        float s = 0.9f;
+        float bb = Utilities.RandomRange(bRandom, 0.3f, 0.6f);
+        for (int i = 0; i < count; i++)
+        {
+            HSBColor thisColor = new HSBColor(
+                Utilities.RandomRange(bRandom, h - (range) , h + range)
+                , s
+                , Utilities.RandomRange(bRandom, b - (range), b + range)
                 );
             creatureColors[i] = thisColor.ToColor();
         }
 
-        float b = 0.6f;
-        float range = 0.2f;
-        float bb = Utilities.RandomRange(bRandom, 0, 0.6f);
-        for (int i = 0; i < count; i++)
-        {
-            HSBColor thisColor = new HSBColor(
-                Utilities.RandomRange(bRandom, b - (range) , b + range)
-                , baseColor.s
-                , bb 
-                );
-            backColors[i] = thisColor.ToColor();
-        }
 
 
 

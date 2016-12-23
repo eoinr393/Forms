@@ -83,13 +83,13 @@ namespace BGE.Forms
                 // The square fish
                 if (r.gameObject.layer == 9)
                 {
-                    r.material.color = p.creatureColors[0];
+                    r.material.color = p.creatureColors[1];
                 }
 
                 // The big blues
                 if (r.gameObject.layer == 10)
                 {
-                    r.material.color = p.creatureColors[1];
+                    r.material.color = p.creatureColors[0];
                 }
 
                 // The Tenticle creatures

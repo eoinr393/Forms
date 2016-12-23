@@ -45,11 +45,11 @@ namespace BGE.Forms
         System.Collections.IEnumerator StraightenUp()
         {
             float t = 0;
-            Vector3 current = transform.up;
+            Quaternion current = transform.rotation;
             while (t < 1.0f)
             {
-                transform.up = Vector3.Lerp(transform.up, Vector3.up, t);
-                t += Time.deltaTime;
+                transform.rotation = Quaternion.Slerp(current, Quaternion.identity, t);
+                t += Time.deltaTime * 0.2f;
                 yield return null;
             }
         }
