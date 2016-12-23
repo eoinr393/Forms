@@ -19,8 +19,8 @@ namespace BGE.Forms
             {
                 leaderBoid = leader.GetComponentInChildren<Boid>();
                 offset = transform.position - leader.transform.position;
-                offset = Quaternion.Inverse(transform.rotation) * offset;
-                targetPos = leaderBoid.TransformPoint(targetPos);
+                offset = Quaternion.Inverse(leader.transform.rotation) * offset;
+                targetPos = leaderBoid.TransformPoint(offset);
             }
         }
 
@@ -40,7 +40,7 @@ namespace BGE.Forms
             if (leaderBoid != null)
             {
                 Vector3 newTarget = leaderBoid.TransformPoint(offset);
-                newTarget.y = leaderBoid.position.y + offset.y;
+                //newTarget.y = leaderBoid.position.y + offset.y;
 
                 if (useDeadReconing)
                 {
