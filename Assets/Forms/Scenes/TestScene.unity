@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.24648565, g: 0.28233036, b: 0.34567446, a: 1}
+  m_IndirectSpecularColor: {r: 0.18053581, g: 0.2260178, b: 0.30718684, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2574,11 +2574,10 @@ GameObject:
   - 23: {fileID: 735802852}
   - 114: {fileID: 735802851}
   - 114: {fileID: 735802859}
+  - 114: {fileID: 735802857}
   - 114: {fileID: 735802850}
   - 114: {fileID: 735802855}
   - 114: {fileID: 735802856}
-  - 114: {fileID: 735802857}
-  - 114: {fileID: 735802858}
   m_Layer: 0
   m_Name: head
   m_TagString: Untagged
@@ -2654,7 +2653,7 @@ MonoBehaviour:
   maxTurnDegrees: 180
   applyBanking: 1
   keepUpright: 0
-  straighteningTendancy: 0.2
+  straighteningTendancy: 10
   rollingTendancy: 0.4
   integrateForces: 1
   preferredTimeDelta: 0
@@ -2760,30 +2759,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSpeed: 0
   initialAmplitude: 0
-  speedVariation: 0.5
+  speedVariation: 0.3
   amplitudeVariation: 0.5
   glide: 0
 --- !u!114 &735802857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 735802848}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c5328a791ba0084ab9e66db759b0bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  weight: 1
-  force: {x: 0, y: 0, z: 0}
-  forceMagnitude: 0
-  boid: {fileID: 0}
-  range: 3
-  radius: 2
-  distance: 5
-  noisiness: 0.2
---- !u!114 &735802858
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -2801,7 +2780,7 @@ MonoBehaviour:
   boid: {fileID: 0}
   centreOnPosition: 1
   centre: {x: 0, y: 0, z: 0}
-  radius: 100
+  radius: 50
 --- !u!114 &735802859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3134,7 +3113,7 @@ MonoBehaviour:
   maxTurnDegrees: 180
   applyBanking: 1
   keepUpright: 0
-  straighteningTendancy: 2
+  straighteningTendancy: 6
   rollingTendancy: 0.4
   integrateForces: 1
   preferredTimeDelta: 0
@@ -3167,7 +3146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSpeed: 0
   initialAmplitude: 0
-  speedVariation: 0.5
+  speedVariation: 0.3
   amplitudeVariation: 0.5
   glide: 0
 --- !u!114 &768843576
@@ -4399,7 +4378,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1040341408}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5b49821dc74e6346a7f320edcead006, type: 3}
   m_Name: 
@@ -4439,7 +4418,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1040341408}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec2e19e6e1a4a29429d4e8dd007799fa, type: 3}
   m_Name: 
@@ -5704,7 +5683,7 @@ MonoBehaviour:
   maxTurnDegrees: 180
   applyBanking: 1
   keepUpright: 0
-  straighteningTendancy: 2
+  straighteningTendancy: 6
   rollingTendancy: 0.4
   integrateForces: 1
   preferredTimeDelta: 0
@@ -5737,7 +5716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSpeed: 0
   initialAmplitude: 0
-  speedVariation: 0.5
+  speedVariation: 0.3
   amplitudeVariation: 0.5
   glide: 0
 --- !u!114 &1393384837
@@ -6646,7 +6625,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1669018681}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 104.21, y: 16.4, z: -36.42}
+  m_LocalPosition: {x: 266, y: 16.4, z: -36.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -7160,7 +7139,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1818792279}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 119.19, y: 16.4, z: -35.99}
+  m_LocalPosition: {x: 281, y: 16.4, z: -35.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -7201,7 +7180,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1829960756}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 112.7, y: 16.98, z: -22.26}
+  m_LocalPosition: {x: 274, y: 16.98, z: -22.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
