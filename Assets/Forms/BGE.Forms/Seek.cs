@@ -13,8 +13,11 @@ namespace BGE.Forms
 
         public void OnDrawGizmos()
         {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(transform.position, target);
+            if (isActiveAndEnabled)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(transform.position, target);
+            }
         }
     
         public override Vector3 Calculate()

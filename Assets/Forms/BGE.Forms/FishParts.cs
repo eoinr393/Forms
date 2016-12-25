@@ -67,8 +67,11 @@ namespace BGE.Forms
 
         public void OnDrawGizmos()
         {
-            float radius = (1.5f * segmentExtents) + gap;
-            Gizmos.color = Color.yellow;
+            if (isActiveAndEnabled)
+            {
+                float radius = (1.5f*segmentExtents) + gap;
+                Gizmos.color = Color.yellow;
+            }
             //Gizmos.DrawWireSphere(transform.position, radius);
         }
 

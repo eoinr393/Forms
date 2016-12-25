@@ -12,6 +12,8 @@ namespace BGE.Forms
         private Vector3 targetPos;
         public bool useDeadReconing = false;
 
+        public float reformationDistance = 10.0f;
+
 
         public void Start()
         {
@@ -22,6 +24,13 @@ namespace BGE.Forms
                 offset = Quaternion.Inverse(leader.transform.rotation) * offset;
                 targetPos = leaderBoid.TransformPoint(offset);
             }
+        }
+
+        private void RecalculateOffest()
+        {
+            offset = boid.position - leaderBoid.position;
+            offset = Quaternion.Inverse(leaderBoid.rotation) * offset;
+            targetPos = leaderBoid.TransformPoint(offset);
         }
 
         public void OnDrawGizmos()
@@ -49,7 +58,13 @@ namespace BGE.Forms
                     newTarget = newTarget + (lookAhead * leaderBoid.velocity);
                 }
                 targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta * 0.5f);
-                return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 5.0f);
+
+                if (Vector3.Distance(targetPos, boid.position) > reformationDistance)
+                {
+                    RecalculateOffest();                                        
+                }
+
+                return boid.ArriveForce(targetPos, boid.maxSpeed / 2, 15f);
             }
             else
             {

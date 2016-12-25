@@ -21,12 +21,15 @@ namespace BGE.Forms
 
         public void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
-            Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward * distance, transform);
-            Gizmos.DrawWireSphere(wanderCircleCenter, radius);
-            Gizmos.color = Color.gray;
-            Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward * distance, transform);
-            Gizmos.DrawLine(transform.position, worldTarget);
+            if (isActiveAndEnabled)
+            {
+                Gizmos.color = Color.blue;
+                Vector3 wanderCircleCenter = Utilities.TransformPointNoScale(Vector3.forward*distance, transform);
+                Gizmos.DrawWireSphere(wanderCircleCenter, radius);
+                Gizmos.color = Color.gray;
+                Vector3 worldTarget = Utilities.TransformPointNoScale(target + Vector3.forward*distance, transform);
+                Gizmos.DrawLine(transform.position, worldTarget);
+            }
         }
 
         public void Start()

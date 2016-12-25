@@ -198,10 +198,9 @@ namespace BGE.Forms
                         transform.forward = uprightForward;
                     }
                 }
+                
 
-
-
-                if (applyBanking)
+                if (applyBanking) 
                 {
                     Quaternion q = Quaternion.LookRotation(transform.forward, tempUp);
                     transform.rotation = q;
@@ -314,10 +313,6 @@ namespace BGE.Forms
             Vector3 toTarget = target - position;
 
             float distance = toTarget.magnitude;
-            if (distance < 10.0f)
-            {
-                return Vector3.zero;
-            }
             float ramped = maxSpeed * (distance / (slowingDistance * deceleration));
 
             float clamped = Math.Min(ramped, maxSpeed);
