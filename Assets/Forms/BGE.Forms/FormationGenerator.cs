@@ -16,9 +16,10 @@ namespace BGE.Forms
         private List<Vector3> positions = new List<Vector3>();
 
 
-        void GenerateCreaturePosition(Vector3 pos, int current, int depth)
+        void GenerateCreaturePosition(Vector3 pos, Vector3 startPos, int current, int depth)
         {
             positions.Add(pos);
+            pos.z = startPos.z;
             if (current < depth)
             {
                 if (pos.x <= transform.position.x)
@@ -26,8 +27,8 @@ namespace BGE.Forms
                     Vector3 left = new Vector3(-1, 0, -1) * gap;
                     left.x *= Random.Range(1.0f, 1.0f - variance);
                     //left.y += gap * Random.Range(-variance, variance);
-                    left.z *= Random.Range(1.0f, 1.0f - variance);
-                    GenerateCreaturePosition(pos + left, current + 1, depth);
+                    left.z *= Random.Range(-1.0f - variance, 1.0f + variance);
+                    GenerateCreaturePosition(pos + left, startPos, current + 1, depth);
                 
                 }
                 if (pos.x >= transform.position.x)
@@ -35,8 +36,8 @@ namespace BGE.Forms
                     Vector3 right = new Vector3(1, 0, -1) * gap;
                     right.x *= Random.Range(1.0f, 1.0f - variance);
                     //right.y += gap * Random.Range(-variance, variance);
-                    right.z *= Random.Range(1.0f, 1.0f - variance);
-                    GenerateCreaturePosition(pos + right, current + 1, depth);
+                    right.z *= Random.Range(-1.0f - variance, 1.0f + variance);
+                    GenerateCreaturePosition(pos + right, startPos, current + 1, depth);
                 }
             }
         }
@@ -44,7 +45,7 @@ namespace BGE.Forms
         void GeneratePositions()
         {
             positions.Clear();
-            GenerateCreaturePosition(transform.position, 0, sideWidth);
+            GenerateCreaturePosition(transform.position, transform.position, 0, sideWidth);
         }
 
         void OnDrawGizmos()

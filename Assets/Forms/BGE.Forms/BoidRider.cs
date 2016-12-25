@@ -25,7 +25,7 @@ namespace BGE.Forms
             GameObject other = c.gameObject;
             if (other.tag == "Player")
             {
-                other.transform.parent = this.transform.parent;
+                other.transform.parent = this.transform;
                 other.GetComponent<ForceController>().enabled = false;
                 other.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);

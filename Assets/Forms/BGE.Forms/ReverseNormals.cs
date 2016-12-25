@@ -6,8 +6,13 @@ namespace BGE.Forms
     [RequireComponent(typeof(MeshFilter))]
     public class ReverseNormals : MonoBehaviour
     {
+        private bool done = false;
         void Start()
         {
+            if (done)
+            {
+                return;
+            }
             MeshFilter filter = GetComponent(typeof(MeshFilter)) as MeshFilter;
             if (filter != null)
             {
@@ -30,6 +35,7 @@ namespace BGE.Forms
                     mesh.SetTriangles(triangles, m);
                 }
             }
+            done = true;
         }
     }
 }

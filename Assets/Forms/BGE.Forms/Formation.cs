@@ -57,7 +57,7 @@ namespace BGE.Forms
                     float lookAhead = (dist / boid.maxSpeed);
                     newTarget = newTarget + (lookAhead * leaderBoid.velocity);
                 }
-                targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta * 0.5f);
+                targetPos = Vector3.Lerp(targetPos, newTarget, boid.TimeDelta * 0.2f);
 
                 if (Vector3.Distance(targetPos, boid.position) > reformationDistance)
                 {
