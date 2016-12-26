@@ -74,6 +74,7 @@ namespace BGE.Forms
 
                 boid.GetComponent<Harmonic>().Activate(true);
                 boid.GetComponent<PlayerSteering>().Activate(false);
+                GetComponent<Rigidbody>().isKinematic = false;
                 boid.damping = 0.5f;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 this.transform.parent = null;
@@ -132,6 +133,7 @@ namespace BGE.Forms
 
             float max = 3500;
 
+            /*
             try
             {
 
@@ -153,7 +155,7 @@ namespace BGE.Forms
             {
                 
             }
-
+            */
 
             //rigidBody.velocity = Vector3.ClampMagnitude(rigidBody.velocity, 10f);
 

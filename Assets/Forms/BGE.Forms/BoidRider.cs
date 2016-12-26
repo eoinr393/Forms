@@ -25,9 +25,10 @@ namespace BGE.Forms
             GameObject other = c.gameObject;
             if (other.tag == "Player")
             {
-                other.transform.parent = this.transform;
+                other.transform.parent = this.transform.parent;
                 other.GetComponent<ForceController>().enabled = false;
                 other.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                other.GetComponent<Rigidbody>().isKinematic = true;
                 Boid boid = Utilities.FindBoidInHierarchy(this.gameObject);
                 FindObjectOfType<ViveController>().boid = boid;
                 boid.GetComponent<PlayerSteering>().Activate(true);
