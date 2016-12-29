@@ -37,15 +37,17 @@ namespace BGE.Forms
                     Vector3 spawnPos = new Vector3();
                     spawnPos.x = -c + player.transform.position.x + (col*cellWidth);
                     spawnPos.z = -c + player.transform.position.z + (row*cellWidth);
+                    Vector3 cell = spawnPos/wg.cellSize;
                     if (wg != null)
                     {
-                        spawnPos.y = wg.Sample(spawnPos.x, spawnPos.z) + 1000;
+                        spawnPos.y = wg.Sample(cell.x, cell.z);
                     }
 
                     int dice = (int) Utilities.RandomRange(r, 0, prefabs.Length);
                     GameObject go = GameObject.Instantiate(prefabs[dice]);
                     go.transform.position = spawnPos;
                     babies.Add(go);
+                    go.transform.parent = this.transform;
                 }
             }
         }

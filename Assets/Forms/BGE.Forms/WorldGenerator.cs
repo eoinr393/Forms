@@ -221,8 +221,8 @@ namespace BGE.Forms
             int vertex = 0;
             // What cell is x and z for the bottom left of this tile in world space
             Vector3 tileBottomLeft = new Vector3();
-            tileBottomLeft.x = -(cellsPerTile) / 2;
-            tileBottomLeft.z = -(cellsPerTile) / 2;
+            tileBottomLeft.x = -(cellsPerTile * cellSize) / 2;
+            tileBottomLeft.z = -(cellsPerTile * cellSize) / 2;
         
             GeneratedMesh gm = new GeneratedMesh();
 
@@ -244,13 +244,18 @@ namespace BGE.Forms
                 {
                     int startVertex = vertex;
 
+                    // Cell bottom left is the 0 indexed position of the cell on a tile
+                    // Kinda like local space on the tile       
+                    // We neeed these to make the vertices out of
                     Vector3 cellBottomLeft = tileBottomLeft + new Vector3(x * cellSize, 0, z * cellSize);
                     Vector3 cellTopLeft = tileBottomLeft + new Vector3(x * cellSize, 0, ((z + 1) * cellSize));
                     Vector3 cellTopRight = tileBottomLeft + new Vector3((x + 1) * cellSize, 0, (z + 1) * cellSize);
                     Vector3 cellBottomRight = tileBottomLeft + new Vector3((x + 1) * cellSize, 0, z * cellSize);
 
                     // Add all the samplers together to make the height
-                    Vector3 cell = (position / cellSize) + tileBottomLeft + new Vector3(x, 0, z);
+                    // Cell is the absolute position of the cell in world space. I.e what gets sampled
+                    Vector3 cellLeft = new Vector3(-cellsPerTile / 2, 0, -cellsPerTile / 2);
+                    Vector3 cell = (position / cellSize) + cellLeft + new Vector3(x, 0, z);
                     cellBottomLeft.y = Sample(cell.x, cell.z);
                     cellTopLeft.y = Sample(cell.x, cell.z + 1);
                     cellTopRight.y = Sample(cell.x + 1, cell.z + 1);
