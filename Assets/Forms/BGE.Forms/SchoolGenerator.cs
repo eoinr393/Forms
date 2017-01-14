@@ -27,6 +27,11 @@ namespace BGE.Forms
 
         void Awake()
         {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+
             //Application.targetFrameRate = 20;
             int maxAudioBoids = 5;
             int audioBoids = 0;
@@ -39,7 +44,11 @@ namespace BGE.Forms
                 Vector3 unit = UnityEngine.Random.insideUnitSphere;
 
                 Vector3 pos = transform.position + unit*UnityEngine.Random.Range(0, radius*spread);
-                pos.y = wg.Sample(pos.x, pos.z) + 20;
+                if (wg != null)
+                {
+                    pos.y += wg.Sample(pos.x, pos.z) + 20;
+                }
+                
                 fish.transform.position = pos;
                 fish.transform.parent = transform;
                 Boid boid = fish.GetComponentInChildren<Boid>();
@@ -47,8 +56,7 @@ namespace BGE.Forms
                 {
                     boid.school = this;
                     boid.GetComponent<Constrain>().radius = radius;
-                    boid.GetComponent<Constrain>().centre = transform.position;
-                    boid.GetComponent<Constrain>().centreOnPosition = false;
+                    boid.GetComponent<Constrain>().centreOnPosition = true;
 
                     boids.Add(boid);
                 }

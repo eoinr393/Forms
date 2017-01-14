@@ -31,6 +31,7 @@ namespace BGE.Forms
     
         public override Vector3 Calculate()
         {
+
             Vector3 toTarget = boid.position - centre;
             float sphereRadius = radius;
             Vector3 steeringForce = Vector3.zero;
