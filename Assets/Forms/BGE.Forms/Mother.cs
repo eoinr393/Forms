@@ -105,7 +105,7 @@ namespace BGE.Forms
             int xMove = int.MaxValue;
             int zMove = int.MaxValue;
 
-            float tileSize = gridWidth / playerMaxDistance;
+            float tileSize = playerMaxDistance / gridWidth;
 
             while (true)
             {
@@ -117,9 +117,10 @@ namespace BGE.Forms
                     int playerX = (int)(Mathf.Floor((player.transform.position.x) / (tileSize)) * tileSize);
                     int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (tileSize)) * tileSize);
                     List<Vector3> newBabies = new List<Vector3>();
-                    for (int col = 0; col < gridWidth; col ++)
+                    int halfGridWidth = gridWidth / 2;
+                    for (int col = - halfGridWidth; col <= halfGridWidth; col ++)
                     {
-                        for (int row = 0; row < gridWidth; row ++)
+                        for (int row = -halfGridWidth; row <= halfGridWidth; row ++)
                         {
                             Vector3 pos = new Vector3((col * tileSize + playerX),
                                 0,
@@ -179,6 +180,13 @@ namespace BGE.Forms
         private GameObject MakeABaby(Vector3 pos)
         {
             GameObject go = GameObject.Instantiate(prefabs[dice % prefabs.Length]);
+
+            if (wg != null)
+            {
+                Vector3 cell = pos / wg.cellSize;
+                pos.y = Utilities.RandomRange(200, 1000) + wg.Sample(cell.x, cell.z);
+            }
+
             go.transform.position = pos;
             go.transform.parent = this.transform;
             dice++;

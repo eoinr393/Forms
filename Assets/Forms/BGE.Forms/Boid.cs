@@ -43,7 +43,6 @@ namespace BGE.Forms
 
         public float bank;
 
-
         [HideInInspector]
         public List<Boid> tagged = new List<Boid>();
 
@@ -130,6 +129,7 @@ namespace BGE.Forms
 
         void FixedUpdate()
         {
+            return;
             float smoothRate;
 
             if (!multiThreaded)
