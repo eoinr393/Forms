@@ -10,6 +10,7 @@ namespace BGE.Forms
     {
         [Range(0.0f, 3600.0f)]
         public float speed = 30;
+        public float frequency = 1.0f;
         public float amplitude = 50;
         public Axis direction = Axis.Horizontal;
         public enum Axis { Horizontal, Vertical };

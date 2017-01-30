@@ -16,6 +16,10 @@ namespace BGE.Forms
             if (isActiveAndEnabled)
             {
                 Gizmos.color = Color.cyan;
+                if (targetGameObject != null)
+                {
+                    target = targetGameObject.transform.position;
+                }
                 Gizmos.DrawLine(transform.position, target);
             }
         }

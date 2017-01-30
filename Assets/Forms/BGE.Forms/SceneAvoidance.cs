@@ -43,7 +43,10 @@ namespace BGE.Forms
                 foreach (FeelerInfo feeler in feelers)
                 {
                     Gizmos.color = Color.gray;
-                    Gizmos.DrawLine(transform.position, feeler.point);
+                    if (Application.isPlaying)
+                    {
+                        Gizmos.DrawLine(transform.position, feeler.point);
+                    } 
                     if (feeler.collided)
                     {
                         Gizmos.color = Color.yellow;

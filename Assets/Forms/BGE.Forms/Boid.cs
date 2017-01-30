@@ -129,7 +129,7 @@ namespace BGE.Forms
 
         void FixedUpdate()
         {
-            return;
+            //return;
             float smoothRate;
 
             if (!multiThreaded)

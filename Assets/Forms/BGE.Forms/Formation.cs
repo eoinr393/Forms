@@ -38,7 +38,10 @@ namespace BGE.Forms
             if (isActiveAndEnabled && leaderBoid != null)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(transform.position, targetPos);
+                if (Application.isPlaying)
+                {
+                    Gizmos.DrawLine(transform.position, targetPos);
+                }
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawLine(transform.position, leaderBoid.transform.position);
             }

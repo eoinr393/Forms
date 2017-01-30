@@ -118,9 +118,9 @@ namespace BGE.Forms
                     int playerZ = (int)(Mathf.Floor((player.transform.position.z) / (tileSize)) * tileSize);
                     List<Vector3> newBabies = new List<Vector3>();
                     int halfGridWidth = gridWidth / 2;
-                    for (int col = - halfGridWidth; col <= halfGridWidth; col ++)
+                    for (int col = - halfGridWidth; col < halfGridWidth; col ++)
                     {
-                        for (int row = -halfGridWidth; row <= halfGridWidth; row ++)
+                        for (int row = -halfGridWidth; row < halfGridWidth; row ++)
                         {
                             Vector3 pos = new Vector3((col * tileSize + playerX),
                                 0,
@@ -177,9 +177,20 @@ namespace BGE.Forms
 
         int dice = 0;
 
+        int Hash(Vector3 pos)
+        {
+            float f = pos.x + pos.y + pos.z;
+            Debug.Log(pos);
+            Debug.Log(f);
+            return (int) f; 
+        }
+
         private GameObject MakeABaby(Vector3 pos)
         {
-            GameObject go = GameObject.Instantiate(prefabs[dice % prefabs.Length]);
+            // This should always generate the same creature at the same point
+
+            int dice = (int) Utilities.Map(Mathf.PerlinNoise(pos.x, pos.y), 0, 1, 0, prefabs.Length);
+            GameObject go = GameObject.Instantiate(prefabs[dice]);
 
             if (wg != null)
             {

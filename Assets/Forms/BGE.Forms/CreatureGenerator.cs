@@ -9,6 +9,8 @@ namespace BGE.Forms
         public bool makeRotator = false;
 
         public bool scaleFins = true;
+
+        // Changes the position of the fins
         public float finRotatorOffset = 0.0f;
 
         public float partOffset = 0.0f;
@@ -33,9 +35,6 @@ namespace BGE.Forms
         public float verticalSize = 1.0f;
 
         public bool flatten = false;
-
-        [Range(0, 90)]
-        public float finRoll = 45.0f;
 
         public GameObject headPrefab;
         public GameObject bodyPrefab;
@@ -112,7 +111,6 @@ namespace BGE.Forms
         {
             GameObject fin = null; 
             Vector3 pos = cp.position;
-            float rotOffset = finRotatorOffset; 
             switch (side)
             {
                 case FinAnimator.Side.left:
@@ -122,10 +120,8 @@ namespace BGE.Forms
                 case FinAnimator.Side.right:
                     fin = GameObject.Instantiate<GameObject>(rightFinPrefab);
                     pos += (transform.right * cp.size / 2);
-                    rotOffset = -rotOffset;
                     break;
             }
-            pos += rotOffset * transform.right * scale;        
             fin.transform.position = pos;
             fin.transform.rotation = fin.transform.rotation * transform.rotation;
             if (scaleFins)
