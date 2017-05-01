@@ -234,7 +234,7 @@ public class CreateIcoSphere : ScriptableWizard
             mesh.normals = normales;
 
             mesh.RecalculateBounds();
-            mesh.Optimize();
+            ;
 
             AssetDatabase.CreateAsset(mesh, "Assets/Editor/" + sphereAssetName);
             AssetDatabase.SaveAssets();
