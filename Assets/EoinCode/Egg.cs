@@ -51,15 +51,9 @@ public class Egg : MonoBehaviour {
 				Utilities.RecursiveSetColor (baby, c);
 
 				//turn of reproduction and turn on movement behaviours
-				foreach (Transform child in baby.transform) {
-					if (child.name.Contains ("head")) {
-						foreach (SteeringBehaviour sb in child.gameObject.GetComponents<SteeringBehaviour> ()) {
-							sb.enabled = true;
-						}
-						child.GetComponent<Reproduction>().enabled = false;
-
-					}
-				}
+				resetBehaviours(baby);
+				resetBehaviours (parent1);
+				resetBehaviours (parent2);
 					
 				//reset parents
 				parent1.GetComponent<CreatureGenerator> ().headPrefab.GetComponent<Reproduction> ().resetMating();
@@ -108,6 +102,18 @@ public class Egg : MonoBehaviour {
 		}
 		catch(System.Exception e){ 
 			Debug.Log (e.ToString ());
+		}
+	}
+
+	void resetBehaviours(GameObject creature){
+		foreach (Transform child in creature.transform) {
+			if (child.name.Contains ("head")) {
+				foreach (SteeringBehaviour sb in child.gameObject.GetComponents<SteeringBehaviour> ()) {
+					sb.enabled = true;
+				}
+				child.GetComponent<Reproduction>().enabled = false;
+
+			}
 		}
 	}
 
