@@ -69,7 +69,7 @@ public class Reproduction : SteeringBehaviour {
 		
 	//called from other creature to set mates, create egg
 	public bool setMate(GameObject mate){
-		if (!ismating) {
+		if (!ismating && enabled) {
 			Debug.Log (transform.parent.name + "is mating");
 			ismating = true;
 			this.mate = mate;

@@ -18,7 +18,7 @@ public class CreatureReproduction  {
 
 		foreach(FieldInfo f in fi){
 
-			//Debug.Log (f.Name + " Type= " + f.GetValue(c1).GetType().ToString());
+			Debug.Log (f.Name + " Type= " + f.GetValue(c1).GetType().ToString());
 
 			//randomly select certain attibutes from either parent and put into child,
 			//chance for mutation of certain variables
@@ -32,31 +32,46 @@ public class CreatureReproduction  {
 			}
 		}
 
-
+		Debug.Log ("After attr select");
 		//set the name to longest parent name, or a combination of both
 		if (p1.name.Length < p2.name.Length && p2.name.Contains (p1.name)) {
 			babyCreature.name = p2.name;
-		} else if (p2.name.Length < p1.name.Length && p1.name.Contains (p2.name)) {
+		}else if (p2.name.Length < p1.name.Length && p1.name.Contains (p2.name)) {
 			babyCreature.name = p1.name;
-		} else {
+		} 
+		else {
 			//indexes of the capital letters
-			int p1index = (from ch in p1.name.ToCharArray ()
-			                  where char.IsUpper (ch)
-								select p1.name.IndexOf (ch)).First();
 
-			int p2index = (from ch in p2.name.ToCharArray ()
-							where char.IsUpper (ch)
-							select p2.name.IndexOf (ch)).First();
+			Debug.Log ("Getting index");
+			int p1index = 0;
+			int p2index = 0;
 
+			try{
+					p1index= (from ch in p1.name.ToCharArray ()
+					                  where char.IsUpper (ch)
+										select p1.name.IndexOf (ch)).First();
+
+					p2index = (from ch in p2.name.ToCharArray ()
+									where char.IsUpper (ch)
+									select p2.name.IndexOf (ch)).First();
+			}catch(System.Exception e){
+				Debug.Log (e.ToString ());
+			}
+
+			Debug.Log ("After index");
 			//if caps in name else just combine name
 			if (p1index > 0 && p2index > 0)
 				babyCreature.name = p1.name.Substring (0, p1index) + p2.name.Substring (0, p2index);
 			else
 				babyCreature.name = p1.name + p2.name;
-		}
+			}
+
+			Debug.Log ("Setting Name");
+
 
 		//mutate the creature
 		if (allowMutation) {
+			Debug.Log ("Check Mutate");
 			foreach (FieldInfo f in fi) {
 				float chance = Random.Range (0, 101) * 0.01f;
 
@@ -65,6 +80,8 @@ public class CreatureReproduction  {
 					//if its greater than one increment or decrement by random percentage of the current value;
 
 					if ((float)f.GetValue (c3) > 0) {
+						Debug.Log ("Mutating");
+
 						float percent = Random.Range (-150, 150) * 0.01f;
 						float oldVal = (float)typeof(CreatureGenerator).GetField (f.Name).GetValue (c3);
 						float newVal =Mathf.Clamp( oldVal + oldVal * percent,0.1f,float.MaxValue);
@@ -77,7 +94,7 @@ public class CreatureReproduction  {
 			}
 		}
 
-		//turn of reproduction and turn on movement behaviours
+
 
 		return babyCreature;
 	}

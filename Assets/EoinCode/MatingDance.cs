@@ -14,9 +14,10 @@ public class MatingDance  {
 	bool changepoint = false;
 	Vector3 angles = new Vector3 (0.7f, 0.5f,0.2f);
 
-	public MatingDance(GameObject parent1, GameObject parent2){
+	public MatingDance(GameObject parent1, GameObject parent2, float sphereRad = 5.0f){
 		this.parent1 = parent1;
 		this.parent2 = parent2;
+		this.sphererad = sphereRad;
 	}
 
 	public Vector3[] Calculate()	{

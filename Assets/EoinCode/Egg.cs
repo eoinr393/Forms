@@ -22,6 +22,7 @@ public class Egg : MonoBehaviour {
 
 	float spawntime;
 	float hatchTime = 10;
+	float maxCreatureSize;
 
 	void Start(){
 		spawntime = Time.time;
@@ -43,9 +44,23 @@ public class Egg : MonoBehaviour {
 				hatchEgg = false;
 				//spawn and color the creature
 				Color c = (parent1.GetComponent<CreatureGenerator> ().color + parent2.GetComponent<CreatureGenerator> ().color) / 2;
-				//spawn creature
-				Utilities.RecursiveSetColor (Instantiate (cr.Create (parent1, parent2), eggpos, transform.rotation), c);
 
+				Debug.Log ("Instantiating");
+				//spawn creature and set it up
+				GameObject baby = Instantiate (cr.Create (parent1, parent2), eggpos, transform.rotation);
+				Utilities.RecursiveSetColor (baby, c);
+
+				//turn of reproduction and turn on movement behaviours
+				foreach (Transform child in baby.transform) {
+					if (child.name.Contains ("head")) {
+						foreach (SteeringBehaviour sb in child.gameObject.GetComponents<SteeringBehaviour> ()) {
+							sb.enabled = true;
+						}
+						child.GetComponent<Reproduction>().enabled = false;
+
+					}
+				}
+					
 				//reset parents
 				parent1.GetComponent<CreatureGenerator> ().headPrefab.GetComponent<Reproduction> ().resetMating();
 				parent2.GetComponent<CreatureGenerator> ().headPrefab.GetComponent<Reproduction> ().resetMating();
@@ -59,8 +74,8 @@ public class Egg : MonoBehaviour {
 				l1.intensity = Mathf.PingPong (Time.time, 5);
 				l2.intensity = Mathf.PingPong (Time.time / 2, 5);
 
-				l1.range = (Mathf.PingPong (Time.time, 3) + 0.1f) * 3;
-				l2.range = (Mathf.PingPong (Time.time / 5, 3) + 0.1f) * 3;
+				l1.range = (Mathf.PingPong (Time.time, maxCreatureSize) + 0.1f) * 3;
+				l2.range = (Mathf.PingPong (Time.time / 5, maxCreatureSize) + 0.1f) * 3;
 			}
 
 			if (Time.time - spawntime > hatchTime)
@@ -75,7 +90,9 @@ public class Egg : MonoBehaviour {
 		this.parent1 = p1;
 		this.parent2 = p2;
 		spawnLight ();
-		md = new MatingDance (parent1, parent2);
+		//largest creature
+		maxCreatureSize = p1.GetComponent<CreatureGenerator> ().verticalSize > p2.GetComponent<CreatureGenerator> ().verticalSize ? p1.GetComponent<CreatureGenerator> ().verticalSize * 3 : p2.GetComponent<CreatureGenerator> ().verticalSize * 3;
+		md = new MatingDance (parent1, parent2, maxCreatureSize);
 	}
 
 	//set lights to spawn
