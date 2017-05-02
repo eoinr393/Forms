@@ -8,16 +8,14 @@ using System.Reflection;
 /// </summary>
 public class Reproduction : SteeringBehaviour {
 
+	public Light babyLight;
 	public GameObject mate;
 	GameObject egg;
 	CreatureScan cs = new CreatureScan();
 	public float sightLength = 50;
 	public bool ismating = false;
 
-
-	//temp
 	Vector3 seekpos;
-
 
 	//find a mate to mate with
 	void findMate(){
@@ -60,7 +58,7 @@ public class Reproduction : SteeringBehaviour {
 	public override Vector3 Calculate(){
 		if(!ismating)
 			findMate ();
-		if (ismating && mate != null) {
+		if (ismating && mate != null && egg != null) {
 			seekpos = egg.GetComponent<Egg>().GetSeekPos (this.transform.parent.gameObject);
 
 			return boid.ArriveForce(seekpos,30,1);
@@ -79,18 +77,6 @@ public class Reproduction : SteeringBehaviour {
 			//create new egg
 			egg = createEgg(mate);
 
-			//add light
-			//GameObject lightob = Instantiate((GameObject)Resources.Load("babyLight"),egg.GetComponent<Egg> ().getCentre(), transform.rotation);
-			/*Light light = lightob.AddComponent<Light>();
-			light.type = LightType.Point;
-			light.range = 10;
-			light.color = Color.white;*/
-			//egg.AddComponent ("Halo");
-
-			//Component halo = light.GetComponent ("Halo");
-			//halo.GetType ().GetProperty ("enabled").SetValue (halo,true, null);
-
-
 			return true;
 		}
 		return false;
@@ -105,6 +91,13 @@ public class Reproduction : SteeringBehaviour {
 
 		return eggobject;
 
+	}
+
+	public void resetMating(){
+		ismating = false;
+		this.enabled = false;
+		this.mate = null;
+		this.egg = null;
 	}
 
 	public GameObject getEgg(){

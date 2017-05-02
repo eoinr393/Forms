@@ -22,9 +22,8 @@ public class CreatureReproduction  {
 
 			//randomly select certain attibutes from either parent and put into child,
 			//chance for mutation of certain variables
-
 			int sel = Random.Range (0, 2);
-			Debug.Log (sel);
+			//Debug.Log (sel);
 			//set values to either parent1 or parent2 values at random
 			if (sel == 1) {
 				typeof(CreatureGenerator).GetField (f.Name).SetValue (c3, typeof(CreatureGenerator).GetField (f.Name).GetValue (c1));
@@ -70,7 +69,7 @@ public class CreatureReproduction  {
 						float oldVal = (float)typeof(CreatureGenerator).GetField (f.Name).GetValue (c3);
 						float newVal =Mathf.Clamp( oldVal + oldVal * percent,0.1f,float.MaxValue);
 						typeof(CreatureGenerator).GetField (f.Name).SetValue (c3, newVal);
-						Debug.Log ("mutated " + f.Name + " from " + oldVal.ToString () + " to " + newVal);
+						//Debug.Log ("mutated " + f.Name + " from " + oldVal.ToString () + " to " + newVal);
 					}
 
 
